@@ -5,14 +5,14 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 
 @Suppress("DEPRECATION")
-class PagerAdapter (fm: FragmentManager) : FragmentStatePagerAdapter(fm){
+class PagerAdapter (fm: FragmentManager, private val dataKursus: ArrayList<DataKursus>) : FragmentStatePagerAdapter(fm){
 
     private val tabName : Array<String> = arrayOf("BERANDA", "KATEGORI")
 
     override fun getItem(position: Int): Fragment {
         return when (position) {
 
-            0 -> BerandaFragment()
+            0 -> BerandaFragment().newInstance(dataKursus)!!
             else -> KategoriFragment()
         }
     }

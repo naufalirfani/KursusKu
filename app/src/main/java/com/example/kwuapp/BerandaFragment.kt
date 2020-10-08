@@ -14,6 +14,19 @@ import kotlinx.android.synthetic.main.fragment_beranda.*
  */
 class BerandaFragment : Fragment() {
 
+    var dataKursus: ArrayList<DataKursus> = arrayListOf()
+    fun newInstance(dataKursus: ArrayList<DataKursus>): BerandaFragment?{
+        val fragmentBeranda = BerandaFragment()
+        val args = Bundle()
+        args.putParcelableArrayList("dataKursus", dataKursus)
+        fragmentBeranda.setArguments(args)
+        return fragmentBeranda
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        dataKursus = arguments!!.getParcelableArrayList<DataKursus>("dataKursus")!!
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -27,7 +40,6 @@ class BerandaFragment : Fragment() {
         @Nullable savedInstanceState: Bundle?
     ) {
         super.onViewCreated(view, savedInstanceState)
-        tv_test.text = "Fragment Beranda"
+        tv_test.text = dataKursus[0].nama
     }
-
 }

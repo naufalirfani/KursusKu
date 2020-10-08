@@ -4,14 +4,16 @@ import android.os.Parcel
 import android.os.Parcelable
 
 data class DataKursus(
-    var username: String = "",
-    var name: String = "",
-    var location: String = "",
-    var repository: String = "",
-    var company: String = "",
-    var followers: String = "",
-    var following: String = "",
-    val avatar: String = ""
+    var deskripsi: String = "",
+    var dilihat: String = "",
+    var gambar: String = "",
+    var harga: String = "",
+    val kategori: String = "",
+    var nama: String = "",
+    var pembuat: String = "",
+    var pengguna: String = "",
+    val rating: String = "",
+    val remaining: String = ""
 ): Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readString()!!,
@@ -21,19 +23,22 @@ data class DataKursus(
         parcel.readString()!!,
         parcel.readString()!!,
         parcel.readString()!!,
+        parcel.readString()!!,
+        parcel.readString()!!,
         parcel.readString()!!
-    ) {
-    }
+    )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeString(username)
-        parcel.writeString(name)
-        parcel.writeString(location)
-        parcel.writeString(repository)
-        parcel.writeString(company)
-        parcel.writeString(followers)
-        parcel.writeString(following)
-        parcel.writeString(avatar)
+        parcel.writeString(deskripsi)
+        parcel.writeString(dilihat)
+        parcel.writeString(gambar)
+        parcel.writeString(harga)
+        parcel.writeString(kategori)
+        parcel.writeString(nama)
+        parcel.writeString(pembuat)
+        parcel.writeString(pengguna)
+        parcel.writeString(rating)
+        parcel.writeString(remaining)
     }
 
     override fun describeContents(): Int {

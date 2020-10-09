@@ -5,11 +5,15 @@
     android:layout_height="match_parent"
     tools:context=".BerandaFragment">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/mRecyclerView1"
-        android:paddingRight="8dp"
-        android:paddingBottom="8dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/mRecyclerView1"
+            android:paddingRight="8dp"
+            android:paddingBottom="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
 
 </FrameLayout>

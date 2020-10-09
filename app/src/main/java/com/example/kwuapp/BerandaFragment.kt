@@ -1,17 +1,20 @@
 package com.example.kwuapp
 
 
+import android.app.ProgressDialog
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.os.Handler
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.Nullable
+import androidx.recyclerview.widget.GridLayoutManager
 import kotlinx.android.synthetic.main.fragment_beranda.*
 
-/**
- * A simple [Fragment] subclass.
- */
+@Suppress("DEPRECATION")
 class BerandaFragment : Fragment() {
 
     var dataKursus: ArrayList<DataKursus> = arrayListOf()
@@ -40,6 +43,12 @@ class BerandaFragment : Fragment() {
         @Nullable savedInstanceState: Bundle?
     ) {
         super.onViewCreated(view, savedInstanceState)
-        tv_test.text = dataKursus[0].nama
+
+
+        mRecyclerView1.setHasFixedSize(true)
+        mRecyclerView1.layoutManager = GridLayoutManager(context, 2)
+        val adapter = RVAdapterKursus(dataKursus)
+        adapter.notifyDataSetChanged()
+        mRecyclerView1.adapter = adapter
     }
 }

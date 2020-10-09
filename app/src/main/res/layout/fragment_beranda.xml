@@ -5,10 +5,11 @@
     android:layout_height="match_parent"
     tools:context=".BerandaFragment">
 
-    <TextView
-        android:id="@+id/tv_test"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/mRecyclerView1"
+        android:paddingRight="8dp"
+        android:paddingBottom="8dp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="wrap_content" />
 
 </FrameLayout>

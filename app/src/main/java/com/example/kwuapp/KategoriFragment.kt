@@ -8,10 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.Nullable
 import kotlinx.android.synthetic.main.fragment_beranda.*
+import kotlinx.android.synthetic.main.fragment_kategori.*
 
-/**
- * A simple [Fragment] subclass.
- */
 class KategoriFragment : Fragment() {
 
     override fun onCreateView(

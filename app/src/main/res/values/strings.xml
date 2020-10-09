@@ -3,4 +3,8 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="dilihat">Dilihat</string>
+    <string name="pembeli">Pembeli</string>
+    <string name="harga">Harga</string>
+    <string name="remaining">Remaining</string>
 </resources>

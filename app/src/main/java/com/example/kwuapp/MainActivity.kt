@@ -5,9 +5,7 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -15,6 +13,7 @@ import androidx.viewpager.widget.ViewPager
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlin.random.Random
 
 
 @Suppress("DEPRECATION")
@@ -22,6 +21,10 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var tabLayout1: TabLayout
     var arrayList = ArrayList<DataKursus>()
+    var arrayList2 = ArrayList<DataKursus>()
+    var arrayList3 = ArrayList<DataKursus>()
+    val kategori = arrayOf("Desain", "Bisnis", "Finansial", "Kantor", "Pendidikan", "Pengembangan")
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,6 +50,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun loadKursus(loading2: ProgressDialog){
+        val angka1 = Random.nextInt(0,5)
+        val angka2 = Random.nextInt(0,5)
+        val kategori1 = kategori[angka1]
+        val kategori2 = kategori[angka2]
         val db = FirebaseFirestore.getInstance()
         db.collection("kursus")
             .get()
@@ -66,8 +73,16 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 if(arrayList.isNotEmpty()){
+                    for(i in 0 until arrayList.size){
+                        if(arrayList[i].kategori == kategori1){
+                            arrayList2.add(arrayList[0])
+                        }
+                        if(arrayList[i].kategori == kategori2){
+                            arrayList3.add(arrayList[0])
+                        }
+                    }
                     loading2.dismiss()
-                    val pagerAdapter = PagerAdapter(supportFragmentManager, arrayList)
+                    val pagerAdapter = PagerAdapter(supportFragmentManager, arrayList, arrayList2, arrayList3, kategori1, kategori2)
                     val pager = findViewById<View>(R.id.pager) as ViewPager
                     pager.adapter = pagerAdapter
                     tabLayout1.setupWithViewPager(pager)

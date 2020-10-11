@@ -25,6 +25,5 @@ class KategoriFragment : Fragment() {
         @Nullable savedInstanceState: Bundle?
     ) {
         super.onViewCreated(view, savedInstanceState)
-        tv_test.text = "Fragment Beranda"
     }
 }

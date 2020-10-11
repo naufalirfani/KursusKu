@@ -7,4 +7,11 @@
     <string name="pembeli">Pembeli</string>
     <string name="harga">Harga</string>
     <string name="remaining">Remaining</string>
+    <string name="bisnis">Bisnis</string>
+    <string name="desain">Desain</string>
+    <string name="finasial">Finansial</string>
+    <string name="fotografi">Fotografi</string>
+    <string name="kantor">Kantor</string>
+    <string name="pendidikan">Pendidikan</string>
+    <string name="pengembangan">Pengembangan</string>
 </resources>

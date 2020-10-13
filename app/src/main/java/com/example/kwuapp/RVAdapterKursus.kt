@@ -36,7 +36,7 @@ class RVAdapterKursus(private val listKursus: ArrayList<DataKursus>) : RecyclerV
         holder.view.tv_item_pembeli.text = kursus.pengguna
         holder.view.tv_item_dilihat.text = kursus.dilihat
 
-        val ratingValue = kursus.rating.toFloat() / 2
+        val ratingValue = kursus.rating.toFloat()
         holder.view.ratingbar.rating = ratingValue
 
 

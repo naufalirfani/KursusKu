@@ -76,10 +76,10 @@ class MainActivity : AppCompatActivity() {
                 if(arrayList.isNotEmpty()){
                     for(i in 0 until arrayList.size){
                         if(arrayList[i].kategori == kategori1){
-                            arrayList2.add(arrayList[0])
+                            arrayList2.add(arrayList[i])
                         }
                         if(arrayList[i].kategori == kategori2){
-                            arrayList3.add(arrayList[0])
+                            arrayList3.add(arrayList[i])
                         }
                     }
                     loading2.dismiss()

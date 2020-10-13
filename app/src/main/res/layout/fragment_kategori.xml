@@ -172,7 +172,6 @@
                 android:text="@string/kategori1"/>
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/mRecyclerView2"
-                android:paddingTop="8dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
         </LinearLayout>
@@ -193,7 +192,6 @@
                 android:text="@string/kategori2"/>
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/mRecyclerView3"
-                android:paddingTop="8dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
         </LinearLayout>

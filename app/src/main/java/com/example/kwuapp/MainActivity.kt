@@ -24,6 +24,8 @@ class MainActivity : AppCompatActivity() {
     var arrayList2 = ArrayList<DataKursus>()
     var arrayList3 = ArrayList<DataKursus>()
     val kategori = arrayOf("Desain", "Bisnis", "Finansial", "Kantor", "Pendidikan", "Pengembangan")
+    var angka1: Int = 0
+    var angka2: Int = 0
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,8 +52,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun loadKursus(loading2: ProgressDialog){
-        val angka1 = Random.nextInt(0,5)
-        val angka2 = Random.nextInt(0,5)
+        randomAngka()
         val kategori1 = kategori[angka1]
         val kategori2 = kategori[angka2]
         val db = FirebaseFirestore.getInstance()
@@ -114,5 +115,13 @@ class MainActivity : AppCompatActivity() {
                 }
                 snackBar.show()
             }
+    }
+
+    fun randomAngka(){
+        angka1 = Random.nextInt(0,5)
+        angka2 = Random.nextInt(0,5)
+        if(angka1 == angka2){
+            randomAngka()
+        }
     }
 }

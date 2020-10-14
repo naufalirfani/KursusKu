@@ -18,13 +18,18 @@
             android:id="@+id/btn_akun"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:layout_margin="4dp"
-            android:background="@drawable/akun"/>
+            android:layout_marginLeft="4dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginRight="4dp"
+            android:layout_marginBottom="4dp"
+            android:background="@drawable/login"/>
         <Button
             android:id="@+id/btn_keranjang"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:layout_margin="4dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            android:layout_marginRight="4dp"
             android:background="@drawable/keranjang"/>
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabLayout"

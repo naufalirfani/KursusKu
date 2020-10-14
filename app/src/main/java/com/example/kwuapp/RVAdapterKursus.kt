@@ -1,6 +1,8 @@
 package com.example.kwuapp
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.content.Intent
 import android.graphics.Paint
 import android.view.LayoutInflater
 import android.view.View
@@ -9,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.list_kursus.view.*
 
-class RVAdapterKursus(private val listKursus: ArrayList<DataKursus>) : RecyclerView.Adapter<RVAdapterKursus.Holder>() {
+class RVAdapterKursus(private val context: Context?, private val listKursus: ArrayList<DataKursus>) : RecyclerView.Adapter<RVAdapterKursus.Holder>() {
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, i: Int): Holder {
         val view: View = LayoutInflater.from(viewGroup.context).inflate(R.layout.list_kursus, viewGroup, false)
@@ -39,10 +41,23 @@ class RVAdapterKursus(private val listKursus: ArrayList<DataKursus>) : RecyclerV
         val ratingValue = kursus.rating.toFloat()
         holder.view.ratingbar.rating = ratingValue
 
+        val data = DataKursus(
+            kursus.deskripsi,
+            kursus.dilihat,
+            kursus.gambar,
+            kursus.harga,
+            kursus.kategori,
+            kursus.nama,
+            kursus.pembuat,
+            kursus.pengguna,
+            kursus.rating,
+            kursus.remaining
+        )
 
-
-        holder.itemView.setOnClickListener{
-
+        holder.view.cvList.setOnClickListener{
+            val intent = Intent(context, DetailActivity::class.java)
+            intent.putExtra("kursus", data)
+            context?.startActivity(intent)
         }
     }
 

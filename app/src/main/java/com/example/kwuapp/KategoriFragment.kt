@@ -59,14 +59,14 @@ class KategoriFragment : Fragment() {
         mRecyclerView2.setHasFixedSize(true)
         val layout = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         mRecyclerView2.layoutManager = layout
-        val adapter = RVAdapterKursus(dataKursus)
+        val adapter = RVAdapterKursus(activity, dataKursus)
         adapter.notifyDataSetChanged()
         mRecyclerView2.adapter = adapter
 
         mRecyclerView3.setHasFixedSize(true)
         val layout2 = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         mRecyclerView3.layoutManager = layout2
-        val adapter2 = RVAdapterKursus(dataKursus2)
+        val adapter2 = RVAdapterKursus(activity, dataKursus2)
         adapter.notifyDataSetChanged()
         mRecyclerView3.adapter = adapter2
 

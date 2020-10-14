@@ -69,7 +69,7 @@ class KategoriActivity : AppCompatActivity() {
                     loading2.dismiss()
                     rv_katergori.setHasFixedSize(true)
                     rv_katergori.layoutManager = GridLayoutManager(this, 2)
-                    val adapter = RVAdapterKursus(dataKursus)
+                    val adapter = RVAdapterKursus(applicationContext, dataKursus)
                     adapter.notifyDataSetChanged()
                     rv_katergori.adapter = adapter
                 }

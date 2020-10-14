@@ -39,6 +39,7 @@ class MainActivity : AppCompatActivity() {
         tabLayout1.addTab(tabLayout1.newTab().setText("BERANDA"))
         tabLayout1.addTab(tabLayout1.newTab().setText("KATEGORi"))
         tabLayout1.setTabTextColors(Color.parseColor("#BDBDBD"), Color.parseColor("#000000"))
+
     }
 
     override fun onResume() {

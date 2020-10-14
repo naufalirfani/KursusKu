@@ -48,7 +48,6 @@
                         android:textSize="14sp"
                         android:maxLines="2"
                         android:textColor="@color/black"
-                        android:textStyle="bold"
                         tools:text="@string/nama_kursus" />
                     <TextView
                         android:id="@+id/tv_item_pembuat"
@@ -123,7 +122,7 @@
                                 android:layout_marginLeft="8dp"
                                 android:textColor="@color/colorAbuabu"
                                 android:textStyle=""
-                                android:text="Rp49.900"/>
+                                android:text="@string/harga_asli"/>
                         </RelativeLayout>
                     </LinearLayout>
 

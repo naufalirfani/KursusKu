@@ -41,9 +41,8 @@ class BerandaFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         mRecyclerView1.setHasFixedSize(true)
-        val layout = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         mRecyclerView1.layoutManager = GridLayoutManager(context, 2)
-        val adapter = RVAdapterKursus(dataKursus)
+        val adapter = RVAdapterKursus(activity, dataKursus)
         adapter.notifyDataSetChanged()
         mRecyclerView1.adapter = adapter
     }

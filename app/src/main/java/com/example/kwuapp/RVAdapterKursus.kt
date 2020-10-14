@@ -1,14 +1,12 @@
 package com.example.kwuapp
 
 import android.annotation.SuppressLint
+import android.graphics.Paint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.DecodeFormat
-import com.bumptech.glide.request.RequestOptions
-import com.bumptech.glide.request.target.Target
 import kotlinx.android.synthetic.main.list_kursus.view.*
 
 class RVAdapterKursus(private val listKursus: ArrayList<DataKursus>) : RecyclerView.Adapter<RVAdapterKursus.Holder>() {
@@ -32,7 +30,9 @@ class RVAdapterKursus(private val listKursus: ArrayList<DataKursus>) : RecyclerV
         holder.view.tv_item_pembuat.text = kursus.pembuat
         holder.view.tv_item_rating.text = kursus.rating
         holder.view.tv_jumlah_rating.text = "(0)"
-        holder.view.tv_item_harga.text = kursus.harga
+        holder.view.tv_item_harga.text = "Rp${kursus.harga}"
+        holder.view.tv_hargaasli.text = "Rp49.900"
+        holder.view.tv_hargaasli.setPaintFlags(holder.view.tv_hargaasli.getPaintFlags() or Paint.STRIKE_THRU_TEXT_FLAG)
         holder.view.tv_item_pembeli.text = kursus.pengguna
         holder.view.tv_item_dilihat.text = kursus.dilihat
 

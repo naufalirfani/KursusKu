@@ -28,6 +28,7 @@
                     android:gravity="center"
                     android:orientation="vertical">
                     <ImageView
+                        android:id="@+id/iv_bisnis"
                         android:layout_width="40dp"
                         android:layout_height="40dp"
                         android:background="@drawable/bisnis"/>
@@ -47,6 +48,7 @@
                     android:gravity="center"
                     android:orientation="vertical">
                     <ImageView
+                        android:id="@+id/iv_desain"
                         android:layout_width="40dp"
                         android:layout_height="40dp"
                         android:background="@drawable/desain"/>
@@ -66,6 +68,7 @@
                     android:gravity="center"
                     android:orientation="vertical">
                     <ImageView
+                        android:id="@+id/iv_finansial"
                         android:layout_width="40dp"
                         android:layout_height="40dp"
                         android:background="@drawable/finansial"/>
@@ -85,6 +88,7 @@
                     android:gravity="center"
                     android:orientation="vertical">
                     <ImageView
+                        android:id="@+id/iv_fotografi"
                         android:layout_width="40dp"
                         android:layout_height="40dp"
                         android:background="@drawable/fotografi"/>
@@ -104,6 +108,7 @@
                     android:gravity="center"
                     android:orientation="vertical">
                     <ImageView
+                        android:id="@+id/iv_kantor"
                         android:layout_width="40dp"
                         android:layout_height="40dp"
                         android:background="@drawable/kantor"/>
@@ -123,6 +128,7 @@
                     android:gravity="center"
                     android:orientation="vertical">
                     <ImageView
+                        android:id="@+id/iv_pendidikan"
                         android:layout_width="40dp"
                         android:layout_height="40dp"
                         android:background="@drawable/pendidikan"/>
@@ -143,6 +149,7 @@
                     android:gravity="center"
                     android:orientation="vertical">
                     <ImageView
+                        android:id="@+id/iv_penegmbangan"
                         android:layout_width="40dp"
                         android:layout_height="40dp"
                         android:background="@drawable/pengembangan"/>

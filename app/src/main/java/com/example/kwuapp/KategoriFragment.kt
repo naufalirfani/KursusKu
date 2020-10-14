@@ -1,6 +1,7 @@
 package com.example.kwuapp
 
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -68,5 +69,48 @@ class KategoriFragment : Fragment() {
         val adapter2 = RVAdapterKursus(dataKursus2)
         adapter.notifyDataSetChanged()
         mRecyclerView3.adapter = adapter2
+
+        iv_bisnis.setOnClickListener {
+            val intent = Intent(context, KategoriActivity::class.java)
+            intent.putExtra("kategori", getString(R.string.bisnis))
+            startActivity(intent)
+
+        }
+        iv_desain.setOnClickListener {
+            val intent = Intent(context, KategoriActivity::class.java)
+            intent.putExtra("kategori", getString(R.string.desain))
+            startActivity(intent)
+
+        }
+        iv_finansial.setOnClickListener {
+            val intent = Intent(context, KategoriActivity::class.java)
+            intent.putExtra("kategori", getString(R.string.finasial))
+            startActivity(intent)
+
+        }
+        iv_fotografi.setOnClickListener {
+            val intent = Intent(context, KategoriActivity::class.java)
+            intent.putExtra("kategori", getString(R.string.fotografi))
+            startActivity(intent)
+
+        }
+        iv_kantor.setOnClickListener {
+            val intent = Intent(context, KategoriActivity::class.java)
+            intent.putExtra("kategori", getString(R.string.kantor))
+            startActivity(intent)
+
+        }
+        iv_pendidikan.setOnClickListener {
+            val intent = Intent(context, KategoriActivity::class.java)
+            intent.putExtra("kategori", getString(R.string.pendidikan))
+            startActivity(intent)
+
+        }
+        iv_penegmbangan.setOnClickListener {
+            val intent = Intent(context, KategoriActivity::class.java)
+            intent.putExtra("kategori", getString(R.string.pengembangan))
+            startActivity(intent)
+
+        }
     }
 }

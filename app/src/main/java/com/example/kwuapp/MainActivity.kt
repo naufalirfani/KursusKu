@@ -84,11 +84,12 @@ class MainActivity : AppCompatActivity() {
                             arrayList3.add(arrayList[i])
                         }
                     }
-                    loading2.dismiss()
                     val pagerAdapter = PagerAdapter(supportFragmentManager, arrayList, arrayList2, arrayList3, kategori1, kategori2)
                     val pager = findViewById<View>(R.id.pager) as ViewPager
                     pager.adapter = pagerAdapter
                     tabLayout1.setupWithViewPager(pager)
+
+                    loading2.dismiss()
                 }
                 else{
                     loadKursus(loading2)

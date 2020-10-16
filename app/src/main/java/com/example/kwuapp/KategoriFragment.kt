@@ -20,7 +20,10 @@ class KategoriFragment : Fragment() {
     lateinit var kategori: String
     lateinit var kategori2: String
 
-    fun newInstance(dataKursus: ArrayList<DataKursus>, dataKursus2: ArrayList<DataKursus>, kategori: String, kategori2: String): KategoriFragment?{
+    fun newInstance(dataKursus: ArrayList<DataKursus>,
+                    dataKursus2: ArrayList<DataKursus>,
+                    kategori: String,
+                    kategori2: String): KategoriFragment?{
         val fragmentKategori= KategoriFragment()
         val args = Bundle()
         args.putParcelableArrayList("dataKursus", dataKursus)

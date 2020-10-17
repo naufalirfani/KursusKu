@@ -40,6 +40,9 @@ class MainActivity : AppCompatActivity() {
         tabLayout1.addTab(tabLayout1.newTab().setText("KATEGORi"))
         tabLayout1.setTabTextColors(Color.parseColor("#BDBDBD"), Color.parseColor("#000000"))
 
+        val intent = Intent(this, SignUpActivity::class.java)
+        startActivity(intent)
+
     }
 
     override fun onResume() {
@@ -62,6 +65,8 @@ class MainActivity : AppCompatActivity() {
             .get()
             .addOnSuccessListener { result ->
                 arrayList.clear()
+                arrayList2.clear()
+                arrayList3.clear()
                 for (document in result) {
                     arrayList.add(DataKursus(document.getString("deskripsi")!!,
                         document.getString("dilihat")!!,

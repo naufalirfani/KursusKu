@@ -20,4 +20,6 @@
     <string name="keranjang">Keranjang</string>
     <string name="harga_asli">Rp49.900</string>
     <string name="deskripsi">Deskripsi</string>
+    <string name="daftar">Daftar</string>
+    <string name="masuk">Masuk</string>
 </resources>

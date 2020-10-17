@@ -14,6 +14,7 @@ import androidx.viewpager.widget.ViewPager
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlin.random.Random
 
 
@@ -40,8 +41,10 @@ class MainActivity : AppCompatActivity() {
         tabLayout1.addTab(tabLayout1.newTab().setText("KATEGORi"))
         tabLayout1.setTabTextColors(Color.parseColor("#BDBDBD"), Color.parseColor("#000000"))
 
-        val intent = Intent(this, SignUpActivity::class.java)
-        startActivity(intent)
+        btn_akun.setOnClickListener {
+            val intent = Intent(this, SignInActivity::class.java)
+            startActivity(intent)
+        }
 
     }
 

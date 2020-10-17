@@ -1,6 +1,7 @@
 package com.example.kwuapp
 
 import android.R.attr.password
+import android.content.Intent
 import android.os.Bundle
 import android.text.InputType
 import androidx.appcompat.app.AppCompatActivity
@@ -30,5 +31,11 @@ class SignUpActivity : AppCompatActivity() {
         }
 
         btn_daftar_back.setOnClickListener { onBackPressed() }
+
+        tv_masuk.setOnClickListener {
+            val intent = Intent(this, SignInActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
     }
 }

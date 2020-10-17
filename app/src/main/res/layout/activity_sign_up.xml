@@ -8,7 +8,6 @@
     android:orientation="vertical"
     android:gravity="center|top">
     <LinearLayout
-        android:id="@+id/linear1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -25,7 +24,6 @@
             android:layout_marginBottom="4dp"
             android:background="@drawable/ic_arrow_back_black_24dp"/>
         <TextView
-            android:id="@+id/tv_nama"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
@@ -116,7 +114,7 @@
         android:layout_marginRight="32dp"
         android:text="@string/daftar"
         android:textAllCaps="false"
-        android:textSize="16sp"
+        android:textSize="14sp"
         android:textColor="@color/white"
         android:textStyle="bold"
         android:background="@drawable/button_daftar_masuk" />

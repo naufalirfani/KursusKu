@@ -4,6 +4,7 @@ import android.R.attr.password
 import android.content.Intent
 import android.os.Bundle
 import android.text.InputType
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_sign_up.*
 

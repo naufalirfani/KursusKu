@@ -38,16 +38,11 @@ class DetailActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        val loading = ProgressDialog(this)
-        loading.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        loading.isIndeterminate = true
-        loading.setCancelable(true)
-        loading.show()
-        loading.setContentView(R.layout.progressdialog)
-        loadKursus(loading)
+        datail_progressBar.visibility = View.VISIBLE
+        loadKursus()
     }
 
-    private fun loadKursus(loading2: ProgressDialog){
+    private fun loadKursus(){
         arraySyarat.clear()
         arrayDipelajari.clear()
         val db = FirebaseFirestore.getInstance()
@@ -64,14 +59,14 @@ class DetailActivity : AppCompatActivity() {
                     adapter.notifyDataSetChanged()
                     rv_detail.adapter = adapter
 
-                    loading2.dismiss()
+                    datail_progressBar.visibility = View.INVISIBLE
                 }
                 else{
-                    loadKursus(loading2)
+                    loadKursus()
                 }
             }
             .addOnFailureListener { exception ->
-                loading2.dismiss()
+                datail_progressBar.visibility = View.INVISIBLE
                 Log.d("Error", "Error getting documents: ", exception)
                 val snackBar = Snackbar.make(
                     currentFocus!!, "    Connection Failure",
@@ -88,7 +83,7 @@ class DetailActivity : AppCompatActivity() {
 
                 // Set an action for snack bar
                 snackBar.setAction("Retry") {
-                    loadKursus(loading2)
+                    loadKursus()
 
                 }
                 snackBar.show()

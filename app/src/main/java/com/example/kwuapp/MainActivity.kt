@@ -15,6 +15,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.fragment_beranda.*
 import kotlin.random.Random
 
 
@@ -45,21 +46,15 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, SignInActivity::class.java)
             startActivity(intent)
         }
-
     }
 
     override fun onResume() {
         super.onResume()
-        val loading = ProgressDialog(this)
-        loading.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        loading.isIndeterminate = true
-        loading.setCancelable(true)
-        loading.show()
-        loading.setContentView(R.layout.progressdialog)
-        loadKursus(loading)
+        main_progressBar.visibility = View.VISIBLE
+        loadKursus()
     }
 
-    private fun loadKursus(loading2: ProgressDialog){
+    private fun loadKursus(){
         randomAngka()
         val kategori1 = kategori[angka1]
         val kategori2 = kategori[angka2]
@@ -97,14 +92,14 @@ class MainActivity : AppCompatActivity() {
                     pager.adapter = pagerAdapter
                     tabLayout1.setupWithViewPager(pager)
 
-                    loading2.dismiss()
+                    main_progressBar.visibility = View.INVISIBLE
                 }
                 else{
-                    loadKursus(loading2)
+                    loadKursus()
                 }
             }
             .addOnFailureListener { exception ->
-                loading2.dismiss()
+                main_progressBar.visibility = View.INVISIBLE
                 Log.d("Error", "Error getting documents: ", exception)
                 val snackBar = Snackbar.make(
                     currentFocus!!, "    Connection Failure",
@@ -121,7 +116,7 @@ class MainActivity : AppCompatActivity() {
 
                 // Set an action for snack bar
                 snackBar.setAction("Retry") {
-                    loadKursus(loading2)
+                    loadKursus()
 
                 }
                 snackBar.show()

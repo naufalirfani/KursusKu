@@ -14,6 +14,36 @@
             android:paddingBottom="8dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
+        <LinearLayout
+            android:id="@+id/db1_root"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dip"
+                android:layout_weight="1"
+                android:id="@+id/db2_root"
+                android:gravity="right|center"
+                android:orientation="vertical" >
+
+                <Button
+                    android:id="@+id/btn_back_to_top"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="right|center"
+                    android:background="@drawable/button_circle"
+                    android:drawableStart="@drawable/ic_arrow_upward_white_24dp"
+                    android:textColor="#FFFFFF"
+                    android:padding="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:alpha="0.5"
+                    android:textSize="15sp" />
+            </LinearLayout>
+        </LinearLayout>
     </RelativeLayout>
 
 </FrameLayout>

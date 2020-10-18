@@ -20,7 +20,7 @@
         android:background="@color/white"
         android:elevation="8dp">
         <Button
-            android:id="@+id/btn_akun"
+            android:id="@+id/btn_detail_back"
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:layout_marginLeft="4dp"

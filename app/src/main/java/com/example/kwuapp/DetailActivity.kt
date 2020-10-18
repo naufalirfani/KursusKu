@@ -1,9 +1,7 @@
 package com.example.kwuapp
 
-import android.app.ProgressDialog
+import android.content.Intent
 import android.graphics.Color
-import android.graphics.Paint
-import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -12,12 +10,9 @@ import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.viewpager.widget.ViewPager
-import com.bumptech.glide.Glide
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_detail.*
-import kotlinx.android.synthetic.main.list_kursus.*
 
 @Suppress("DEPRECATION")
 class DetailActivity : AppCompatActivity() {
@@ -34,6 +29,15 @@ class DetailActivity : AppCompatActivity() {
 
         kursus = intent.getParcelableExtra("kursus")!!
         tv_nama.text = kursus.nama
+
+        btn_detail_back.setOnClickListener {onBackPressed()}
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        val intent = Intent(this, MainActivity::class.java)
+        startActivity(intent)
+        finish()
     }
 
     override fun onResume() {

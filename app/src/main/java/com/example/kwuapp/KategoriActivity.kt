@@ -1,6 +1,7 @@
 package com.example.kwuapp
 
 import android.app.ProgressDialog
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
@@ -28,6 +29,13 @@ class KategoriActivity : AppCompatActivity() {
         tv_kategori3.text = kategori
 
         btn_back.setOnClickListener { onBackPressed() }
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        val intent = Intent(this, MainActivity::class.java)
+        startActivity(intent)
+        finish()
     }
 
     override fun onResume() {

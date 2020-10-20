@@ -18,7 +18,6 @@
         <androidx.cardview.widget.CardView
             android:id="@+id/cvList"
             android:clickable="true"
-            android:foreground="?android:attr/selectableItemBackground"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/white"

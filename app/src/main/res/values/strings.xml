@@ -24,4 +24,6 @@
     <string name="masuk">Masuk</string>
     <string name="facebook">Facebook</string>
     <string name="google">Google</string>
+    <string name="semua">Semua</string>
+    <string name="nothing_found">Tidak ada yang ditemukan</string>
 </resources>

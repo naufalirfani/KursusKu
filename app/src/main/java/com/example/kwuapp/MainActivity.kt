@@ -43,6 +43,11 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, SignInActivity::class.java)
             startActivity(intent)
         }
+        btn_search.setOnClickListener {
+            val intent = Intent(this, SearchActivity::class.java)
+            intent.putParcelableArrayListExtra("dataKursus", arrayList)
+            startActivity(intent)
+        }
 
     }
 
@@ -90,14 +95,14 @@ class MainActivity : AppCompatActivity() {
                     pager.adapter = pagerAdapter
                     tabLayout1.setupWithViewPager(pager)
 
-                    main_progressBar.visibility = View.INVISIBLE
+                    main_progressBar.visibility = View.GONE
                 }
                 else{
                     loadKursus()
                 }
             }
             .addOnFailureListener { exception ->
-                main_progressBar.visibility = View.INVISIBLE
+                main_progressBar.visibility = View.GONE
                 Log.d("Error", "Error getting documents: ", exception)
                 val snackBar = Snackbar.make(
                     currentFocus!!, "    Connection Failure",

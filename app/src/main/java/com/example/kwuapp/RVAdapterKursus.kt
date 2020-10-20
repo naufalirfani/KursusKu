@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.list_kursus.view.*
 
-class RVAdapterKursus(private val context: Context?, private val listKursus: ArrayList<DataKursus>) : RecyclerView.Adapter<RVAdapterKursus.Holder>() {
+class RVAdapterKursus(private val context: Context?, private val listKursus: ArrayList<DataKursus>, private var tempat: String) : RecyclerView.Adapter<RVAdapterKursus.Holder>() {
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, i: Int): Holder {
         val view: View = LayoutInflater.from(viewGroup.context).inflate(R.layout.list_kursus, viewGroup, false)
@@ -57,6 +57,7 @@ class RVAdapterKursus(private val context: Context?, private val listKursus: Arr
         holder.view.cvList.setOnClickListener{
             val intent = Intent(context, DetailActivity::class.java)
             intent.putExtra("kursus", data)
+            intent.putExtra("tempat", tempat)
             context?.startActivity(intent)
         }
     }

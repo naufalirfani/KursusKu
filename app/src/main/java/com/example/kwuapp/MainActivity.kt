@@ -33,6 +33,9 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         supportActionBar?.hide()
+        arrayList.clear()
+        arrayList2.clear()
+        arrayList3.clear()
 
         tabLayout1 = findViewById<View>(R.id.tabLayout) as TabLayout
         tabLayout1.addTab(tabLayout1.newTab().setText("BERANDA"))
@@ -47,6 +50,7 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, SearchActivity::class.java)
             intent.putParcelableArrayListExtra("dataKursus", arrayList)
             startActivity(intent)
+            finish()
         }
 
     }

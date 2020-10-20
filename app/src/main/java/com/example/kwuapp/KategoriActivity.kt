@@ -7,17 +7,20 @@ import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_kategori.*
+import java.io.IOException
 
 @Suppress("DEPRECATION")
 class KategoriActivity : AppCompatActivity() {
 
-    lateinit var kategori: String
+    var kategori: String? = null
+    var tempat: String = ""
     var arrayList: ArrayList<DataKursus> = arrayListOf()
     var dataKursus: ArrayList<DataKursus> = arrayListOf()
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,7 +28,9 @@ class KategoriActivity : AppCompatActivity() {
         setContentView(R.layout.activity_kategori)
 
         supportActionBar?.hide()
-        kategori = intent.getStringExtra("kategori")!!
+
+        kategori = intent.getStringExtra("kategori")
+        tempat = "kategori $kategori"
         tv_kategori3.text = kategori
 
         btn_back.setOnClickListener { onBackPressed() }
@@ -40,16 +45,11 @@ class KategoriActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        val loading = ProgressDialog(this)
-        loading.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        loading.isIndeterminate = true
-        loading.setCancelable(true)
-        loading.show()
-        loading.setContentView(R.layout.progressdialog)
-        loadKursus(loading)
+        loadKursus()
     }
 
-    private fun loadKursus(loading2: ProgressDialog){
+    private fun loadKursus(){
+        kategori_progressBar.visibility = View.VISIBLE
         val db = FirebaseFirestore.getInstance()
         db.collection("kursus")
             .get()
@@ -74,19 +74,19 @@ class KategoriActivity : AppCompatActivity() {
                             dataKursus.add(arrayList[i])
                         }
                     }
-                    loading2.dismiss()
+                    kategori_progressBar.visibility = View.GONE
                     rv_katergori.setHasFixedSize(true)
                     rv_katergori.layoutManager = GridLayoutManager(this, 2)
-                    val adapter = RVAdapterKursus(applicationContext, dataKursus)
+                    val adapter = RVAdapterKursus(applicationContext, dataKursus, tempat)
                     adapter.notifyDataSetChanged()
                     rv_katergori.adapter = adapter
                 }
                 else{
-                    loadKursus(loading2)
+                    loadKursus()
                 }
             }
             .addOnFailureListener { exception ->
-                loading2.dismiss()
+                kategori_progressBar.visibility = View.GONE
                 Log.d("Error", "Error getting documents: ", exception)
                 val snackBar = Snackbar.make(
                     currentFocus!!, "    Connection Failure",
@@ -103,7 +103,7 @@ class KategoriActivity : AppCompatActivity() {
 
                 // Set an action for snack bar
                 snackBar.setAction("Retry") {
-                    loadKursus(loading2)
+                    loadKursus()
 
                 }
                 snackBar.show()

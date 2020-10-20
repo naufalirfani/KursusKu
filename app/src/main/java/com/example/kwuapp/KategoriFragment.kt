@@ -19,6 +19,7 @@ class KategoriFragment : Fragment() {
     var dataKursus2: ArrayList<DataKursus> = arrayListOf()
     lateinit var kategori: String
     lateinit var kategori2: String
+    val tempat = "main"
 
     fun newInstance(dataKursus: ArrayList<DataKursus>,
                     dataKursus2: ArrayList<DataKursus>,
@@ -62,14 +63,14 @@ class KategoriFragment : Fragment() {
         mRecyclerView2.setHasFixedSize(true)
         val layout = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         mRecyclerView2.layoutManager = layout
-        val adapter = RVAdapterKursus(activity, dataKursus)
+        val adapter = RVAdapterKursus(activity, dataKursus, tempat)
         adapter.notifyDataSetChanged()
         mRecyclerView2.adapter = adapter
 
         mRecyclerView3.setHasFixedSize(true)
         val layout2 = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         mRecyclerView3.layoutManager = layout2
-        val adapter2 = RVAdapterKursus(activity, dataKursus2)
+        val adapter2 = RVAdapterKursus(activity, dataKursus2, tempat)
         adapter.notifyDataSetChanged()
         mRecyclerView3.adapter = adapter2
 

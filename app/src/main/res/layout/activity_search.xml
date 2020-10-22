@@ -170,11 +170,33 @@
         android:textStyle="normal"
         tools:text="@string/nothing_found"
         android:layout_below="@+id/search_menu"/>
+    <TextView
+        android:id="@+id/tv_nothing2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:padding="16dp"
+        android:textSize="14sp"
+        android:gravity="center"
+        android:textColor="@color/black"
+        android:background="#FFFFFF"
+        android:textStyle="normal"
+        tools:text="@string/nothing_found"
+        android:layout_below="@+id/linear_search_history"/>
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/search_rv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingRight="8dp"
+        android:paddingLeft="8dp"
+        android:paddingBottom="8dp"
         android:layout_below="@+id/search_menu"/>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/search_rv2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/linear_search_history"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"

@@ -1,6 +1,5 @@
 package com.example.kwuapp
 
-import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
@@ -8,18 +7,15 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.view.animation.AnimationUtils
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
-import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.database.*
 import com.google.firebase.firestore.FirebaseFirestore
-import kotlinx.android.synthetic.main.activity_detail.*
 import kotlinx.android.synthetic.main.activity_search.*
 
 @Suppress("DEPRECATION")
@@ -30,21 +26,25 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var dbReference: DatabaseReference
     private lateinit var etSearch: EditText
     private var listSearch: ArrayList<String> = arrayListOf()
+    var iterator: Int = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
         
         supportActionBar?.hide()
         tv_nothing.visibility = View.GONE
+        tv_nothing2.visibility = View.GONE
         search_progressBar.visibility = View.GONE
         search_menu.visibility = View.GONE
         linear_search_history.visibility = View.VISIBLE
         btn_search_back.setOnClickListener { onBackPressed() }
         loadKursus()
+        loadSearch()
 
         etSearch = findViewById(R.id.search_et)
         search_btn.setOnClickListener {
             linear_search_history.visibility = View.GONE
+            search_rv2.visibility = View.GONE
             search_progressBar.visibility = View.VISIBLE
             search_menu.visibility = View.VISIBLE
             search.listSearch.clear()
@@ -68,22 +68,12 @@ class SearchActivity : AppCompatActivity() {
 
             dbReference = FirebaseDatabase.getInstance().getReference("search")
             val key: String? = dbReference.push().getKey()
-            val kata: String = etSearch.text.toString()
-            val dataSearch = DataSearch(kata)
-            dbReference.child(key.toString()).setValue(dataSearch)
+            val db = FirebaseFirestore.getInstance()
+            val kata = etSearch.text.toString()
+            listSearch.add(kata)
+            val city = DataSearch(kata, listSearch)
+            db.collection("search").document(key!!).set(city)
         }
-
-        getSearch()
-
-        if(listSearch.isNotEmpty()){
-            tv_nothing.visibility = View.GONE
-        }
-        else{
-            tv_nothing.visibility = View.VISIBLE
-            val searchkosong = "Tidak ada riwayat pencarian"
-            tv_nothing.text = searchkosong
-        }
-
     }
 
     override fun onBackPressed() {
@@ -123,21 +113,7 @@ class SearchActivity : AppCompatActivity() {
                 }
 
                 if(dataKursus.isNotEmpty()){
-                    getSearch()
-
-                    if(listSearch.isNotEmpty()){
-                        tv_nothing.visibility = View.GONE
-                        search_rv.setHasFixedSize(true)
-                        search_rv.layoutManager = LinearLayoutManager(applicationContext)
-                        val adapter = RVASearchHistory(applicationContext, listSearch)
-                        adapter.notifyDataSetChanged()
-                        search_rv.adapter = adapter
-                    }
-                    else{
-                        tv_nothing.visibility = View.VISIBLE
-                        val searchkosong = "Tidak ada riwayat pencarian"
-                        tv_nothing.text = searchkosong
-                    }
+                    search_progressBar.visibility = View.GONE
                 }
                 else{
                     loadKursus()
@@ -168,22 +144,57 @@ class SearchActivity : AppCompatActivity() {
             }
     }
 
-    fun getSearch(){
-        val dbReference = FirebaseDatabase.getInstance().getReference("search")
-        val postListener = object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                if(listSearch.isNotEmpty()){
-                    listSearch.clear()
+    fun loadSearch(){
+        val db = FirebaseFirestore.getInstance()
+        db.collection("search")
+            .get()
+            .addOnSuccessListener { result ->
+                listSearch.clear()
+                for (document in result) {
+                    listSearch = document.get("listSearch") as ArrayList<String>
                 }
-                for (data: DataSnapshot in dataSnapshot.children){
-                    val hasil = data.getValue(DataSearch::class.java)
-                    listSearch.add(hasil?.kata!!)
-                }
-            }
 
-            override fun onCancelled(databaseError: DatabaseError) {
+                if(listSearch.isNotEmpty()){
+                    if(listSearch.isNotEmpty()){
+                        search_progressBar.visibility = View.GONE
+                        tv_nothing2.visibility = View.GONE
+                        search_rv2.layoutManager = LinearLayoutManager(this)
+                        val adapter = RVASearchHistory(this, listSearch)
+                        search_rv2.adapter = adapter
+                    }
+                    else{
+                        search_progressBar.visibility = View.GONE
+                        tv_nothing2.visibility = View.VISIBLE
+                        val searchkosong = "Tidak ada riwayat pencarian"
+                        tv_nothing2.text = searchkosong
+                    }
+                }
+                else{
+                    loadSearch()
+                }
             }
-        }
-        dbReference.addValueEventListener(postListener)
+            .addOnFailureListener { exception ->
+                search_progressBar.visibility = View.GONE
+                Log.d("Error", "Error getting documents: ", exception)
+                val snackBar = Snackbar.make(
+                    currentFocus!!, "    Connection Failure",
+                    Snackbar.LENGTH_INDEFINITE
+                )
+                val snackBarView = snackBar.view
+                snackBarView.setBackgroundColor(Color.BLACK)
+                val textView = snackBarView.findViewById<TextView>(R.id.snackbar_text)
+                textView.setTextColor(Color.WHITE)
+                textView.textSize = 16F
+                textView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.warning, 0, 0, 0)
+                val snack_action_view = snackBarView.findViewById<Button>(R.id.snackbar_action)
+                snack_action_view.setTextColor(Color.YELLOW)
+
+                // Set an action for snack bar
+                snackBar.setAction("Retry") {
+                    loadSearch()
+
+                }
+                snackBar.show()
+            }
     }
 }

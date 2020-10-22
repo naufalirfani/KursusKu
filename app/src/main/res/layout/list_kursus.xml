@@ -12,6 +12,7 @@
         android:paddingLeft="8dp"
         android:elevation="10dp"
         android:paddingTop="8dp"
+        android:paddingBottom="2dp"
         android:orientation="vertical">
 
 

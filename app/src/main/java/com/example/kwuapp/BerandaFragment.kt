@@ -17,7 +17,6 @@ import kotlinx.android.synthetic.main.fragment_beranda.*
 class BerandaFragment : Fragment() {
 
     var dataKursus: ArrayList<DataKursus> = arrayListOf()
-    val tempat = "main"
     fun newInstance(dataKursus: ArrayList<DataKursus>): BerandaFragment?{
         val fragmentBeranda = BerandaFragment()
         val args = Bundle()
@@ -47,7 +46,7 @@ class BerandaFragment : Fragment() {
 
         mRecyclerView1.setHasFixedSize(true)
         mRecyclerView1.layoutManager = GridLayoutManager(context, 2)
-        val adapter = RVAdapterKursus(activity, dataKursus, tempat)
+        val adapter = RVAdapterKursus(activity, dataKursus)
         adapter.notifyDataSetChanged()
         mRecyclerView1.adapter = adapter
 

@@ -121,6 +121,7 @@
                                 android:layout_marginLeft="8dp"
                                 android:textColor="@color/colorAbuabu"
                                 android:textStyle=""
+                                android:maxLines="1"
                                 android:text="@string/harga_asli"/>
                         </RelativeLayout>
                     </LinearLayout>
@@ -146,6 +147,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="8dp"
                                 android:textSize="12sp"
+                                android:maxLines="1"
                                 android:textColor="@color/black"
                                 android:text="@string/pembeli"/>
                         </LinearLayout>
@@ -166,6 +168,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="8dp"
                                 android:textSize="12sp"
+                                android:maxLines="1"
                                 android:textColor="@color/black"
                                 android:text="@string/dilihat"/>
                         </LinearLayout>

@@ -26,7 +26,6 @@ class SearchActivity : AppCompatActivity() {
     var dataKursus = ArrayList<DataKursus>()
     val search = Search()
     private lateinit var etSearch: EditText
-    val tempat = "search"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
@@ -34,12 +33,15 @@ class SearchActivity : AppCompatActivity() {
         supportActionBar?.hide()
         tv_nothing.visibility = View.GONE
         search_progressBar.visibility = View.GONE
+        search_menu.visibility = View.GONE
         btn_search_back.setOnClickListener { onBackPressed() }
         loadKursus()
 
         etSearch = findViewById(R.id.search_et)
         search_btn.setOnClickListener {
+            tv_search_history.visibility = View.GONE
             search_progressBar.visibility = View.VISIBLE
+            search_menu.visibility = View.VISIBLE
             search.listSearch.clear()
             search.searchJudul(etSearch.text.toString(), dataKursus)
             search_progressBar.visibility = View.GONE
@@ -52,7 +54,7 @@ class SearchActivity : AppCompatActivity() {
             }
             search_rv.setHasFixedSize(true)
             search_rv.layoutManager = GridLayoutManager(applicationContext, 2)
-            val adapter = RVAdapterKursus(applicationContext, search.listSearch, tempat)
+            val adapter = RVAdapterKursus(applicationContext, search.listSearch)
             adapter.notifyDataSetChanged()
             search_rv.adapter = adapter
 
@@ -66,6 +68,7 @@ class SearchActivity : AppCompatActivity() {
         super.onBackPressed()
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
+        overridePendingTransition(R.anim.left, R.anim.right)
         finish()
     }
 
@@ -98,9 +101,10 @@ class SearchActivity : AppCompatActivity() {
                 }
 
                 if(dataKursus.isNotEmpty()){
+                    search_progressBar.visibility = View.GONE
                     search_rv.setHasFixedSize(true)
                     search_rv.layoutManager = GridLayoutManager(applicationContext, 2)
-                    val adapter = RVAdapterKursus(applicationContext, dataKursus, tempat)
+                    val adapter = RVAdapterKursus(applicationContext, dataKursus)
                     adapter.notifyDataSetChanged()
                     search_rv.adapter = adapter
                 }

@@ -1,9 +1,6 @@
 package com.example.kwuapp
 
-import android.app.ProgressDialog
-import android.content.Intent
 import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -14,13 +11,11 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_kategori.*
-import java.io.IOException
 
 @Suppress("DEPRECATION")
 class KategoriActivity : AppCompatActivity() {
 
     var kategori: String? = null
-    var tempat: String = ""
     var arrayList: ArrayList<DataKursus> = arrayListOf()
     var dataKursus: ArrayList<DataKursus> = arrayListOf()
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,21 +25,10 @@ class KategoriActivity : AppCompatActivity() {
         supportActionBar?.hide()
 
         kategori = intent.getStringExtra("kategori")
-        tempat = "kategori $kategori"
         tv_kategori3.text = kategori
 
         btn_back.setOnClickListener { onBackPressed() }
-    }
 
-    override fun onBackPressed() {
-        super.onBackPressed()
-        val intent = Intent(this, MainActivity::class.java)
-        startActivity(intent)
-        finish()
-    }
-
-    override fun onResume() {
-        super.onResume()
         loadKursus()
     }
 
@@ -77,7 +61,7 @@ class KategoriActivity : AppCompatActivity() {
                     kategori_progressBar.visibility = View.GONE
                     rv_katergori.setHasFixedSize(true)
                     rv_katergori.layoutManager = GridLayoutManager(this, 2)
-                    val adapter = RVAdapterKursus(applicationContext, dataKursus, tempat)
+                    val adapter = RVAdapterKursus(applicationContext, dataKursus)
                     adapter.notifyDataSetChanged()
                     rv_katergori.adapter = adapter
                 }

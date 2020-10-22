@@ -1,6 +1,5 @@
 package com.example.kwuapp
 
-import android.content.Intent
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -20,7 +19,6 @@ class DetailActivity : AppCompatActivity() {
     lateinit var kursus: DataKursus
     var arraySyarat = ArrayList<String>()
     var arrayDipelajari = ArrayList<String>()
-    var tempat: String? = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,40 +27,10 @@ class DetailActivity : AppCompatActivity() {
         supportActionBar?.hide()
 
         kursus = intent.getParcelableExtra("kursus")!!
-        tempat = intent.getStringExtra("tempat")
         tv_nama.text = kursus.nama
 
         btn_detail_back.setOnClickListener {onBackPressed()}
-    }
 
-    override fun onBackPressed() {
-        super.onBackPressed()
-        val tempat2 = tempat!!.split(" ")
-        if(tempat == "main"){
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
-            finish()
-        }
-        else if(tempat2[0] == "kategori"){
-            val intent = Intent(this, KategoriActivity::class.java)
-            intent.putExtra("kategori", tempat2[1])
-            startActivity(intent)
-            finish()
-        }
-        else if(tempat == "search"){
-            val intent = Intent(this, SearchActivity::class.java)
-            startActivity(intent)
-            finish()
-        }
-        else{
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
-            finish()
-        }
-    }
-
-    override fun onResume() {
-        super.onResume()
         datail_progressBar.visibility = View.VISIBLE
         loadKursus()
     }

@@ -53,12 +53,9 @@ class MainActivity : AppCompatActivity() {
             finish()
         }
 
-    }
-
-    override fun onResume() {
-        super.onResume()
         main_progressBar.visibility = View.VISIBLE
         loadKursus()
+
     }
 
     private fun loadKursus(){

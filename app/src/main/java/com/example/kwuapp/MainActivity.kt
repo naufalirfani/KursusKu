@@ -50,7 +50,6 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, SearchActivity::class.java)
             intent.putParcelableArrayListExtra("dataKursus", arrayList)
             startActivity(intent)
-            finish()
         }
 
         main_progressBar.visibility = View.VISIBLE

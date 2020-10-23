@@ -26,6 +26,9 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var dbReference: DatabaseReference
     private lateinit var etSearch: EditText
     private var listSearch: ArrayList<String> = arrayListOf()
+    private var listSearch2: ArrayList<String> = arrayListOf()
+    private var listKosong: ArrayList<String> = arrayListOf()
+    var kataSearch: String? = null
     var iterator: Int = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,11 +43,14 @@ class SearchActivity : AppCompatActivity() {
         btn_search_back.setOnClickListener { onBackPressed() }
         loadKursus()
         loadSearch()
+        menuClick()
 
         etSearch = findViewById(R.id.search_et)
         search_btn.setOnClickListener {
+            startermenu()
             linear_search_history.visibility = View.GONE
             search_rv2.visibility = View.GONE
+            tv_nothing2.visibility = View.GONE
             search_progressBar.visibility = View.VISIBLE
             search_menu.visibility = View.VISIBLE
             search.listSearch.clear()
@@ -72,16 +78,22 @@ class SearchActivity : AppCompatActivity() {
             val kata = etSearch.text.toString()
             listSearch.add(kata)
             val city = DataSearch(kata, listSearch)
-            db.collection("search").document(key!!).set(city)
+            db.collection("search").document("user1").set(city)
         }
-    }
 
-    override fun onBackPressed() {
-        super.onBackPressed()
-        val intent = Intent(this, MainActivity::class.java)
-        startActivity(intent)
-        overridePendingTransition(R.anim.left, R.anim.right)
-        finish()
+        btn_search_clear.setOnClickListener {
+            dbReference = FirebaseDatabase.getInstance().getReference("search")
+            val key: String? = dbReference.push().getKey()
+            val db = FirebaseFirestore.getInstance()
+            val kata = "kosong"
+            listKosong.add(kata)
+            val city = DataSearch(kata, listKosong)
+            db.collection("search").document("user1").set(city)
+            search_rv2.visibility = View.GONE
+            tv_nothing2.visibility = View.VISIBLE
+            val searchkosong = "Tidak ada riwayat pencarian"
+            tv_nothing2.text = searchkosong
+        }
     }
 
     private fun closeKeyBoard() {
@@ -152,14 +164,17 @@ class SearchActivity : AppCompatActivity() {
                 listSearch.clear()
                 for (document in result) {
                     listSearch = document.get("listSearch") as ArrayList<String>
+                    kataSearch = document.getString("kata")
                 }
 
                 if(listSearch.isNotEmpty()){
-                    if(listSearch.isNotEmpty()){
+                    if(kataSearch != "kosong"){
+                        listSearch2 = listSearch
+                        listSearch2.remove("kosong")
                         search_progressBar.visibility = View.GONE
                         tv_nothing2.visibility = View.GONE
-                        search_rv2.layoutManager = LinearLayoutManager(this)
-                        val adapter = RVASearchHistory(this, listSearch)
+                        search_rv2.layoutManager = LinearLayoutManager(this,LinearLayoutManager.VERTICAL,true)
+                        val adapter = RVASearchHistory(this, listSearch2)
                         search_rv2.adapter = adapter
                     }
                     else{
@@ -196,5 +211,172 @@ class SearchActivity : AppCompatActivity() {
                 }
                 snackBar.show()
             }
+    }
+    fun startermenu(){
+        cv_search_1.setCardBackgroundColor(resources.getColor(R.color.colorAbuGelap))
+        tv_search_semua.setTextColor(resources.getColor(R.color.white))
+        cv_search_2.setCardBackgroundColor(resources.getColor(R.color.white))
+        tv_search_bisnis.setTextColor(resources.getColor(R.color.black))
+        cv_search_3.setCardBackgroundColor(resources.getColor(R.color.white))
+        tv_search_desain.setTextColor(resources.getColor(R.color.black))
+        cv_search_4.setCardBackgroundColor(resources.getColor(R.color.white))
+        tv_search_finansial.setTextColor(resources.getColor(R.color.black))
+        cv_search_5.setCardBackgroundColor(resources.getColor(R.color.white))
+        tv_search_fotografi.setTextColor(resources.getColor(R.color.black))
+        cv_search_6.setCardBackgroundColor(resources.getColor(R.color.white))
+        tv_search_kantor.setTextColor(resources.getColor(R.color.black))
+        cv_search_7.setCardBackgroundColor(resources.getColor(R.color.white))
+        tv_search_pendidikan.setTextColor(resources.getColor(R.color.black))
+        cv_search_8.setCardBackgroundColor(resources.getColor(R.color.white))
+        tv_search_pengembangan.setTextColor(resources.getColor(R.color.black))
+
+        cv_search_1.radius
+    }
+
+    fun menuClick(){
+        cv_search_1.setOnClickListener {
+            cv_search_1.setCardBackgroundColor(resources.getColor(R.color.colorAbuGelap))
+            tv_search_semua.setTextColor(resources.getColor(R.color.white))
+            cv_search_2.setCardBackgroundColor(resources.getColor(R.color.white))
+            tv_search_bisnis.setTextColor(resources.getColor(R.color.black))
+            cv_search_3.setCardBackgroundColor(resources.getColor(R.color.white))
+            tv_search_desain.setTextColor(resources.getColor(R.color.black))
+            cv_search_4.setCardBackgroundColor(resources.getColor(R.color.white))
+            tv_search_finansial.setTextColor(resources.getColor(R.color.black))
+            cv_search_5.setCardBackgroundColor(resources.getColor(R.color.white))
+            tv_search_fotografi.setTextColor(resources.getColor(R.color.black))
+            cv_search_6.setCardBackgroundColor(resources.getColor(R.color.white))
+            tv_search_kantor.setTextColor(resources.getColor(R.color.black))
+            cv_search_7.setCardBackgroundColor(resources.getColor(R.color.white))
+            tv_search_pendidikan.setTextColor(resources.getColor(R.color.black))
+            cv_search_8.setCardBackgroundColor(resources.getColor(R.color.white))
+            tv_search_pengembangan.setTextColor(resources.getColor(R.color.black))
+        }
+        cv_search_2.setOnClickListener {
+            cv_search_1.setCardBackgroundColor(resources.getColor(R.color.white))
+            tv_search_semua.setTextColor(resources.getColor(R.color.black))
+            cv_search_2.setCardBackgroundColor(resources.getColor(R.color.colorAbuGelap))
+            tv_search_bisnis.setTextColor(resources.getColor(R.color.white))
+            cv_search_3.setCardBackgroundColor(resources.getColor(R.color.white))
+            tv_search_desain.setTextColor(resources.getColor(R.color.black))
+            cv_search_4.setCardBackgroundColor(resources.getColor(R.color.white))
+            tv_search_finansial.setTextColor(resources.getColor(R.color.black))
+            cv_search_5.setCardBackgroundColor(resources.getColor(R.color.white))
+            tv_search_fotografi.setTextColor(resources.getColor(R.color.black))
+            cv_search_6.setCardBackgroundColor(resources.getColor(R.color.white))
+            tv_search_kantor.setTextColor(resources.getColor(R.color.black))
+            cv_search_7.setCardBackgroundColor(resources.getColor(R.color.white))
+            tv_search_pendidikan.setTextColor(resources.getColor(R.color.black))
+            cv_search_8.setCardBackgroundColor(resources.getColor(R.color.white))
+            tv_search_pengembangan.setTextColor(resources.getColor(R.color.black))
+        }
+        cv_search_3.setOnClickListener {
+            cv_search_1.setCardBackgroundColor(resources.getColor(R.color.white))
+            tv_search_semua.setTextColor(resources.getColor(R.color.black))
+            cv_search_2.setCardBackgroundColor(resources.getColor(R.color.white))
+            tv_search_bisnis.setTextColor(resources.getColor(R.color.black))
+            cv_search_3.setCardBackgroundColor(resources.getColor(R.color.colorAbuGelap))
+            tv_search_desain.setTextColor(resources.getColor(R.color.white))
+            cv_search_4.setCardBackgroundColor(resources.getColor(R.color.white))
+            tv_search_finansial.setTextColor(resources.getColor(R.color.black))
+            cv_search_5.setCardBackgroundColor(resources.getColor(R.color.white))
+            tv_search_fotografi.setTextColor(resources.getColor(R.color.black))
+            cv_search_6.setCardBackgroundColor(resources.getColor(R.color.white))
+            tv_search_kantor.setTextColor(resources.getColor(R.color.black))
+            cv_search_7.setCardBackgroundColor(resources.getColor(R.color.white))
+            tv_search_pendidikan.setTextColor(resources.getColor(R.color.black))
+            cv_search_8.setCardBackgroundColor(resources.getColor(R.color.white))
+            tv_search_pengembangan.setTextColor(resources.getColor(R.color.black))
+        }
+        cv_search_4.setOnClickListener {
+            cv_search_1.setCardBackgroundColor(resources.getColor(R.color.white))
+            tv_search_semua.setTextColor(resources.getColor(R.color.black))
+            cv_search_2.setCardBackgroundColor(resources.getColor(R.color.white))
+            tv_search_bisnis.setTextColor(resources.getColor(R.color.black))
+            cv_search_3.setCardBackgroundColor(resources.getColor(R.color.white))
+            tv_search_desain.setTextColor(resources.getColor(R.color.black))
+            cv_search_4.setCardBackgroundColor(resources.getColor(R.color.colorAbuGelap))
+            tv_search_finansial.setTextColor(resources.getColor(R.color.white))
+            cv_search_5.setCardBackgroundColor(resources.getColor(R.color.white))
+            tv_search_fotografi.setTextColor(resources.getColor(R.color.black))
+            cv_search_6.setCardBackgroundColor(resources.getColor(R.color.white))
+            tv_search_kantor.setTextColor(resources.getColor(R.color.black))
+            cv_search_7.setCardBackgroundColor(resources.getColor(R.color.white))
+            tv_search_pendidikan.setTextColor(resources.getColor(R.color.black))
+            cv_search_8.setCardBackgroundColor(resources.getColor(R.color.white))
+            tv_search_pengembangan.setTextColor(resources.getColor(R.color.black))
+        }
+        cv_search_5.setOnClickListener {
+            cv_search_1.setCardBackgroundColor(resources.getColor(R.color.white))
+            tv_search_semua.setTextColor(resources.getColor(R.color.black))
+            cv_search_2.setCardBackgroundColor(resources.getColor(R.color.white))
+            tv_search_bisnis.setTextColor(resources.getColor(R.color.black))
+            cv_search_3.setCardBackgroundColor(resources.getColor(R.color.white))
+            tv_search_desain.setTextColor(resources.getColor(R.color.black))
+            cv_search_4.setCardBackgroundColor(resources.getColor(R.color.white))
+            tv_search_finansial.setTextColor(resources.getColor(R.color.black))
+            cv_search_5.setCardBackgroundColor(resources.getColor(R.color.colorAbuGelap))
+            tv_search_fotografi.setTextColor(resources.getColor(R.color.white))
+            cv_search_6.setCardBackgroundColor(resources.getColor(R.color.white))
+            tv_search_kantor.setTextColor(resources.getColor(R.color.black))
+            cv_search_7.setCardBackgroundColor(resources.getColor(R.color.white))
+            tv_search_pendidikan.setTextColor(resources.getColor(R.color.black))
+            cv_search_8.setCardBackgroundColor(resources.getColor(R.color.white))
+            tv_search_pengembangan.setTextColor(resources.getColor(R.color.black))
+        }
+        cv_search_6.setOnClickListener {
+            cv_search_1.setCardBackgroundColor(resources.getColor(R.color.white))
+            tv_search_semua.setTextColor(resources.getColor(R.color.black))
+            cv_search_2.setCardBackgroundColor(resources.getColor(R.color.white))
+            tv_search_bisnis.setTextColor(resources.getColor(R.color.black))
+            cv_search_3.setCardBackgroundColor(resources.getColor(R.color.white))
+            tv_search_desain.setTextColor(resources.getColor(R.color.black))
+            cv_search_4.setCardBackgroundColor(resources.getColor(R.color.white))
+            tv_search_finansial.setTextColor(resources.getColor(R.color.black))
+            cv_search_5.setCardBackgroundColor(resources.getColor(R.color.white))
+            tv_search_fotografi.setTextColor(resources.getColor(R.color.black))
+            cv_search_6.setCardBackgroundColor(resources.getColor(R.color.colorAbuGelap))
+            tv_search_kantor.setTextColor(resources.getColor(R.color.white))
+            cv_search_7.setCardBackgroundColor(resources.getColor(R.color.white))
+            tv_search_pendidikan.setTextColor(resources.getColor(R.color.black))
+            cv_search_8.setCardBackgroundColor(resources.getColor(R.color.white))
+            tv_search_pengembangan.setTextColor(resources.getColor(R.color.black))
+        }
+        cv_search_7.setOnClickListener {
+            cv_search_1.setCardBackgroundColor(resources.getColor(R.color.white))
+            tv_search_semua.setTextColor(resources.getColor(R.color.black))
+            cv_search_2.setCardBackgroundColor(resources.getColor(R.color.white))
+            tv_search_bisnis.setTextColor(resources.getColor(R.color.black))
+            cv_search_3.setCardBackgroundColor(resources.getColor(R.color.white))
+            tv_search_desain.setTextColor(resources.getColor(R.color.black))
+            cv_search_4.setCardBackgroundColor(resources.getColor(R.color.white))
+            tv_search_finansial.setTextColor(resources.getColor(R.color.black))
+            cv_search_5.setCardBackgroundColor(resources.getColor(R.color.white))
+            tv_search_fotografi.setTextColor(resources.getColor(R.color.black))
+            cv_search_6.setCardBackgroundColor(resources.getColor(R.color.white))
+            tv_search_kantor.setTextColor(resources.getColor(R.color.black))
+            cv_search_7.setCardBackgroundColor(resources.getColor(R.color.colorAbuGelap))
+            tv_search_pendidikan.setTextColor(resources.getColor(R.color.white))
+            cv_search_8.setCardBackgroundColor(resources.getColor(R.color.white))
+            tv_search_pengembangan.setTextColor(resources.getColor(R.color.black))
+        }
+        cv_search_8.setOnClickListener {
+            cv_search_1.setCardBackgroundColor(resources.getColor(R.color.white))
+            tv_search_semua.setTextColor(resources.getColor(R.color.black))
+            cv_search_2.setCardBackgroundColor(resources.getColor(R.color.white))
+            tv_search_bisnis.setTextColor(resources.getColor(R.color.black))
+            cv_search_3.setCardBackgroundColor(resources.getColor(R.color.white))
+            tv_search_desain.setTextColor(resources.getColor(R.color.black))
+            cv_search_4.setCardBackgroundColor(resources.getColor(R.color.white))
+            tv_search_finansial.setTextColor(resources.getColor(R.color.black))
+            cv_search_5.setCardBackgroundColor(resources.getColor(R.color.white))
+            tv_search_fotografi.setTextColor(resources.getColor(R.color.black))
+            cv_search_6.setCardBackgroundColor(resources.getColor(R.color.white))
+            tv_search_kantor.setTextColor(resources.getColor(R.color.black))
+            cv_search_7.setCardBackgroundColor(resources.getColor(R.color.white))
+            tv_search_pendidikan.setTextColor(resources.getColor(R.color.black))
+            cv_search_8.setCardBackgroundColor(resources.getColor(R.color.colorAbuGelap))
+            tv_search_pengembangan.setTextColor(resources.getColor(R.color.white))
+        }
     }
 }

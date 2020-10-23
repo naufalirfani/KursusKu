@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     tools:context=".SearchActivity">
     <LinearLayout
         android:id="@+id/search_linear"
@@ -95,65 +96,177 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="20dp"
             android:orientation="horizontal">
-            <TextView
-                android:id="@+id/tv_search_semua"
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cv_search_1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="8dp"
-                android:text="@string/semua"
-                android:textColor="@color/black"/>
-            <TextView
-                android:id="@+id/tv_search_bisnis"
+                android:background="@color/white"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                android:layout_marginBottom="1dp"
+                app:cardCornerRadius="16dp">
+                <TextView
+                    android:id="@+id/tv_search_semua"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="12dp"
+                    android:paddingRight="12dp"
+                    android:paddingTop="4dp"
+                    android:paddingBottom="8dp"
+                    android:textSize="12sp"
+                    android:text="@string/semua"
+                    android:textColor="@color/black"/>
+            </androidx.cardview.widget.CardView>
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cv_search_2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="8dp"
-                android:text="@string/bisnis"
-                android:textColor="@color/black"/>
-            <TextView
-                android:id="@+id/tv_search_desain"
+                android:background="@color/white"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                android:layout_marginBottom="1dp"
+                app:cardCornerRadius="16dp">
+                <TextView
+                    android:id="@+id/tv_search_bisnis"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="12dp"
+                    android:paddingRight="12dp"
+                    android:paddingTop="4dp"
+                    android:paddingBottom="8dp"
+                    android:textSize="12sp"
+                    android:text="@string/bisnis"
+                    android:textColor="@color/black"/>
+            </androidx.cardview.widget.CardView>
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cv_search_3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="8dp"
-                android:text="@string/desain"
-                android:textColor="@color/black"/>
-            <TextView
-                android:id="@+id/tv_search_finasial"
+                android:background="@color/white"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                android:layout_marginBottom="1dp"
+                app:cardCornerRadius="16dp">
+                <TextView
+                    android:id="@+id/tv_search_desain"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="12dp"
+                    android:paddingRight="12dp"
+                    android:paddingTop="4dp"
+                    android:paddingBottom="8dp"
+                    android:textSize="12sp"
+                    android:text="@string/desain"
+                    android:textColor="@color/black"/>
+            </androidx.cardview.widget.CardView>
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cv_search_4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="8dp"
-                android:text="@string/finasial"
-                android:textColor="@color/black"/>
-            <TextView
-                android:id="@+id/tv_search_fotografi"
+                android:background="@color/white"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                android:layout_marginBottom="1dp"
+                app:cardCornerRadius="16dp">
+                <TextView
+                    android:id="@+id/tv_search_finansial"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="12dp"
+                    android:paddingRight="12dp"
+                    android:paddingTop="4dp"
+                    android:paddingBottom="8dp"
+                    android:textSize="12sp"
+                    android:text="@string/finasial"
+                    android:textColor="@color/black"/>
+            </androidx.cardview.widget.CardView>
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cv_search_5"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="8dp"
-                android:text="@string/fotografi"
-                android:textColor="@color/black"/>
-            <TextView
-                android:id="@+id/tv_search_kantor"
+                android:background="@color/white"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                android:layout_marginBottom="1dp"
+                app:cardCornerRadius="16dp">
+                <TextView
+                    android:id="@+id/tv_search_fotografi"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="12dp"
+                    android:paddingRight="12dp"
+                    android:paddingTop="4dp"
+                    android:paddingBottom="8dp"
+                    android:textSize="12sp"
+                    android:text="@string/fotografi"
+                    android:textColor="@color/black"/>
+            </androidx.cardview.widget.CardView>
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cv_search_6"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="8dp"
-                android:text="@string/kantor"
-                android:textColor="@color/black"/>
-            <TextView
-                android:id="@+id/tv_search_pendidikan"
+                android:background="@color/white"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                android:layout_marginBottom="1dp"
+                app:cardCornerRadius="16dp">
+                <TextView
+                    android:id="@+id/tv_search_kantor"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="12dp"
+                    android:paddingRight="12dp"
+                    android:paddingTop="4dp"
+                    android:paddingBottom="8dp"
+                    android:textSize="12sp"
+                    android:text="@string/kantor"
+                    android:textColor="@color/black"/>
+            </androidx.cardview.widget.CardView>
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cv_search_7"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="8dp"
-                android:text="@string/pendidikan"
-                android:textColor="@color/black"/>
-            <TextView
-                android:id="@+id/tv_search_pengembangan"
+                android:background="@color/white"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                android:layout_marginBottom="1dp"
+                app:cardCornerRadius="16dp">
+                <TextView
+                    android:id="@+id/tv_search_pendidikan"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="12dp"
+                    android:paddingRight="12dp"
+                    android:paddingTop="4dp"
+                    android:paddingBottom="8dp"
+                    android:textSize="12sp"
+                    android:text="@string/pendidikan"
+                    android:textColor="@color/black"/>
+            </androidx.cardview.widget.CardView>
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cv_search_8"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="8dp"
-                android:text="@string/pengembangan"
-                android:textColor="@color/black"/>
+                android:background="@color/white"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                android:layout_marginBottom="1dp"
+                app:cardCornerRadius="16dp">
+                <TextView
+                    android:id="@+id/tv_search_pengembangan"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="12dp"
+                    android:paddingRight="12dp"
+                    android:paddingTop="4dp"
+                    android:paddingBottom="8dp"
+                    android:textSize="12sp"
+                    android:text="@string/pengembangan"
+                    android:textColor="@color/black"/>
+            </androidx.cardview.widget.CardView>
         </LinearLayout>
     </HorizontalScrollView>
     <TextView
@@ -162,6 +275,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
+        android:layout_marginTop="8dp"
         android:padding="16dp"
         android:textSize="14sp"
         android:gravity="center"
@@ -176,6 +290,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
+        android:layout_marginTop="8dp"
         android:padding="16dp"
         android:textSize="14sp"
         android:gravity="center"
@@ -188,9 +303,10 @@
         android:id="@+id/search_rv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingRight="8dp"
-        android:paddingLeft="8dp"
-        android:paddingBottom="8dp"
+        android:layout_marginRight="4dp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"
         android:layout_below="@+id/search_menu"/>
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/search_rv2"

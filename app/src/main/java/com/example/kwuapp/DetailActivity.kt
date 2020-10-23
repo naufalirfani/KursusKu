@@ -1,5 +1,6 @@
 package com.example.kwuapp
 
+import android.content.Intent
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -33,6 +34,11 @@ class DetailActivity : AppCompatActivity() {
 
         datail_progressBar.visibility = View.VISIBLE
         loadKursus()
+
+        btn_detail_search.setOnClickListener {
+            val intent = Intent(this, SearchActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     private fun loadKursus(){

@@ -48,7 +48,6 @@ class MainActivity : AppCompatActivity() {
         }
         btn_search.setOnClickListener {
             val intent = Intent(this, SearchActivity::class.java)
-            intent.putParcelableArrayListExtra("dataKursus", arrayList)
             startActivity(intent)
         }
 

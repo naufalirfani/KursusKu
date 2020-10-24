@@ -1,22 +1,37 @@
 package com.example.kwuapp
 
+import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.TextView
+import android.widget.Toast
 import androidx.annotation.Nullable
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout.OnRefreshListener
+import androidx.viewpager.widget.ViewPager
+import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.fragment_beranda.*
+import kotlin.random.Random
 
 @Suppress("DEPRECATION")
-class BerandaFragment : Fragment() {
+class BerandaFragment : Fragment(), OnRefreshListener {
 
     var dataKursus: ArrayList<DataKursus> = arrayListOf()
+    var mSwipeRefreshLayout: SwipeRefreshLayout? = null
+    val kategori = arrayOf("Desain", "Bisnis", "Finansial", "Kantor", "Pendidikan", "Pengembangan")
+    var angka1: Int = 0
+    var angka2: Int = 0
     fun newInstance(dataKursus: ArrayList<DataKursus>): BerandaFragment?{
         val fragmentBeranda = BerandaFragment()
         val args = Bundle()
@@ -34,8 +49,25 @@ class BerandaFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_beranda, container, false)
+        val rootView: View = inflater.inflate(R.layout.fragment_beranda, container, false)
+
+        // SwipeRefreshLayout
+        mSwipeRefreshLayout =
+            rootView.findViewById<View>(R.id.swipe_container) as SwipeRefreshLayout
+        mSwipeRefreshLayout!!.setOnRefreshListener(this)
+        mSwipeRefreshLayout!!.setColorSchemeResources(
+            R.color.colorPrimary,
+            R.color.colorPrimary,
+            R.color.colorPrimary,
+            R.color.colorPrimary
+        )
+        
+        mSwipeRefreshLayout!!.post {
+            mSwipeRefreshLayout!!.isRefreshing = true
+            loadKursus()
+        }
+
+        return rootView
     }
 
     override fun onViewCreated(
@@ -112,5 +144,50 @@ class BerandaFragment : Fragment() {
                 }
             }
         })
+    }
+
+    override fun onRefresh() {
+        mSwipeRefreshLayout!!.isRefreshing = true
+        loadKursus()
+    }
+
+    private fun loadKursus() {
+        val db = FirebaseFirestore.getInstance()
+        db.collection("kursus")
+            .get()
+            .addOnSuccessListener { result ->
+                dataKursus.clear()
+                for (document in result) {
+                    dataKursus.add(
+                        DataKursus(
+                            document.getString("deskripsi")!!,
+                            document.getString("dilihat")!!,
+                            document.getString("gambar")!!,
+                            document.getString("harga")!!,
+                            document.getString("kategori")!!,
+                            document.getString("nama")!!,
+                            document.getString("pembuat")!!,
+                            document.getString("pengguna")!!,
+                            document.getString("rating")!!,
+                            document.getString("remaining")!!
+                        )
+                    )
+                }
+
+                if (dataKursus.isNotEmpty()) {
+                    mSwipeRefreshLayout!!.setRefreshing(false)
+                    mRecyclerView1.setHasFixedSize(true)
+                    mRecyclerView1.layoutManager = GridLayoutManager(context, 2)
+                    val adapter = RVAdapterKursus(activity, dataKursus)
+                    adapter.notifyDataSetChanged()
+                    mRecyclerView1.adapter = adapter
+                } else {
+                    loadKursus()
+                }
+            }
+            .addOnFailureListener { exception ->
+                mSwipeRefreshLayout!!.setRefreshing(false)
+                Toast.makeText(context, "Connection error", Toast.LENGTH_SHORT).show()
+            }
     }
 }

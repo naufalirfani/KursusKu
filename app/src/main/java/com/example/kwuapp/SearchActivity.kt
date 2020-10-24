@@ -1,22 +1,26 @@
 package com.example.kwuapp
 
 import android.content.Context
-import android.content.Intent
 import android.graphics.Color
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+import android.widget.TextView.OnEditorActionListener
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
-import com.google.firebase.database.*
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_search.*
+
 
 @Suppress("DEPRECATION")
 class SearchActivity : AppCompatActivity() {
@@ -45,43 +49,20 @@ class SearchActivity : AppCompatActivity() {
         loadSearch()
         menuClick()
 
+        search_btn.setOnClickListener { perfomSearch() }
+
         etSearch = findViewById(R.id.search_et)
-        search_btn.setOnClickListener {
-            startermenu()
-            linear_search_history.visibility = View.GONE
-            search_rv2.visibility = View.GONE
-            tv_nothing2.visibility = View.GONE
-            search_progressBar.visibility = View.VISIBLE
-            search_menu.visibility = View.VISIBLE
-            search.listSearch.clear()
-            search.searchJudul(etSearch.text.toString(), dataKursus)
-            search_progressBar.visibility = View.GONE
-            if(search.listSearch.size == 0){
-                tv_nothing.visibility = View.VISIBLE
-                tv_nothing.text = getString(R.string.nothing_found)
+        etSearch.setOnEditorActionListener(OnEditorActionListener { v, actionId, event ->
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                perfomSearch()
+                return@OnEditorActionListener true
             }
-            else{
-                tv_nothing.visibility = View.GONE
-            }
-            search_rv.setHasFixedSize(true)
-            search_rv.layoutManager = GridLayoutManager(applicationContext, 2)
-            val adapter = RVAdapterKursus(applicationContext, search.listSearch)
-            adapter.notifyDataSetChanged()
-            search_rv.adapter = adapter
+            false
+        })
 
-            //close virtual keyboard
-            closeKeyBoard()
-
-            dbReference = FirebaseDatabase.getInstance().getReference("search")
-            val key: String? = dbReference.push().getKey()
-            val db = FirebaseFirestore.getInstance()
-            val kata = etSearch.text.toString()
-            listSearch.add(kata)
-            val city = DataSearch(kata, listSearch)
-            db.collection("search").document("user1").set(city)
-        }
 
         btn_search_clear.setOnClickListener {
+            listSearch.clear()
             dbReference = FirebaseDatabase.getInstance().getReference("search")
             val key: String? = dbReference.push().getKey()
             val db = FirebaseFirestore.getInstance()
@@ -94,6 +75,41 @@ class SearchActivity : AppCompatActivity() {
             val searchkosong = "Tidak ada riwayat pencarian"
             tv_nothing2.text = searchkosong
         }
+    }
+
+    fun perfomSearch(){
+        startermenu()
+        linear_search_history.visibility = View.GONE
+        search_rv2.visibility = View.GONE
+        tv_nothing2.visibility = View.GONE
+        search_progressBar.visibility = View.VISIBLE
+        search_menu.visibility = View.VISIBLE
+        search.listSearch.clear()
+        search.searchJudul(etSearch.text.toString(), dataKursus)
+        search_progressBar.visibility = View.GONE
+        if(search.listSearch.size == 0){
+            tv_nothing.visibility = View.VISIBLE
+            tv_nothing.text = getString(R.string.nothing_found)
+        }
+        else{
+            tv_nothing.visibility = View.GONE
+        }
+        search_rv.setHasFixedSize(true)
+        search_rv.layoutManager = GridLayoutManager(applicationContext, 2)
+        val adapter = RVAdapterKursus(applicationContext, search.listSearch)
+        adapter.notifyDataSetChanged()
+        search_rv.adapter = adapter
+
+        //close virtual keyboard
+        closeKeyBoard()
+
+        dbReference = FirebaseDatabase.getInstance().getReference("search")
+        val key: String? = dbReference.push().getKey()
+        val db = FirebaseFirestore.getInstance()
+        val kata = etSearch.text.toString()
+        listSearch.add(kata)
+        val city = DataSearch(kata, listSearch)
+        db.collection("search").document("user1").set(city)
     }
 
     private fun closeKeyBoard() {

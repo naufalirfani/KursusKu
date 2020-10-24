@@ -31,6 +31,7 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var etSearch: EditText
     private var listSearch: ArrayList<String> = arrayListOf()
     private var listSearch2: ArrayList<String> = arrayListOf()
+    private var listSearchKategori = ArrayList<DataKursus>()
     private var listKosong: ArrayList<String> = arrayListOf()
     var kataSearch: String? = null
     var iterator: Int = 0
@@ -245,8 +246,6 @@ class SearchActivity : AppCompatActivity() {
         tv_search_pendidikan.setTextColor(resources.getColor(R.color.black))
         cv_search_8.setCardBackgroundColor(resources.getColor(R.color.white))
         tv_search_pengembangan.setTextColor(resources.getColor(R.color.black))
-
-        cv_search_1.radius
     }
 
     fun menuClick(){
@@ -267,6 +266,19 @@ class SearchActivity : AppCompatActivity() {
             tv_search_pendidikan.setTextColor(resources.getColor(R.color.black))
             cv_search_8.setCardBackgroundColor(resources.getColor(R.color.white))
             tv_search_pengembangan.setTextColor(resources.getColor(R.color.black))
+
+            if(search.listSearch.size == 0){
+                tv_nothing.visibility = View.VISIBLE
+                tv_nothing.text = getString(R.string.nothing_found)
+            }
+            else{
+                tv_nothing.visibility = View.GONE
+            }
+            search_rv.setHasFixedSize(true)
+            search_rv.layoutManager = GridLayoutManager(applicationContext, 2)
+            val adapter = RVAdapterKursus(applicationContext, search.listSearch)
+            adapter.notifyDataSetChanged()
+            search_rv.adapter = adapter
         }
         cv_search_2.setOnClickListener {
             cv_search_1.setCardBackgroundColor(resources.getColor(R.color.white))
@@ -285,6 +297,25 @@ class SearchActivity : AppCompatActivity() {
             tv_search_pendidikan.setTextColor(resources.getColor(R.color.black))
             cv_search_8.setCardBackgroundColor(resources.getColor(R.color.white))
             tv_search_pengembangan.setTextColor(resources.getColor(R.color.black))
+
+            listSearchKategori.clear()
+            for(i in 0 until search.listSearch.size){
+                if(search.listSearch[i].kategori == getString(R.string.bisnis)){
+                    listSearchKategori.add(search.listSearch[i])
+                }
+            }
+            if(listSearchKategori.size == 0){
+                tv_nothing.visibility = View.VISIBLE
+                tv_nothing.text = getString(R.string.nothing_found)
+            }
+            else{
+                tv_nothing.visibility = View.GONE
+            }
+            search_rv.setHasFixedSize(true)
+            search_rv.layoutManager = GridLayoutManager(applicationContext, 2)
+            val adapter = RVAdapterKursus(applicationContext, listSearchKategori)
+            adapter.notifyDataSetChanged()
+            search_rv.adapter = adapter
         }
         cv_search_3.setOnClickListener {
             cv_search_1.setCardBackgroundColor(resources.getColor(R.color.white))
@@ -303,6 +334,25 @@ class SearchActivity : AppCompatActivity() {
             tv_search_pendidikan.setTextColor(resources.getColor(R.color.black))
             cv_search_8.setCardBackgroundColor(resources.getColor(R.color.white))
             tv_search_pengembangan.setTextColor(resources.getColor(R.color.black))
+
+            listSearchKategori.clear()
+            for(i in 0 until search.listSearch.size){
+                if(search.listSearch[i].kategori == getString(R.string.desain)){
+                    listSearchKategori.add(search.listSearch[i])
+                }
+            }
+            if(listSearchKategori.size == 0){
+                tv_nothing.visibility = View.VISIBLE
+                tv_nothing.text = getString(R.string.nothing_found)
+            }
+            else{
+                tv_nothing.visibility = View.GONE
+            }
+            search_rv.setHasFixedSize(true)
+            search_rv.layoutManager = GridLayoutManager(applicationContext, 2)
+            val adapter = RVAdapterKursus(applicationContext, listSearchKategori)
+            adapter.notifyDataSetChanged()
+            search_rv.adapter = adapter
         }
         cv_search_4.setOnClickListener {
             cv_search_1.setCardBackgroundColor(resources.getColor(R.color.white))
@@ -321,6 +371,25 @@ class SearchActivity : AppCompatActivity() {
             tv_search_pendidikan.setTextColor(resources.getColor(R.color.black))
             cv_search_8.setCardBackgroundColor(resources.getColor(R.color.white))
             tv_search_pengembangan.setTextColor(resources.getColor(R.color.black))
+
+            listSearchKategori.clear()
+            for(i in 0 until search.listSearch.size){
+                if(search.listSearch[i].kategori == getString(R.string.finasial)){
+                    listSearchKategori.add(search.listSearch[i])
+                }
+            }
+            if(listSearchKategori.size == 0){
+                tv_nothing.visibility = View.VISIBLE
+                tv_nothing.text = getString(R.string.nothing_found)
+            }
+            else{
+                tv_nothing.visibility = View.GONE
+            }
+            search_rv.setHasFixedSize(true)
+            search_rv.layoutManager = GridLayoutManager(applicationContext, 2)
+            val adapter = RVAdapterKursus(applicationContext, listSearchKategori)
+            adapter.notifyDataSetChanged()
+            search_rv.adapter = adapter
         }
         cv_search_5.setOnClickListener {
             cv_search_1.setCardBackgroundColor(resources.getColor(R.color.white))
@@ -339,6 +408,25 @@ class SearchActivity : AppCompatActivity() {
             tv_search_pendidikan.setTextColor(resources.getColor(R.color.black))
             cv_search_8.setCardBackgroundColor(resources.getColor(R.color.white))
             tv_search_pengembangan.setTextColor(resources.getColor(R.color.black))
+
+            listSearchKategori.clear()
+            for(i in 0 until search.listSearch.size){
+                if(search.listSearch[i].kategori == getString(R.string.fotografi)){
+                    listSearchKategori.add(search.listSearch[i])
+                }
+            }
+            if(listSearchKategori.size == 0){
+                tv_nothing.visibility = View.VISIBLE
+                tv_nothing.text = getString(R.string.nothing_found)
+            }
+            else{
+                tv_nothing.visibility = View.GONE
+            }
+            search_rv.setHasFixedSize(true)
+            search_rv.layoutManager = GridLayoutManager(applicationContext, 2)
+            val adapter = RVAdapterKursus(applicationContext, listSearchKategori)
+            adapter.notifyDataSetChanged()
+            search_rv.adapter = adapter
         }
         cv_search_6.setOnClickListener {
             cv_search_1.setCardBackgroundColor(resources.getColor(R.color.white))
@@ -357,6 +445,25 @@ class SearchActivity : AppCompatActivity() {
             tv_search_pendidikan.setTextColor(resources.getColor(R.color.black))
             cv_search_8.setCardBackgroundColor(resources.getColor(R.color.white))
             tv_search_pengembangan.setTextColor(resources.getColor(R.color.black))
+
+            listSearchKategori.clear()
+            for(i in 0 until search.listSearch.size){
+                if(search.listSearch[i].kategori == getString(R.string.kantor)){
+                    listSearchKategori.add(search.listSearch[i])
+                }
+            }
+            if(listSearchKategori.size == 0){
+                tv_nothing.visibility = View.VISIBLE
+                tv_nothing.text = getString(R.string.nothing_found)
+            }
+            else{
+                tv_nothing.visibility = View.GONE
+            }
+            search_rv.setHasFixedSize(true)
+            search_rv.layoutManager = GridLayoutManager(applicationContext, 2)
+            val adapter = RVAdapterKursus(applicationContext, listSearchKategori)
+            adapter.notifyDataSetChanged()
+            search_rv.adapter = adapter
         }
         cv_search_7.setOnClickListener {
             cv_search_1.setCardBackgroundColor(resources.getColor(R.color.white))
@@ -375,6 +482,25 @@ class SearchActivity : AppCompatActivity() {
             tv_search_pendidikan.setTextColor(resources.getColor(R.color.white))
             cv_search_8.setCardBackgroundColor(resources.getColor(R.color.white))
             tv_search_pengembangan.setTextColor(resources.getColor(R.color.black))
+
+            listSearchKategori.clear()
+            for(i in 0 until search.listSearch.size){
+                if(search.listSearch[i].kategori == getString(R.string.pendidikan)){
+                    listSearchKategori.add(search.listSearch[i])
+                }
+            }
+            if(listSearchKategori.size == 0){
+                tv_nothing.visibility = View.VISIBLE
+                tv_nothing.text = getString(R.string.nothing_found)
+            }
+            else{
+                tv_nothing.visibility = View.GONE
+            }
+            search_rv.setHasFixedSize(true)
+            search_rv.layoutManager = GridLayoutManager(applicationContext, 2)
+            val adapter = RVAdapterKursus(applicationContext, listSearchKategori)
+            adapter.notifyDataSetChanged()
+            search_rv.adapter = adapter
         }
         cv_search_8.setOnClickListener {
             cv_search_1.setCardBackgroundColor(resources.getColor(R.color.white))
@@ -393,6 +519,25 @@ class SearchActivity : AppCompatActivity() {
             tv_search_pendidikan.setTextColor(resources.getColor(R.color.black))
             cv_search_8.setCardBackgroundColor(resources.getColor(R.color.colorAbuGelap))
             tv_search_pengembangan.setTextColor(resources.getColor(R.color.white))
+
+            listSearchKategori.clear()
+            for(i in 0 until search.listSearch.size){
+                if(search.listSearch[i].kategori == getString(R.string.pengembangan)){
+                    listSearchKategori.add(search.listSearch[i])
+                }
+            }
+            if(listSearchKategori.size == 0){
+                tv_nothing.visibility = View.VISIBLE
+                tv_nothing.text = getString(R.string.nothing_found)
+            }
+            else{
+                tv_nothing.visibility = View.GONE
+            }
+            search_rv.setHasFixedSize(true)
+            search_rv.layoutManager = GridLayoutManager(applicationContext, 2)
+            val adapter = RVAdapterKursus(applicationContext, listSearchKategori)
+            adapter.notifyDataSetChanged()
+            search_rv.adapter = adapter
         }
     }
 }

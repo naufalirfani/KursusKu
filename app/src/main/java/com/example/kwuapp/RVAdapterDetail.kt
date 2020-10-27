@@ -6,11 +6,15 @@ import android.graphics.Paint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.rv_detail.view.*
 
-class RVAdapterDetail(private val context: Context?, private val listKursus: DataKursus) : RecyclerView.Adapter<RVAdapterDetail.Holder>() {
+class RVAdapterDetail(private val context: Context?,
+                      private val listKursus: DataKursus,
+                      private val arrayDipelajari: ArrayList<String>,
+                      private val arraySyarat: ArrayList<String>) : RecyclerView.Adapter<RVAdapterDetail.Holder>() {
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, i: Int): Holder {
         val view: View = LayoutInflater.from(viewGroup.context).inflate(R.layout.rv_detail, viewGroup, false)
@@ -36,9 +40,17 @@ class RVAdapterDetail(private val context: Context?, private val listKursus: Dat
         val terjual = "${kursus.pengguna} Terjual"
         holder.view.tv_detail_terjual.text = terjual
         holder.view.tv_detail_deskripsi.text = kursus.deskripsi
+
+        holder.view.rv_dipelajari.setHasFixedSize(true)
+        holder.view.rv_dipelajari.layoutManager = LinearLayoutManager(context)
+        val adapter = RVADetailList(arrayDipelajari)
+        adapter.notifyDataSetChanged()
+        holder.view.rv_dipelajari.isNestedScrollingEnabled = false
+        holder.view.rv_dipelajari.adapter = adapter
     }
 
     override fun getItemCount(): Int {
+
         return 1
     }
 

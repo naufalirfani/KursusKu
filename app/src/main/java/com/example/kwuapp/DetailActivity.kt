@@ -51,10 +51,9 @@ class DetailActivity : AppCompatActivity() {
                 arraySyarat = result.get("syarat") as ArrayList<String>
                 arrayDipelajari = result.get("dipelajari") as ArrayList<String>
                 if(arraySyarat.isNotEmpty() && arrayDipelajari.isNotEmpty()){
-                    Toast.makeText(this, "ada isinya broo ${arraySyarat[0]}", Toast.LENGTH_LONG).show()
                     rv_detail.setHasFixedSize(true)
                     rv_detail.layoutManager = LinearLayoutManager(this)
-                    val adapter = RVAdapterDetail(applicationContext, kursus)
+                    val adapter = RVAdapterDetail(applicationContext, kursus, arrayDipelajari, arraySyarat)
                     adapter.notifyDataSetChanged()
                     rv_detail.adapter = adapter
 

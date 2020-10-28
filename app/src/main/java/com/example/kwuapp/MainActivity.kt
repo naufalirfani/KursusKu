@@ -50,6 +50,10 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, SearchActivity::class.java)
             startActivity(intent)
         }
+        btn_keranjang.setOnClickListener {
+            val intent = Intent(this, KeranjangActivity::class.java)
+            startActivity(intent)
+        }
 
         main_progressBar.visibility = View.VISIBLE
         loadKursus()

@@ -44,14 +44,15 @@
             android:layout_height="30dp"
             android:layout_margin="4dp"
             android:background="@drawable/search"/>
+
         <Button
             android:id="@+id/btn_detail_keranjang"
             android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_height="21dp"
             android:layout_marginTop="4dp"
-            android:layout_marginBottom="4dp"
             android:layout_marginRight="4dp"
-            android:background="@drawable/keranjang"/>
+            android:layout_marginBottom="4dp"
+            android:background="@drawable/keranjang" />
         <Button
             android:id="@+id/btn_detail_chat"
             android:layout_width="30dp"

@@ -40,7 +40,11 @@ class DetailActivity : AppCompatActivity() {
             startActivity(intent)
         }
         btn_detail_keranjang.setOnClickListener {
-            val intent = Intent(this, SearchActivity::class.java)
+            val intent = Intent(this, KeranjangActivity::class.java)
+            startActivity(intent)
+        }
+        btn_detail_addtokeranjang.setOnClickListener {
+            val intent = Intent(this, KeranjangActivity::class.java)
             startActivity(intent)
         }
     }

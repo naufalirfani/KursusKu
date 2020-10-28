@@ -43,10 +43,17 @@ class RVAdapterDetail(private val context: Context?,
 
         holder.view.rv_dipelajari.setHasFixedSize(true)
         holder.view.rv_dipelajari.layoutManager = LinearLayoutManager(context)
-        val adapter = RVADetailList(arrayDipelajari)
+        val adapter = RVADetailList(arrayDipelajari, "dipelajari")
         adapter.notifyDataSetChanged()
         holder.view.rv_dipelajari.isNestedScrollingEnabled = false
         holder.view.rv_dipelajari.adapter = adapter
+
+        holder.view.rv_syarat.setHasFixedSize(true)
+        holder.view.rv_syarat.layoutManager = LinearLayoutManager(context)
+        val adapter2 = RVADetailList(arrayDipelajari, "syarat")
+        adapter2.notifyDataSetChanged()
+        holder.view.rv_syarat.isNestedScrollingEnabled = false
+        holder.view.rv_syarat.adapter = adapter2
     }
 
     override fun getItemCount(): Int {

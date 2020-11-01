@@ -8,6 +8,7 @@ import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.snackbar.Snackbar
@@ -68,31 +69,29 @@ class MainActivity : AppCompatActivity() {
                 if(!(name!!.contains("@"))){
                     val db = FirebaseFirestore.getInstance()
                     val userAkun = UserAkun(name, email2)
-                    db.collection("users").document(id).set(userAkun)
+                    db.collection("users2").document(id).set(userAkun)
                 }
             }
-        }
 
-    }
-
-    override fun onResume() {
-        super.onResume()
-        auth = FirebaseAuth.getInstance()
-        val user = auth.currentUser
-        if (user != null) {
             btn_akun.background = resources.getDrawable(R.drawable.akun)
             btn_akun.setOnClickListener {
-                val intent = Intent(this, SignInActivity::class.java)
-                startActivity(intent)
+                FirebaseAuth.getInstance().signOut()
+                btn_akun.background = resources.getDrawable(R.drawable.login)
+                Toast.makeText(this, "Berhasil keluar", Toast.LENGTH_SHORT).show()
+                btn_akun.setOnClickListener {
+                    val intent = Intent(this, SignInActivity::class.java)
+                    startActivity(intent)
+                }
             }
         }
         else{
             btn_akun.background = resources.getDrawable(R.drawable.login)
             btn_akun.setOnClickListener {
-                FirebaseAuth.getInstance().signOut()
-                btn_akun.background = resources.getDrawable(R.drawable.login)
+                val intent = Intent(this, SignInActivity::class.java)
+                startActivity(intent)
             }
         }
+
     }
 
     private fun loadKursus(){

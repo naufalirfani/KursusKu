@@ -64,13 +64,13 @@ class SignUpActivity : AppCompatActivity() {
     }
 
     fun signUp(){
-        dbReference = FirebaseDatabase.getInstance().getReference("search")
+        dbReference = FirebaseDatabase.getInstance().getReference("users")
         val username: String = et_daftar_username.text.toString()
         val email: String = et_daftar_email.text.toString()
         val password: String = et_daftar_password.text.toString()
 
         if(TextUtils.isEmpty(email) || TextUtils.isEmpty(password) || TextUtils.isEmpty(username)) {
-            Toast.makeText(this, "Please fill all the fields", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, "Harap isi semua", Toast.LENGTH_LONG).show()
         }
         else{
             var user: UserAkun? = null
@@ -88,20 +88,20 @@ class SignUpActivity : AppCompatActivity() {
                 addUser(username, email)
                 auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, OnCompleteListener{ task ->
                     if(task.isSuccessful){
-                        Toast.makeText(this, "Successfully registered", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, "Terimakasih telah mendaftar", Toast.LENGTH_SHORT).show()
                         val handler = Handler()
                         handler.postDelayed(Runnable { // Do something after 5s = 5000ms
                             val intent = Intent(this, SignInActivity::class.java)
                             startActivity(intent)
                             finish()
-                        }, 3000)
+                        }, 2000)
                     }else {
-                        Toast.makeText(this, "Username or rmail already used", Toast.LENGTH_LONG).show()
+                        Toast.makeText(this, "Username atau email telah digunakan", Toast.LENGTH_LONG).show()
                     }
                 })
             }
             else{
-                Toast.makeText(this, "Username or rmail already used", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, "Username or rmail telah digunakan", Toast.LENGTH_LONG).show()
             }
         }
     }

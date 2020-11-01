@@ -69,6 +69,7 @@
                 android:layout_marginTop="8dp"
                 android:backgroundTint="@color/colorUnguTua"
                 android:hint="Kata Sandi"
+                android:imeOptions="actionDone"
                 android:inputType="textPassword"/>
         </com.google.android.material.textfield.TextInputLayout>
         <FrameLayout

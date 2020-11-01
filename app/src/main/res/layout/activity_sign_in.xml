@@ -96,7 +96,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="32dp"
         android:layout_marginRight="32dp"
-        android:text="Lupa kara sandi?"
+        android:text="Lupa kata sandi?"
         android:textColor="@color/colorPrimary"
         android:textSize="12sp"
         android:gravity="right"/>

@@ -3,6 +3,7 @@ package com.example.kwuapp
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.text.TextUtils
 import android.util.Log
 import android.view.View
 import android.widget.Button
@@ -11,6 +12,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlin.random.Random
@@ -27,6 +30,7 @@ class MainActivity : AppCompatActivity() {
     var angka1: Int = 0
     var angka2: Int = 0
 
+    private lateinit var auth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,10 +46,6 @@ class MainActivity : AppCompatActivity() {
         tabLayout1.addTab(tabLayout1.newTab().setText("KATEGORi"))
         tabLayout1.setTabTextColors(Color.parseColor("#BDBDBD"), Color.parseColor("#000000"))
 
-        btn_akun.setOnClickListener {
-            val intent = Intent(this, SignInActivity::class.java)
-            startActivity(intent)
-        }
         btn_search.setOnClickListener {
             val intent = Intent(this, SearchActivity::class.java)
             startActivity(intent)
@@ -58,6 +58,41 @@ class MainActivity : AppCompatActivity() {
         main_progressBar.visibility = View.VISIBLE
         loadKursus()
 
+        auth = FirebaseAuth.getInstance()
+        val user = auth.currentUser
+        if (user != null) {
+            val name = intent.getStringExtra("username")
+            val id = user.uid
+            val email2 = user.email
+            if(!TextUtils.isEmpty(name)){
+                if(!(name!!.contains("@"))){
+                    val db = FirebaseFirestore.getInstance()
+                    val userAkun = UserAkun(name, email2)
+                    db.collection("users").document(id).set(userAkun)
+                }
+            }
+        }
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+        auth = FirebaseAuth.getInstance()
+        val user = auth.currentUser
+        if (user != null) {
+            btn_akun.background = resources.getDrawable(R.drawable.akun)
+            btn_akun.setOnClickListener {
+                val intent = Intent(this, SignInActivity::class.java)
+                startActivity(intent)
+            }
+        }
+        else{
+            btn_akun.background = resources.getDrawable(R.drawable.login)
+            btn_akun.setOnClickListener {
+                FirebaseAuth.getInstance().signOut()
+                btn_akun.background = resources.getDrawable(R.drawable.login)
+            }
+        }
     }
 
     private fun loadKursus(){

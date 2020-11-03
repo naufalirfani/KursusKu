@@ -68,20 +68,15 @@ class MainActivity : AppCompatActivity() {
             if(!TextUtils.isEmpty(name)){
                 if(!(name!!.contains("@"))){
                     val db = FirebaseFirestore.getInstance()
-                    val userAkun = UserAkun(name, email2)
-                    db.collection("users2").document(id).set(userAkun)
+                    val userDetail = UserDetail(name, email2.toString(), "kosong", "0")
+                    db.collection("users2").document(id).set(userDetail)
                 }
             }
 
             btn_akun.background = resources.getDrawable(R.drawable.akun)
             btn_akun.setOnClickListener {
-                FirebaseAuth.getInstance().signOut()
-                btn_akun.background = resources.getDrawable(R.drawable.login)
-                Toast.makeText(this, "Berhasil keluar", Toast.LENGTH_SHORT).show()
-                btn_akun.setOnClickListener {
-                    val intent = Intent(this, SignInActivity::class.java)
-                    startActivity(intent)
-                }
+                val intent2 = Intent(this, AkunActivity::class.java)
+                startActivity(intent2)
             }
         }
         else{

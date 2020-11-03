@@ -1,14 +1,11 @@
 package com.example.kwuapp
 
-import android.graphics.Color
+
 import android.os.Bundle
 import android.os.Handler
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.Nullable
 import androidx.fragment.app.Fragment
@@ -18,20 +15,15 @@ import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout.OnRefreshListener
-import androidx.viewpager.widget.ViewPager
-import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.fragment_beranda.*
-import kotlin.random.Random
 
 @Suppress("DEPRECATION")
 class BerandaFragment : Fragment(), OnRefreshListener {
 
     var dataKursus: ArrayList<DataKursus> = arrayListOf()
     var mSwipeRefreshLayout: SwipeRefreshLayout? = null
-    val kategori = arrayOf("Desain", "Bisnis", "Finansial", "Kantor", "Pendidikan", "Pengembangan")
-    var angka1: Int = 0
-    var angka2: Int = 0
+
     fun newInstance(dataKursus: ArrayList<DataKursus>): BerandaFragment?{
         val fragmentBeranda = BerandaFragment()
         val args = Bundle()

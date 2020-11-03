@@ -128,7 +128,7 @@
             android:layout_marginTop="16dp"
             android:layout_marginBottom="16dp"
             app:cardCornerRadius="10dp"
-            app:cardElevation="6dp">
+            app:cardElevation="4dp">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -155,39 +155,48 @@
         </androidx.cardview.widget.CardView>
     </LinearLayout>
     <Button
+        android:id="@+id/btn_akun_isisaldo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Isi Saldo"
         android:textSize="14sp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="4dp"
         android:background="@color/white"
         android:textAllCaps="false"
+        android:textAlignment="textStart"
         android:textColor="@color/colorAbuGelap"
-        android:drawableLeft="@drawable/button_keluar"
+        android:drawableLeft="@drawable/button_topup"
+        android:drawablePadding="12dp"
         android:paddingLeft="12dp"
-        android:paddingRight="299dp"/>
+        android:paddingRight="12dp"/>
     <Button
+        android:id="@+id/btn_akun_setting2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Pengaturan Akun"
         android:textSize="14sp"
-        android:layout_marginTop="2dp"
+        android:layout_marginTop="1dp"
         android:background="@color/white"
         android:textAllCaps="false"
+        android:textAlignment="textStart"
         android:textColor="@color/colorAbuGelap"
-        android:drawableLeft="@drawable/button_keluar"
+        android:drawableLeft="@drawable/button_setting"
+        android:drawablePadding="12dp"
         android:paddingLeft="12dp"
-        android:paddingRight="310dp"/>
+        android:paddingRight="12dp"/>
     <Button
+        android:id="@+id/btn_akun_keluar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/keluar"
         android:textSize="14sp"
-        android:layout_marginTop="2dp"
+        android:layout_marginTop="1dp"
         android:background="@color/white"
         android:textAllCaps="false"
+        android:textAlignment="textStart"
         android:textColor="@color/colorAbuGelap"
         android:drawableLeft="@drawable/button_keluar"
+        android:drawablePadding="12dp"
         android:paddingLeft="12dp"
-        android:paddingRight="310dp"/>
+        android:paddingRight="12dp"/>
 </LinearLayout>

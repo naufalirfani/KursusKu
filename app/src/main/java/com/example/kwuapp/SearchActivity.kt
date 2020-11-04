@@ -78,6 +78,11 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
+    override fun onBackPressed() {
+        super.onBackPressed()
+        finish()
+    }
+
     fun perfomSearch(){
         startermenu()
         linear_search_history.visibility = View.GONE

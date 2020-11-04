@@ -32,6 +32,11 @@ class KategoriActivity : AppCompatActivity() {
         loadKursus()
     }
 
+    override fun onBackPressed() {
+        super.onBackPressed()
+        finish()
+    }
+
     private fun loadKursus(){
         kategori_progressBar.visibility = View.VISIBLE
         val db = FirebaseFirestore.getInstance()

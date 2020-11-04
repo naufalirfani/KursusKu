@@ -49,6 +49,11 @@ class DetailActivity : AppCompatActivity() {
         }
     }
 
+    override fun onBackPressed() {
+        super.onBackPressed()
+        finish()
+    }
+
     private fun loadKursus(){
         arraySyarat.clear()
         arrayDipelajari.clear()

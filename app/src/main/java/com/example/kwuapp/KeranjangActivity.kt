@@ -14,4 +14,9 @@ class KeranjangActivity : AppCompatActivity() {
 
         btn_keranjang_back.setOnClickListener { onBackPressed() }
     }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        finish()
+    }
 }

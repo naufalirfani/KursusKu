@@ -72,6 +72,11 @@ class SignInActivity : AppCompatActivity() {
         })
     }
 
+    override fun onBackPressed() {
+        super.onBackPressed()
+        finish()
+    }
+
     fun masuk(){
         closeKeyBoard()
         auth = FirebaseAuth.getInstance()

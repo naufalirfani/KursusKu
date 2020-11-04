@@ -63,6 +63,11 @@ class SignUpActivity : AppCompatActivity() {
         dbReference = firebaseDatabase.getReference("users")
     }
 
+    override fun onBackPressed() {
+        super.onBackPressed()
+        finish()
+    }
+
     fun signUp(){
         dbReference = FirebaseDatabase.getInstance().getReference("users")
         val username: String = et_daftar_username.text.toString()

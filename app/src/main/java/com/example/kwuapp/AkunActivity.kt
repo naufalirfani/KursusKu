@@ -49,6 +49,11 @@ class AkunActivity : AppCompatActivity(){
         loadUser()
     }
 
+    override fun onBackPressed() {
+        super.onBackPressed()
+        finish()
+    }
+
     override fun onResume() {
         super.onResume()
         loadUser()

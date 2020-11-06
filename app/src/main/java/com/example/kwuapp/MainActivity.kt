@@ -1,20 +1,22 @@
 package com.example.kwuapp
 
+import android.R.attr.button
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.text.TextUtils
+import android.util.DisplayMetrics
 import android.util.Log
 import android.view.View
+import android.view.ViewGroup
 import android.widget.Button
+import android.widget.LinearLayout
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlin.random.Random
@@ -42,10 +44,18 @@ class MainActivity : AppCompatActivity() {
         arrayList2.clear()
         arrayList3.clear()
 
+        val displayMetrics = DisplayMetrics()
+        windowManager.defaultDisplay.getMetrics(displayMetrics)
+        val dpheight = displayMetrics.heightPixels
+        val dpwidth = displayMetrics.widthPixels
+
         tabLayout1 = findViewById<View>(R.id.tabLayout) as TabLayout
         tabLayout1.addTab(tabLayout1.newTab().setText("BERANDA"))
         tabLayout1.addTab(tabLayout1.newTab().setText("KATEGORi"))
         tabLayout1.setTabTextColors(Color.parseColor("#BDBDBD"), Color.parseColor("#000000"))
+        val params: ViewGroup.LayoutParams = tabLayout1.layoutParams
+        params.width = dpwidth-350
+        tabLayout1.layoutParams = params
 
         btn_search.setOnClickListener {
             val intent = Intent(this, SearchActivity::class.java)
@@ -86,7 +96,6 @@ class MainActivity : AppCompatActivity() {
                 startActivity(intent)
             }
         }
-
     }
 
     private fun loadKursus(){

@@ -19,6 +19,8 @@ class KategoriFragment : Fragment() {
     var dataKursus2: ArrayList<DataKursus> = arrayListOf()
     lateinit var kategori: String
     lateinit var kategori2: String
+    var listKategori: ArrayList<String> = arrayListOf("Bisnis", "Desain", "Finansial", "Fotografi", "Kantor", "Pendidikan", "Pengembangan")
+    val fotoKategori: ArrayList<Int> = arrayListOf(R.drawable.bisnis, R.drawable.desain, R.drawable.finansial, R.drawable.fotografi, R.drawable.kantor, R.drawable.pendidikan, R.drawable.pengembangan)
 
     fun newInstance(dataKursus: ArrayList<DataKursus>,
                     dataKursus2: ArrayList<DataKursus>,
@@ -59,61 +61,27 @@ class KategoriFragment : Fragment() {
         tv_kategori.text = kategori
         tv_kategori2.text = kategori2
 
-        mRecyclerView2.setHasFixedSize(true)
+
+        rv_list_kategori.setHasFixedSize(true)
         val layout = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-        mRecyclerView2.layoutManager = layout
-        val adapter = RVAdapterKursus(activity, dataKursus)
+        rv_list_kategori.layoutManager = layout
+        val adapter = RVAListKategori(activity, listKategori, fotoKategori)
         adapter.notifyDataSetChanged()
-        mRecyclerView2.adapter = adapter
+        rv_list_kategori.adapter = adapter
+
+        mRecyclerView2.setHasFixedSize(true)
+        val layout2 = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        mRecyclerView2.layoutManager = layout2
+        val adapter2 = RVAdapterKursus(activity, dataKursus)
+        adapter.notifyDataSetChanged()
+        mRecyclerView2.adapter = adapter2
 
         mRecyclerView3.setHasFixedSize(true)
-        val layout2 = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-        mRecyclerView3.layoutManager = layout2
-        val adapter2 = RVAdapterKursus(activity, dataKursus2)
+        val layout3 = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        mRecyclerView3.layoutManager = layout3
+        val adapter3 = RVAdapterKursus(activity, dataKursus2)
         adapter.notifyDataSetChanged()
-        mRecyclerView3.adapter = adapter2
+        mRecyclerView3.adapter = adapter3
 
-        iv_bisnis.setOnClickListener {
-            val intent = Intent(context, KategoriActivity::class.java)
-            intent.putExtra("kategori", getString(R.string.bisnis))
-            startActivity(intent)
-
-        }
-        iv_desain.setOnClickListener {
-            val intent = Intent(context, KategoriActivity::class.java)
-            intent.putExtra("kategori", getString(R.string.desain))
-            startActivity(intent)
-
-        }
-        iv_finansial.setOnClickListener {
-            val intent = Intent(context, KategoriActivity::class.java)
-            intent.putExtra("kategori", getString(R.string.finasial))
-            startActivity(intent)
-
-        }
-        iv_fotografi.setOnClickListener {
-            val intent = Intent(context, KategoriActivity::class.java)
-            intent.putExtra("kategori", getString(R.string.fotografi))
-            startActivity(intent)
-
-        }
-        iv_kantor.setOnClickListener {
-            val intent = Intent(context, KategoriActivity::class.java)
-            intent.putExtra("kategori", getString(R.string.kantor))
-            startActivity(intent)
-
-        }
-        iv_pendidikan.setOnClickListener {
-            val intent = Intent(context, KategoriActivity::class.java)
-            intent.putExtra("kategori", getString(R.string.pendidikan))
-            startActivity(intent)
-
-        }
-        iv_penegmbangan.setOnClickListener {
-            val intent = Intent(context, KategoriActivity::class.java)
-            intent.putExtra("kategori", getString(R.string.pengembangan))
-            startActivity(intent)
-
-        }
     }
 }

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.graphics.Paint
+import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,6 +22,12 @@ class RVAdapterKursus(private val context: Context?, private val listKursus: Arr
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: Holder, position: Int) {
         val kursus = listKursus[position]
+
+//        val params: ViewGroup.LayoutParams = holder.view.cvList.layoutParams
+//        val params2: ViewGroup.LayoutParams = holder.view.img_item_photo.layoutParams
+//        params2.width = params.width
+//        holder.view.img_item_photo.layoutParams = params2
+
 
         Glide.with(holder.itemView.context)
             .load(kursus.gambar)

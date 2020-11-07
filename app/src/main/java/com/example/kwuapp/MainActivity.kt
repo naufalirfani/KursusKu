@@ -1,6 +1,5 @@
 package com.example.kwuapp
 
-import android.R.attr.button
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
@@ -10,7 +9,6 @@ import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager.widget.ViewPager
@@ -57,11 +55,15 @@ class MainActivity : AppCompatActivity() {
         params.width = dpwidth-350
         tabLayout1.layoutParams = params
 
-        btn_search.setOnClickListener {
+        val btnSearch: Button = main_constraint.findViewById(R.id.btn_search)
+        val btnAkun: Button = main_constraint.findViewById(R.id.btn_akun)
+        val btnKeranjang: Button = main_constraint.findViewById(R.id.btn_keranjang)
+
+        btnSearch.setOnClickListener {
             val intent = Intent(this, SearchActivity::class.java)
             startActivity(intent)
         }
-        btn_keranjang.setOnClickListener {
+        btnKeranjang.setOnClickListener {
             val intent = Intent(this, KeranjangActivity::class.java)
             startActivity(intent)
         }
@@ -83,15 +85,15 @@ class MainActivity : AppCompatActivity() {
                 }
             }
 
-            btn_akun.background = resources.getDrawable(R.drawable.akun)
-            btn_akun.setOnClickListener {
+            btnAkun.background = resources.getDrawable(R.drawable.akun)
+            btnAkun.setOnClickListener {
                 val intent2 = Intent(this, AkunActivity::class.java)
                 startActivity(intent2)
             }
         }
         else{
-            btn_akun.background = resources.getDrawable(R.drawable.login)
-            btn_akun.setOnClickListener {
+            btnAkun.background = resources.getDrawable(R.drawable.login)
+            btnAkun.setOnClickListener {
                 val intent = Intent(this, SignInActivity::class.java)
                 startActivity(intent)
             }

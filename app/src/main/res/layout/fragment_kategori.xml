@@ -3,9 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="#F2F2F2"
     tools:context=".KategoriFragment">
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/kategori_cons"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:scrollbars=""
@@ -14,48 +16,59 @@
             android:id="@+id/rv_list_kategori"
             android:background="@color/white"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-        <LinearLayout
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="@id/kategori_cons"
+            app:layout_constraintLeft_toLeftOf="@id/kategori_cons"/>
+        <TextView
+            android:id="@+id/tv_kategori"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/white"
+            android:textSize="14sp"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:text="@string/kategori1"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:paddingTop="16dp"
             android:layout_marginTop="8dp"
-            android:padding="16dp"
-            android:orientation="vertical">
-            <TextView
-                android:id="@+id/tv_kategori"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="14sp"
-                android:textColor="@color/black"
-                android:textStyle="bold"
-                android:text="@string/kategori1"/>
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/mRecyclerView2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
-
-        <LinearLayout
+            android:background="@color/white"
+            app:layout_constraintTop_toBottomOf="@id/rv_list_kategori"
+            app:layout_constraintLeft_toLeftOf="@id/kategori_cons"/>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/mRecyclerView2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:paddingBottom="16dp"
             android:background="@color/white"
+            app:layout_constraintTop_toBottomOf="@id/tv_kategori"
+            app:layout_constraintLeft_toLeftOf="@id/kategori_cons"/>
+        <TextView
+            android:id="@+id/tv_kategori2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:text="@string/kategori2"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:paddingTop="16dp"
             android:layout_marginTop="8dp"
-            android:padding="16dp"
-            android:orientation="vertical">
-            <TextView
-                android:id="@+id/tv_kategori2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="14sp"
-                android:textColor="@color/black"
-                android:textStyle="bold"
-                android:text="@string/kategori2"/>
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/mRecyclerView3"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
-    </LinearLayout>
+            android:background="@color/white"
+            app:layout_constraintTop_toBottomOf="@id/mRecyclerView2"
+            app:layout_constraintLeft_toLeftOf="@id/kategori_cons"/>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/mRecyclerView3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:paddingBottom="16dp"
+            android:background="@color/white"
+            app:layout_constraintTop_toBottomOf="@id/tv_kategori2"
+            app:layout_constraintLeft_toLeftOf="@id/kategori_cons"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </ScrollView>

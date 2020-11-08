@@ -54,7 +54,10 @@ class SignInActivity : AppCompatActivity() {
             }
         }
 
-        btn_masuk_back.setOnClickListener { onBackPressed() }
+        val btnBack: Button = actionbar.findViewById(R.id.btn_actionbar_back)
+        val tvTitle: TextView = actionbar.findViewById(R.id.tv_actionbar)
+        btnBack.setOnClickListener { onBackPressed() }
+        tvTitle.text = resources.getString(R.string.masuk)
 
         tv_daftar.setOnClickListener {
             val intent = Intent(this, SignUpActivity::class.java)

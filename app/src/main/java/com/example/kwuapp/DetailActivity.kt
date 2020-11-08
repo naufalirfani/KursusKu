@@ -69,6 +69,7 @@ class DetailActivity : AppCompatActivity() {
                     val adapter = RVAdapterDetail(applicationContext, kursus, arrayDipelajari, arraySyarat)
                     adapter.notifyDataSetChanged()
                     rv_detail.adapter = adapter
+                    rv_detail.scrollToPosition(0)
 
                     datail_progressBar.visibility = View.INVISIBLE
                 }

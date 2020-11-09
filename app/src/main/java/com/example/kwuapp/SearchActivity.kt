@@ -44,7 +44,8 @@ class SearchActivity : AppCompatActivity() {
         tv_nothing2.visibility = View.GONE
         search_progressBar.visibility = View.GONE
         search_menu.visibility = View.GONE
-        linear_search_history.visibility = View.VISIBLE
+        tv_search_history.visibility = View.VISIBLE
+        btn_search_clear.visibility = View.VISIBLE
         btn_search_back.setOnClickListener { onBackPressed() }
         loadKursus()
         loadSearch()
@@ -85,7 +86,8 @@ class SearchActivity : AppCompatActivity() {
 
     fun perfomSearch(){
         startermenu()
-        linear_search_history.visibility = View.GONE
+        tv_search_history.visibility = View.GONE
+        btn_search_clear.visibility = View.GONE
         search_rv2.visibility = View.GONE
         tv_nothing2.visibility = View.GONE
         search_progressBar.visibility = View.VISIBLE

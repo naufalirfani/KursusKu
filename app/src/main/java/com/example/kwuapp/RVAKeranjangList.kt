@@ -14,7 +14,7 @@ import kotlinx.android.synthetic.main.list_keranjang.view.*
 
 class RVAKeranjangList(private val context: Context?, private val userDetail: ArrayList<DataKursus>, private val width: Int) : RecyclerView.Adapter<RVAKeranjangList.Holder>() {
 
-    private var isShow = true
+    private var isShow = false
     override fun onCreateViewHolder(viewGroup: ViewGroup, i: Int): Holder {
         val view: View = LayoutInflater.from(viewGroup.context).inflate(R.layout.list_keranjang, viewGroup, false)
         return Holder(view)
@@ -27,32 +27,25 @@ class RVAKeranjangList(private val context: Context?, private val userDetail: Ar
         params.width = width
         holder.view.iv_item_keranjang.layoutParams = params
 
-        val params2: ViewGroup.LayoutParams = holder.view.tv_item_keranjang_nama.layoutParams
-        params2.width = width
-        holder.view.tv_item_keranjang_nama.layoutParams = params2
-
         Glide.with(holder.view.context)
             .load(kursus.gambar)
-            .apply(
-                RequestOptions().fitCenter().format(DecodeFormat.PREFER_ARGB_8888).override(
-                    Target.SIZE_ORIGINAL))
+//            .apply(RequestOptions().fitCenter().format(DecodeFormat.PREFER_ARGB_8888).override(Target.SIZE_ORIGINAL))
             .into(holder.view.iv_item_keranjang)
         holder.view.btn_item_keranjang_hapus.visibility = View.GONE
-        holder.view.tv_item_keranjang_nama.text = kursus.nama
-        holder.view.tv_item_keranjang_harga.text = kursus.harga
-        if(isShow){
-            holder.view.tv_item_keranjang_ubah.setOnClickListener {
+        holder.view.tv_item_keranjang_nama_utama.text = kursus.nama
+        val harga = "Rp${kursus.harga}"
+        holder.view.tv_item_keranjang_harga.text = harga
+
+        holder.view.tv_item_keranjang_ubah.setOnClickListener {
+            if(isShow){
                 holder.view.btn_item_keranjang_hapus.visibility = View.GONE
                 isShow = false
             }
-        }
-        else{
-            holder.view.tv_item_keranjang_ubah.setOnClickListener {
+            else{
                 holder.view.btn_item_keranjang_hapus.visibility = View.VISIBLE
+                isShow = true
             }
-            isShow = true
         }
-
     }
 
     override fun getItemCount(): Int {

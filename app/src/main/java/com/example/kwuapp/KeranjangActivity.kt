@@ -17,7 +17,7 @@ import kotlinx.android.synthetic.main.activity_keranjang.actionbar
 @Suppress("DEPRECATION")
 class KeranjangActivity : AppCompatActivity() {
 
-    var userDetail: UserDetail? = null
+    private lateinit var userDetail: UserDetail
     private lateinit var auth: FirebaseAuth
     private var userId: String = ""
     private var arrayList = ArrayList<DataKursus>()
@@ -29,8 +29,6 @@ class KeranjangActivity : AppCompatActivity() {
 
         supportActionBar?.hide()
 
-        userDetail = intent.getParcelableExtra("userDetail")
-
         val displayMetrics = DisplayMetrics()
         windowManager.defaultDisplay.getMetrics(displayMetrics)
         val dpheight = displayMetrics.heightPixels
@@ -41,12 +39,13 @@ class KeranjangActivity : AppCompatActivity() {
         val user = auth.currentUser
         if (user != null) {
             userId = user.uid
+            keranajng_progressbar.visibility = View.VISIBLE
+            loadUser()
         }
         else{
             iv_keranjang_kosong.visibility = View.VISIBLE
             tv_keranjang_kosong.visibility = View.VISIBLE
             tv_keranjang_kosong2.visibility = View.VISIBLE
-            rv_keranjang.visibility = View.GONE
         }
 
         val btnBack: Button = actionbar.findViewById(R.id.btn_actionbar_back)
@@ -57,28 +56,52 @@ class KeranjangActivity : AppCompatActivity() {
         tvTitle.setTextColor(Color.parseColor("#FFFFFF"))
         btnBack.background = resources.getDrawable(R.drawable.ic_arrow_back_white_24dp)
 
-        if(userDetail?.isiKeranjang == "kososng"){
-            iv_keranjang_kosong.visibility = View.GONE
-            tv_keranjang_kosong.visibility = View.GONE
-            tv_keranjang_kosong2.visibility = View.GONE
-            rv_keranjang.visibility = View.GONE
-        }
-
-        keranajng_progressbar.visibility = View.VISIBLE
-        if(userDetail?.username != "kosong"){
-            val nama = userDetail?.isiKeranjang?.split("$")
-            for (i in nama!!.indices){
-                if(i > 0){
-                    namaKursus.add(nama[i])
-                }
-            }
-            loadKursus(namaKursus)
-        }
+        iv_keranjang_kosong.visibility = View.GONE
+        tv_keranjang_kosong.visibility = View.GONE
+        tv_keranjang_kosong2.visibility = View.GONE
     }
 
     override fun onBackPressed() {
         super.onBackPressed()
         finish()
+    }
+
+    private fun loadUser() {
+        val db = FirebaseFirestore.getInstance()
+        db.collection("users2").document(userId)
+            .get()
+            .addOnSuccessListener { result ->
+                userDetail = UserDetail(result.getString("username").toString(),
+                    result.getString("email").toString(),
+                    result.getString("gambar").toString(),
+                    result.getString("saldo").toString(),
+                    result.getString("isiKeranjang").toString(),
+                    result.getString("jumlahKeranjang").toString())
+
+                if(userDetail.isiKeranjang.isNotEmpty()){
+                    if(userDetail.username != "kosong"){
+                        val nama = userDetail.isiKeranjang.split("$")
+                        for (i in nama.indices){
+                            if(i > 0){
+                                namaKursus.add(nama[i])
+                            }
+                        }
+                        loadKursus(namaKursus)
+                    }
+                    else{
+                        iv_keranjang_kosong.visibility = View.VISIBLE
+                        tv_keranjang_kosong.visibility = View.VISIBLE
+                        tv_keranjang_kosong2.visibility = View.VISIBLE
+                    }
+                }
+                else{
+                    loadUser()
+                }
+            }
+            .addOnFailureListener { exception ->
+                keranajng_progressbar.visibility = View.GONE
+                Toast.makeText(this, "Connection error", Toast.LENGTH_SHORT).show()
+            }
     }
 
     private fun loadKursus(nama: ArrayList<String>){
@@ -88,20 +111,23 @@ class KeranjangActivity : AppCompatActivity() {
             .addOnSuccessListener { result ->
                 arrayList.clear()
                 for (document in result) {
-                    arrayList.add(DataKursus(document.getString("deskripsi")!!,
-                        document.getString("dilihat")!!,
-                        document.getString("gambar")!!,
-                        document.getString("harga")!!,
-                        document.getString("kategori")!!,
-                        document.getString("nama")!!,
-                        document.getString("pembuat")!!,
-                        document.getString("pengguna")!!,
-                        document.getString("rating")!!,
-                        document.getString("remaining")!!))
+                    for(i in 0 until namaKursus.size){
+                        if(document.getString("nama") == namaKursus[i]){
+                            arrayList.add(DataKursus(document.getString("deskripsi")!!,
+                                document.getString("dilihat")!!,
+                                document.getString("gambar")!!,
+                                document.getString("harga")!!,
+                                document.getString("kategori")!!,
+                                document.getString("nama")!!,
+                                document.getString("pembuat")!!,
+                                document.getString("pengguna")!!,
+                                document.getString("rating")!!,
+                                document.getString("remaining")!!))
+                        }
+                    }
                 }
 
                 if(arrayList.isNotEmpty()){
-                    rv_keranjang.visibility = View.VISIBLE
                     iv_keranjang_kosong.visibility = View.GONE
                     tv_keranjang_kosong.visibility = View.GONE
                     tv_keranjang_kosong2.visibility = View.GONE

@@ -11,6 +11,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_detail.*
 
@@ -20,6 +21,10 @@ class DetailActivity : AppCompatActivity() {
     private lateinit var kursus: DataKursus
     private var arraySyarat = ArrayList<String>()
     private var arrayDipelajari = ArrayList<String>()
+    private lateinit var userDetail: UserDetail
+    private lateinit var dataUser: UserDetail
+    private var userId: String = ""
+    private lateinit var auth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,6 +34,17 @@ class DetailActivity : AppCompatActivity() {
 
         kursus = intent.getParcelableExtra("kursus")!!
         tv_nama.text = kursus.nama
+
+        auth = FirebaseAuth.getInstance()
+        val user = auth.currentUser
+        if (user != null) {
+            userId = user.uid
+            loadUser()
+        }
+        else{
+            val intent = Intent(this, SignInActivity::class.java)
+            startActivity(intent)
+        }
 
         btn_detail_back.setOnClickListener {onBackPressed()}
 
@@ -40,10 +56,6 @@ class DetailActivity : AppCompatActivity() {
             startActivity(intent)
         }
         btn_detail_keranjang.setOnClickListener {
-            val intent = Intent(this, KeranjangActivity::class.java)
-            startActivity(intent)
-        }
-        btn_detail_addtokeranjang.setOnClickListener {
             val intent = Intent(this, KeranjangActivity::class.java)
             startActivity(intent)
         }
@@ -99,6 +111,41 @@ class DetailActivity : AppCompatActivity() {
 
                 }
                 snackBar.show()
+            }
+    }
+
+    private fun loadUser() {
+        val db = FirebaseFirestore.getInstance()
+        db.collection("users2").document(userId)
+            .get()
+            .addOnSuccessListener { result ->
+                userDetail = UserDetail(result.getString("username").toString(),
+                    result.getString("email").toString(),
+                    result.getString("gambar").toString(),
+                    result.getString("saldo").toString(),
+                    result.getString("isiKeranjang").toString(),
+                    result.getString("jumlahKeranjang").toString())
+
+                if(userDetail.isiKeranjang.isNotEmpty()){
+
+                    btn_detail_addtokeranjang.setOnClickListener {
+                        val db2 = FirebaseFirestore.getInstance()
+                        db2.collection("users2").document(userId)
+                            .update("isiKeranjang", userDetail.isiKeranjang + "$${kursus.nama}")
+                            .addOnSuccessListener { result ->
+                            }
+                            .addOnFailureListener { exception ->
+                            }
+                    }
+                    datail_progressBar.visibility = View.GONE
+                }
+                else{
+                    loadUser()
+                }
+            }
+            .addOnFailureListener { exception ->
+                datail_progressBar.visibility = View.GONE
+                Toast.makeText(this, "Connection error", Toast.LENGTH_SHORT).show()
             }
     }
 }

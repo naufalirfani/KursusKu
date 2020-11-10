@@ -70,6 +70,10 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, SearchActivity::class.java)
             startActivity(intent)
         }
+        btnKeranjang.setOnClickListener {
+            val intent = Intent(this, KeranjangActivity::class.java)
+            startActivity(intent)
+        }
 
         main_progressBar.visibility = View.VISIBLE
         loadKursus()
@@ -197,12 +201,10 @@ class MainActivity : AppCompatActivity() {
                         intent2.putExtra("userDetail", dataUser)
                         startActivity(intent2)
                     }
-                    btnKeranjang.setOnClickListener {
-                        val intent = Intent(this, KeranjangActivity::class.java)
-                        intent.putExtra("userDetail", dataUser)
-                        startActivity(intent)
-                    }
                     main_progressBar.visibility = View.GONE
+                }
+                else{
+                    loadUser()
                 }
             }
             .addOnFailureListener { exception ->

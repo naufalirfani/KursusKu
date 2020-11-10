@@ -32,4 +32,7 @@
     <string name="saldo_di_kursusku">Saldo di KursusKu</string>
     <string name="saldo">Saldo</string>
     <string name="keluar">Keluar</string>
+    <string name="ubah">Ubah</string>
+    <string name="selesai">Selesai</string>
+    <string name="hapus">Hapus</string>
 </resources>

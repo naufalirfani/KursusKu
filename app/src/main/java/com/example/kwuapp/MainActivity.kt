@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.snackbar.Snackbar
@@ -24,14 +25,20 @@ import kotlin.random.Random
 class MainActivity : AppCompatActivity() {
 
     private lateinit var tabLayout1: TabLayout
-    var arrayList = ArrayList<DataKursus>()
-    var arrayList2 = ArrayList<DataKursus>()
-    var arrayList3 = ArrayList<DataKursus>()
-    val kategori = arrayOf("Desain", "Bisnis", "Finansial", "Kantor", "Pendidikan", "Pengembangan")
-    var angka1: Int = 0
-    var angka2: Int = 0
+    private var arrayList = ArrayList<DataKursus>()
+    private var arrayList2 = ArrayList<DataKursus>()
+    private var arrayList3 = ArrayList<DataKursus>()
+    private val kategori = arrayOf("Desain", "Bisnis", "Finansial", "Kantor", "Pendidikan", "Pengembangan")
+    private var angka1: Int = 0
+    private var angka2: Int = 0
 
+    private lateinit var userDetail: UserDetail
+    private lateinit var dataUser: UserDetail
+    private var userId: String = ""
     private lateinit var auth: FirebaseAuth
+    private lateinit var btnAkun: Button
+    private lateinit var btnKeranjang: Button
+    private lateinit var btnSearch: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,16 +62,12 @@ class MainActivity : AppCompatActivity() {
         params.width = dpwidth-350
         tabLayout1.layoutParams = params
 
-        val btnSearch: Button = main_constraint.findViewById(R.id.btn_search)
-        val btnAkun: Button = main_constraint.findViewById(R.id.btn_akun)
-        val btnKeranjang: Button = main_constraint.findViewById(R.id.btn_keranjang)
+        btnSearch = main_constraint.findViewById(R.id.btn_search)
+        btnAkun = main_constraint.findViewById(R.id.btn_akun)
+        btnKeranjang = main_constraint.findViewById(R.id.btn_keranjang)
 
         btnSearch.setOnClickListener {
             val intent = Intent(this, SearchActivity::class.java)
-            startActivity(intent)
-        }
-        btnKeranjang.setOnClickListener {
-            val intent = Intent(this, KeranjangActivity::class.java)
             startActivity(intent)
         }
 
@@ -76,19 +79,15 @@ class MainActivity : AppCompatActivity() {
         if (user != null) {
             val name = intent.getStringExtra("username")
             val id = user.uid
+            userId = id
+            loadUser()
             val email2 = user.email
             if(!TextUtils.isEmpty(name)){
                 if(!(name!!.contains("@"))){
                     val db = FirebaseFirestore.getInstance()
-                    val userDetail = UserDetail(name, email2.toString(), "kosong", "0")
+                    val userDetail = UserDetail(name, email2.toString(), "kosong", "0", "kosong", "0")
                     db.collection("users2").document(id).set(userDetail)
                 }
-            }
-
-            btnAkun.background = resources.getDrawable(R.drawable.akun)
-            btnAkun.setOnClickListener {
-                val intent2 = Intent(this, AkunActivity::class.java)
-                startActivity(intent2)
             }
         }
         else{
@@ -97,6 +96,8 @@ class MainActivity : AppCompatActivity() {
                 val intent = Intent(this, SignInActivity::class.java)
                 startActivity(intent)
             }
+
+            userDetail = UserDetail("kosong", "kosong", "kosong", "kosong", "kosong", "kosong")
         }
     }
 
@@ -166,6 +167,47 @@ class MainActivity : AppCompatActivity() {
 
                 }
                 snackBar.show()
+            }
+    }
+
+    private fun loadUser() {
+        val db = FirebaseFirestore.getInstance()
+        db.collection("users2").document(userId)
+            .get()
+            .addOnSuccessListener { result ->
+                userDetail = UserDetail(result.getString("username").toString(),
+                    result.getString("email").toString(),
+                    result.getString("gambar").toString(),
+                    result.getString("saldo").toString(),
+                    result.getString("isiKeranjang").toString(),
+                    result.getString("jumlahKeranjang").toString())
+
+                if(userDetail.isiKeranjang.isNotEmpty()){
+                    dataUser = UserDetail(
+                        userDetail.username,
+                        userDetail.email,
+                        userDetail.gambar,
+                        userDetail.saldo,
+                        userDetail.isiKeranjang,
+                        userDetail.jumlahKeranjang
+                    )
+                    btnAkun.background = resources.getDrawable(R.drawable.akun)
+                    btnAkun.setOnClickListener {
+                        val intent2 = Intent(this, AkunActivity::class.java)
+                        intent2.putExtra("userDetail", dataUser)
+                        startActivity(intent2)
+                    }
+                    btnKeranjang.setOnClickListener {
+                        val intent = Intent(this, KeranjangActivity::class.java)
+                        intent.putExtra("userDetail", dataUser)
+                        startActivity(intent)
+                    }
+                    main_progressBar.visibility = View.GONE
+                }
+            }
+            .addOnFailureListener { exception ->
+                main_progressBar.visibility = View.GONE
+                Toast.makeText(this, "Connection error", Toast.LENGTH_SHORT).show()
             }
     }
 

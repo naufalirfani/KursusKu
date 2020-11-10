@@ -17,9 +17,9 @@ import kotlinx.android.synthetic.main.activity_detail.*
 @Suppress("DEPRECATION")
 class DetailActivity : AppCompatActivity() {
 
-    lateinit var kursus: DataKursus
-    var arraySyarat = ArrayList<String>()
-    var arrayDipelajari = ArrayList<String>()
+    private lateinit var kursus: DataKursus
+    private var arraySyarat = ArrayList<String>()
+    private var arrayDipelajari = ArrayList<String>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

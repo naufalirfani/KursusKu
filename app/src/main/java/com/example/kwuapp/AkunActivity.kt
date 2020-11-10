@@ -26,6 +26,8 @@ class AkunActivity : AppCompatActivity(){
 
         supportActionBar?.hide()
 
+        userDetail = intent.getParcelableExtra("userDetail")!!
+
         auth = FirebaseAuth.getInstance()
         val user = auth.currentUser
         if (user != null) {
@@ -59,41 +61,26 @@ class AkunActivity : AppCompatActivity(){
         loadUser()
     }
 
-    private fun loadUser() {
-        val db = FirebaseFirestore.getInstance()
-        db.collection("users2").document(userId)
-            .get()
-            .addOnSuccessListener { result ->
-                userDetail = UserDetail(result.getString("username").toString(),
-                    result.getString("email").toString(),
-                    result.getString("gambar").toString(),
-                    result.getString("saldo").toString())
-
-                if(userDetail.username.isNotEmpty()){
-                    if(userDetail.gambar != "kosong"){
-                        Glide.with(applicationContext)
-                            .load(userDetail.gambar)
-                            .apply(
-                                RequestOptions().fitCenter().format(DecodeFormat.PREFER_ARGB_8888).override(
-                                    Target.SIZE_ORIGINAL))
-                            .into(iv_akun_foto)
-                    }
-                    else{
-                        Glide.with(applicationContext)
-                            .load(resources.getDrawable(R.drawable.akun))
-                            .apply(
-                                RequestOptions().fitCenter().format(DecodeFormat.PREFER_ARGB_8888).override(
-                                    Target.SIZE_ORIGINAL))
-                            .into(iv_akun_foto)
-                    }
-                    tv_akun_username.text = userDetail.username
-                    tv_akun_email.text = userDetail.email
-                    val saldo = "Rp ${userDetail.saldo}"
-                    tv_akun_saldo.text = saldo
-                }
-            }
-            .addOnFailureListener { exception ->
-                Toast.makeText(this, "Connection error", Toast.LENGTH_SHORT).show()
-            }
+    private fun loadUser(){
+        if(userDetail.gambar != "kosong"){
+            Glide.with(applicationContext)
+                .load(userDetail.gambar)
+                .apply(
+                    RequestOptions().fitCenter().format(DecodeFormat.PREFER_ARGB_8888).override(
+                        Target.SIZE_ORIGINAL))
+                .into(iv_akun_foto)
+        }
+        else{
+            Glide.with(applicationContext)
+                .load(resources.getDrawable(R.drawable.akun))
+                .apply(
+                    RequestOptions().fitCenter().format(DecodeFormat.PREFER_ARGB_8888).override(
+                        Target.SIZE_ORIGINAL))
+                .into(iv_akun_foto)
+        }
+        tv_akun_username.text = userDetail.username
+        tv_akun_email.text = userDetail.email
+        val saldo = "Rp ${userDetail.saldo}"
+        tv_akun_saldo.text = saldo
     }
 }

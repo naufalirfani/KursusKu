@@ -7,9 +7,13 @@ data class UserDetail(
     var username: String = "",
     var email: String = "",
     var gambar: String = "",
-    var saldo: String = ""
+    var saldo: String = "",
+    var isiKeranjang: String = "",
+    var jumlahKeranjang: String = ""
 ): Parcelable {
     constructor(parcel: Parcel) : this(
+        parcel.readString()!!,
+        parcel.readString()!!,
         parcel.readString()!!,
         parcel.readString()!!,
         parcel.readString()!!,
@@ -21,6 +25,8 @@ data class UserDetail(
         parcel.writeString(email)
         parcel.writeString(gambar)
         parcel.writeString(saldo)
+        parcel.writeString(isiKeranjang)
+        parcel.writeString(jumlahKeranjang)
     }
 
     override fun describeContents(): Int {

@@ -109,12 +109,12 @@ class SignInActivity : AppCompatActivity() {
             email?.let { it1 ->
                 auth.signInWithEmailAndPassword(it1, password).addOnCompleteListener(this, OnCompleteListener { task ->
                     if(task.isSuccessful) {
-                        progressDialog.dismiss()
                         val username = et_masuk_username.text.toString()
                         val intent = Intent(this, MainActivity::class.java)
                         intent.putExtra("username",username)
                         startActivity(intent)
                         finish()
+                        progressDialog.dismiss()
                     }else {
                         progressDialog.dismiss()
                         Toast.makeText(this, "Invalid login, please try again", Toast.LENGTH_LONG).show()

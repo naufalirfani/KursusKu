@@ -136,6 +136,13 @@ class DetailActivity : AppCompatActivity() {
                             }
                             .addOnFailureListener { exception ->
                             }
+                        val jumlahKeranjang = userDetail.jumlahKeranjang.toInt() + 1
+                        db2.collection("users2").document(userId)
+                            .update("jumlahKeranjang", jumlahKeranjang.toString())
+                            .addOnSuccessListener { result ->
+                            }
+                            .addOnFailureListener { exception ->
+                            }
                     }
                     datail_progressBar.visibility = View.GONE
                 }

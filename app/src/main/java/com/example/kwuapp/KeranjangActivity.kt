@@ -134,7 +134,7 @@ class KeranjangActivity : AppCompatActivity() {
 
                     rv_keranjang.setHasFixedSize(true)
                     rv_keranjang.layoutManager = LinearLayoutManager(this)
-                    val adapter = RVAKeranjangList(this, arrayList, widthfix)
+                    val adapter = RVAKeranjangList(this, arrayList, widthfix, userDetail.isiKeranjang, userDetail.jumlahKeranjang, userId)
                     adapter.notifyDataSetChanged()
                     rv_keranjang.adapter = adapter
 

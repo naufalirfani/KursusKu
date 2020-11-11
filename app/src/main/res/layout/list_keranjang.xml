@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:text="@string/nama_kursus"
         android:padding="12dp"
-        android:layout_marginLeft="8dp"
+        android:layout_marginLeft="4dp"
         android:layout_marginRight="56dp"
         android:textColor="@color/black"
         android:textSize="14sp"
@@ -35,7 +35,7 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_gravity="center|left"
-        android:background="#919191"
+        android:background="@color/colorAbuMuda"
         app:layout_constraintTop_toBottomOf="@id/tv_item_keranjang_ubah"
         app:layout_constraintBottom_toTopOf="@id/keranjang_cons"/>
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -60,6 +60,8 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
             app:layout_constraintBottom_toBottomOf="@id/keranjang_cons"
             app:layout_constraintLeft_toRightOf="@id/cb_item_keranjang"
             app:layout_constraintRight_toLeftOf="@id/tv_item_keranjang_harga"
@@ -93,4 +95,12 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_item_keranjang_ubah" />
+    <View
+        android:id="@+id/v_keranjang_pemisah2"
+        android:layout_width="match_parent"
+        android:layout_height="8dp"
+        android:background="@color/colorAbuMuda"
+        app:layout_constraintTop_toBottomOf="parent"/>
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

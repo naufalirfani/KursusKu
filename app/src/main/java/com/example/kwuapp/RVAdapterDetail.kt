@@ -50,7 +50,7 @@ class RVAdapterDetail(private val context: Context?,
 
         holder.view.rv_syarat.setHasFixedSize(true)
         holder.view.rv_syarat.layoutManager = LinearLayoutManager(context)
-        val adapter2 = RVADetailList(arrayDipelajari, "syarat")
+        val adapter2 = RVADetailList(arraySyarat, "syarat")
         adapter2.notifyDataSetChanged()
         holder.view.rv_syarat.isNestedScrollingEnabled = false
         holder.view.rv_syarat.adapter = adapter2

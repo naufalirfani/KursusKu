@@ -41,7 +41,7 @@ class RVAdapterKursus(private val context: Context?, private val listKursus: Arr
         holder.view.tv_jumlah_rating.text = "(0)"
         holder.view.tv_item_harga.text = "Rp${kursus.harga}"
         holder.view.tv_hargaasli.text = "Rp49.900"
-        holder.view.tv_hargaasli.setPaintFlags(holder.view.tv_hargaasli.getPaintFlags() or Paint.STRIKE_THRU_TEXT_FLAG)
+        holder.view.tv_hargaasli.paintFlags = holder.view.tv_hargaasli.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
         holder.view.tv_item_pembeli.text = kursus.pengguna
         holder.view.tv_item_dilihat.text = kursus.dilihat
 

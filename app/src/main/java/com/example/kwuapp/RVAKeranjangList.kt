@@ -5,15 +5,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
-import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.DecodeFormat
-import com.bumptech.glide.request.RequestOptions
-import com.bumptech.glide.request.target.Target
 import com.google.firebase.firestore.FirebaseFirestore
-import kotlinx.android.synthetic.main.list_history.view.*
 import kotlinx.android.synthetic.main.list_keranjang.view.*
 
 class RVAKeranjangList(private val context: Context?,
@@ -21,7 +17,8 @@ class RVAKeranjangList(private val context: Context?,
                        private val width: Int,
                        private val isiKeranjang: String,
                        private val jumlahKeranjang: String,
-                       private val userId: String) : RecyclerView.Adapter<RVAKeranjangList.Holder>() {
+                       private val userId: String,
+                       private val tv_total: TextView) : RecyclerView.Adapter<RVAKeranjangList.Holder>() {
 
     private var isShow = false
     override fun onCreateViewHolder(viewGroup: ViewGroup, i: Int): Holder {
@@ -44,6 +41,41 @@ class RVAKeranjangList(private val context: Context?,
         holder.view.tv_item_keranjang_nama_utama.text = kursus.nama
         val harga = "Rp${kursus.harga}"
         holder.view.tv_item_keranjang_harga.text = harga
+
+        holder.view.cb_item_keranjang.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (isChecked){
+                Toast.makeText(context, kursus.harga, Toast.LENGTH_SHORT).show()
+                val hargaSebelum = tv_total.text.split("p")
+                val hargaSebelumFix = hargaSebelum[1].replace(".", "").toInt()
+                val hargaKursus = 29000
+                val totalHarga = hargaSebelumFix + hargaKursus
+                if(totalHarga.toString().length > 3){
+                    var x = totalHarga.toString()
+                    x = x.substring(0, x.length-3) + "." + x.substring(x.length -3, x.length)
+                    val textHarga = "Rp${x}"
+                    tv_total.text = textHarga
+                }
+                else{
+                    val textHarga = "Rp${totalHarga}"
+                    tv_total.text = textHarga
+                }
+            }else{
+                val hargaSebelum = tv_total.text.split("p")
+                val hargaSebelumFix = hargaSebelum[1].replace(".", "").toInt()
+                val hargaKursus = 29000
+                val totalHarga = hargaSebelumFix - hargaKursus
+                if(totalHarga.toString().length > 3){
+                    var x = totalHarga.toString()
+                    x = x.substring(0, x.length-3) + "." + x.substring(x.length -3, x.length)
+                    val textHarga = "Rp${x}"
+                    tv_total.text = textHarga
+                }
+                else{
+                    val textHarga = "Rp${totalHarga}"
+                    tv_total.text = textHarga
+                }
+            }
+        }
 
         holder.view.tv_item_keranjang_ubah.setOnClickListener {
             if(isShow){

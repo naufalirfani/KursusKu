@@ -43,6 +43,7 @@ class KeranjangActivity : AppCompatActivity() {
             loadUser()
         }
         else{
+            keranjang_cons_utama.setBackgroundColor(resources.getColor((R.color.white)))
             iv_keranjang_kosong.visibility = View.VISIBLE
             tv_keranjang_kosong.visibility = View.VISIBLE
             tv_keranjang_kosong2.visibility = View.VISIBLE
@@ -89,6 +90,7 @@ class KeranjangActivity : AppCompatActivity() {
                         loadKursus(namaKursus)
                     }
                     else{
+                        keranjang_cons_utama.setBackgroundColor(resources.getColor((R.color.white)))
                         iv_keranjang_kosong.visibility = View.VISIBLE
                         tv_keranjang_kosong.visibility = View.VISIBLE
                         tv_keranjang_kosong2.visibility = View.VISIBLE
@@ -134,11 +136,17 @@ class KeranjangActivity : AppCompatActivity() {
 
                     rv_keranjang.setHasFixedSize(true)
                     rv_keranjang.layoutManager = LinearLayoutManager(this)
-                    val adapter = RVAKeranjangList(this, arrayList, widthfix, userDetail.isiKeranjang, userDetail.jumlahKeranjang, userId)
+                    val adapter = RVAKeranjangList(this, arrayList, widthfix, userDetail.isiKeranjang, userDetail.jumlahKeranjang, userId, tv_keranjang_totalharga)
                     adapter.notifyDataSetChanged()
                     rv_keranjang.adapter = adapter
 
                     keranajng_progressbar.visibility = View.GONE
+
+                    cb_keranjang_semua.setOnCheckedChangeListener { buttonView, isChecked ->
+                        if (isChecked){
+                        }else{
+                        }
+                    }
                 }
                 else{
                     loadKursus(namaKursus)

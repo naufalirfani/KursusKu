@@ -16,6 +16,7 @@
         android:layout_marginRight="56dp"
         android:textColor="@color/black"
         android:textSize="14sp"
+        android:ellipsize="end"
         android:maxLines="1"
         app:layout_constraintBottom_toTopOf="@id/keranjang_cons"
         app:layout_constraintRight_toRightOf="parent"

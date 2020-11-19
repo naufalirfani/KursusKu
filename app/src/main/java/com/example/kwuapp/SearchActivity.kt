@@ -66,7 +66,7 @@ class SearchActivity : AppCompatActivity() {
         btn_search_clear.setOnClickListener {
             listSearch.clear()
             dbReference = FirebaseDatabase.getInstance().getReference("search")
-            val key: String? = dbReference.push().getKey()
+            val key: String? = dbReference.push().key
             val db = FirebaseFirestore.getInstance()
             val kata = "kosong"
             listKosong.add(kata)
@@ -112,7 +112,7 @@ class SearchActivity : AppCompatActivity() {
         closeKeyBoard()
 
         dbReference = FirebaseDatabase.getInstance().getReference("search")
-        val key: String? = dbReference.push().getKey()
+        val key: String? = dbReference.push().key
         val db = FirebaseFirestore.getInstance()
         val kata = etSearch.text.toString()
         listSearch.add(kata)

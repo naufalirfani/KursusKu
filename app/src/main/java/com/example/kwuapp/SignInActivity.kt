@@ -43,12 +43,12 @@ class SignInActivity : AppCompatActivity() {
 
         iv_masuk_mata.setOnClickListener {
             if (isShow){
-                et_masuk_password.setInputType(InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD)
+                et_masuk_password.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
                 iv_masuk_mata.background = getDrawable(R.drawable.matanutup)
                 isShow = false
             }
             else{
-                et_masuk_password.setInputType(InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD)
+                et_masuk_password.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
                 iv_masuk_mata.background = getDrawable(R.drawable.matabuka)
                 isShow = true
             }
@@ -87,7 +87,7 @@ class SignInActivity : AppCompatActivity() {
         var iterator = 0
 
         progressDialog = ProgressDialog(this)
-        progressDialog.getWindow()?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        progressDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         progressDialog.isIndeterminate = true
         progressDialog.setCancelable(true)
         progressDialog.show()

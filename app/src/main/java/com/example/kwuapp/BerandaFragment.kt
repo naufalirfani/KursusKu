@@ -19,16 +19,15 @@ import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.fragment_beranda.*
 
 @Suppress("DEPRECATION")
-class BerandaFragment : Fragment(), OnRefreshListener {
+class BerandaFragment : Fragment() {
 
     var dataKursus: ArrayList<DataKursus> = arrayListOf()
-    var mSwipeRefreshLayout: SwipeRefreshLayout? = null
 
     fun newInstance(dataKursus: ArrayList<DataKursus>): BerandaFragment?{
         val fragmentBeranda = BerandaFragment()
         val args = Bundle()
         args.putParcelableArrayList("dataKursus", dataKursus)
-        fragmentBeranda.setArguments(args)
+        fragmentBeranda.arguments = args
         return fragmentBeranda
     }
 
@@ -41,25 +40,24 @@ class BerandaFragment : Fragment(), OnRefreshListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val rootView: View = inflater.inflate(R.layout.fragment_beranda, container, false)
 
-        // SwipeRefreshLayout
-        mSwipeRefreshLayout =
-            rootView.findViewById<View>(R.id.swipe_container) as SwipeRefreshLayout
-        mSwipeRefreshLayout!!.setOnRefreshListener(this)
-        mSwipeRefreshLayout!!.setColorSchemeResources(
-            R.color.colorPrimary,
-            R.color.colorPrimary,
-            R.color.colorPrimary,
-            R.color.colorPrimary
-        )
-        
-        mSwipeRefreshLayout!!.post {
-            mSwipeRefreshLayout!!.isRefreshing = true
-            loadKursus()
-        }
+//        // SwipeRefreshLayout
+//        mSwipeRefreshLayout =
+//            rootView.findViewById<View>(R.id.swipe_container) as SwipeRefreshLayout
+//        mSwipeRefreshLayout!!.setOnRefreshListener(this)
+//        mSwipeRefreshLayout!!.setColorSchemeResources(
+//            R.color.colorPrimary,
+//            R.color.colorPrimary,
+//            R.color.colorPrimary,
+//            R.color.colorPrimary
+//        )
+//
+//        mSwipeRefreshLayout!!.post {
+//            mSwipeRefreshLayout!!.isRefreshing = true
+//            loadKursus()
+//        }
 
-        return rootView
+        return inflater.inflate(R.layout.fragment_beranda, container, false)
     }
 
     override fun onViewCreated(
@@ -136,50 +134,5 @@ class BerandaFragment : Fragment(), OnRefreshListener {
                 }
             }
         })
-    }
-
-    override fun onRefresh() {
-        mSwipeRefreshLayout!!.isRefreshing = true
-        loadKursus()
-    }
-
-    private fun loadKursus() {
-        val db = FirebaseFirestore.getInstance()
-        db.collection("kursus")
-            .get()
-            .addOnSuccessListener { result ->
-                dataKursus.clear()
-                for (document in result) {
-                    dataKursus.add(
-                        DataKursus(
-                            document.getString("deskripsi")!!,
-                            document.getString("dilihat")!!,
-                            document.getString("gambar")!!,
-                            document.getString("harga")!!,
-                            document.getString("kategori")!!,
-                            document.getString("nama")!!,
-                            document.getString("pembuat")!!,
-                            document.getString("pengguna")!!,
-                            document.getString("rating")!!,
-                            document.getString("remaining")!!
-                        )
-                    )
-                }
-
-                if (dataKursus.isNotEmpty()) {
-                    mSwipeRefreshLayout!!.setRefreshing(false)
-                    mRecyclerView1.setHasFixedSize(true)
-                    mRecyclerView1.layoutManager = GridLayoutManager(context, 2)
-                    val adapter = RVAdapterKursus(activity, dataKursus)
-                    adapter.notifyDataSetChanged()
-                    mRecyclerView1.adapter = adapter
-                } else {
-                    loadKursus()
-                }
-            }
-            .addOnFailureListener { exception ->
-                mSwipeRefreshLayout!!.setRefreshing(false)
-                Toast.makeText(context, "Connection error", Toast.LENGTH_SHORT).show()
-            }
     }
 }

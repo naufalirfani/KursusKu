@@ -37,12 +37,12 @@ class SignUpActivity : AppCompatActivity() {
 
         iv_daftar_mata.setOnClickListener {
             if (isShow){
-                et_daftar_password.setInputType(InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD)
+                et_daftar_password.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
                 iv_daftar_mata.background = getDrawable(R.drawable.matanutup)
                 isShow = false
             }
             else{
-                et_daftar_password.setInputType(InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD)
+                et_daftar_password.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
                 iv_daftar_mata.background = getDrawable(R.drawable.matabuka)
                 isShow = true
             }

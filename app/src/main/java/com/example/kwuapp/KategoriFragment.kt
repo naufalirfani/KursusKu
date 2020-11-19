@@ -32,7 +32,7 @@ class KategoriFragment : Fragment() {
         args.putParcelableArrayList("dataKursus2", dataKursus2)
         args.putString("kategori", kategori)
         args.putString("kategori2", kategori2)
-        fragmentKategori.setArguments(args)
+        fragmentKategori.arguments = args
         return fragmentKategori
     }
 

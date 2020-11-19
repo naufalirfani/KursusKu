@@ -33,7 +33,7 @@ class RVAdapterDetail(private val context: Context?,
         val harga = "Rp${kursus.harga}"
         holder.view.tv_detail_harga.text = harga
         holder.view.tv_detail_hargaasli.text = "Rp49.900"
-        holder.view.tv_detail_hargaasli.setPaintFlags(holder.view.tv_detail_hargaasli.getPaintFlags() or Paint.STRIKE_THRU_TEXT_FLAG)
+        holder.view.tv_detail_hargaasli.paintFlags = holder.view.tv_detail_hargaasli.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
         val ratingValue = kursus.rating.toFloat()
         holder.view.detail_ratingbar.rating = ratingValue
         holder.view.tv_detail_rating.text = kursus.rating

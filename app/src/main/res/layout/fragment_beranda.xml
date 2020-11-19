@@ -1,42 +1,32 @@
-<?xml version="1.0" encoding="utf-8"?>
-<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/swipe_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
-    tools:context=".BerandaFragment">
-
-    <androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/cl_beranda">
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/mRecyclerView1"
+        android:layout_marginLeft="6dp"
+        android:layout_marginRight="6dp"
+        android:layout_marginTop="6dp"
+        android:paddingBottom="6dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/cl_beranda">
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/mRecyclerView1"
-            android:layout_marginLeft="6dp"
-            android:layout_marginRight="6dp"
-            android:layout_marginTop="6dp"
-            android:paddingBottom="6dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="@id/cl_beranda"/>
-        <Button
-            android:id="@+id/btn_back_to_top"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:background="@drawable/button_circle"
-            android:drawableStart="@drawable/ic_arrow_upward_white_24dp"
-            android:textColor="#FFFFFF"
-            android:padding="8dp"
-            android:layout_marginBottom="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginLeft="8dp"
-            android:alpha="0.5"
-            android:textSize="15sp"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintRight_toRightOf="parent"/>
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+        app:layout_constraintTop_toTopOf="@id/cl_beranda"/>
+    <Button
+        android:id="@+id/btn_back_to_top"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="@drawable/button_circle"
+        android:drawableStart="@drawable/ic_arrow_upward_white_24dp"
+        android:textColor="#FFFFFF"
+        android:padding="8dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginLeft="8dp"
+        android:alpha="0.5"
+        android:textSize="15sp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

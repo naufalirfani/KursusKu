@@ -3,6 +3,7 @@ package com.example.kwuapp
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout.OnRefreshListener
@@ -26,8 +27,6 @@ class AkunActivity : AppCompatActivity(){
 
         supportActionBar?.hide()
 
-        userDetail = intent.getParcelableExtra("userDetail")!!
-
         auth = FirebaseAuth.getInstance()
         val user = auth.currentUser
         if (user != null) {
@@ -47,18 +46,7 @@ class AkunActivity : AppCompatActivity(){
             startActivity(intent)
             finish()
         }
-
-        btn_akun_setting.setOnClickListener {
-            val intent = Intent(this, AkunActivity::class.java)
-            startActivity(intent)
-        }
-
-        btn_akun_setting2.setOnClickListener {
-            val intent = Intent(this, AkunActivity::class.java)
-            startActivity(intent)
-        }
-
-        loadUser()
+        loadUser2()
     }
 
     override fun onBackPressed() {
@@ -68,7 +56,7 @@ class AkunActivity : AppCompatActivity(){
 
     override fun onResume() {
         super.onResume()
-        loadUser()
+        loadUser2()
     }
 
     private fun loadUser(){
@@ -92,5 +80,40 @@ class AkunActivity : AppCompatActivity(){
         tv_akun_email.text = userDetail.email
         val saldo = "Rp ${userDetail.saldo}"
         tv_akun_saldo.text = saldo
+    }
+
+    private fun loadUser2() {
+        val db = FirebaseFirestore.getInstance()
+        db.collection("users2").document(userId)
+            .get()
+            .addOnSuccessListener { result ->
+                userDetail = UserDetail(result.getString("username").toString(),
+                    result.getString("email").toString(),
+                    result.getString("gambar").toString(),
+                    result.getString("saldo").toString(),
+                    result.getString("isiKeranjang").toString(),
+                    result.getString("jumlahKeranjang").toString())
+
+                if(userDetail.isiKeranjang.isNotEmpty()){
+                    btn_akun_setting.setOnClickListener {
+                        val intent = Intent(this, SettingActivity::class.java)
+                        intent.putExtra("userDetail", userDetail)
+                        startActivity(intent)
+                    }
+
+                    btn_akun_setting2.setOnClickListener {
+                        val intent = Intent(this, SettingActivity::class.java)
+                        intent.putExtra("userDetail", userDetail)
+                        startActivity(intent)
+                    }
+                    loadUser()
+                }
+                else{
+                    loadUser2()
+                }
+            }
+            .addOnFailureListener { exception ->
+                Toast.makeText(this, "Connection error", Toast.LENGTH_SHORT).show()
+            }
     }
 }

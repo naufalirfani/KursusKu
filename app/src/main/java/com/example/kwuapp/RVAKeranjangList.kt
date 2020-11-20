@@ -44,7 +44,6 @@ class RVAKeranjangList(private val context: Context?,
 
         holder.view.cb_item_keranjang.setOnCheckedChangeListener { buttonView, isChecked ->
             if (isChecked){
-                Toast.makeText(context, kursus.harga, Toast.LENGTH_SHORT).show()
                 val hargaSebelum = tv_total.text.split("p")
                 val hargaSebelumFix = hargaSebelum[1].replace(".", "").toInt()
                 val hargaKursus = 29000

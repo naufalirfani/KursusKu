@@ -80,7 +80,7 @@ class KeranjangActivity : AppCompatActivity() {
                     result.getString("jumlahKeranjang").toString())
 
                 if(userDetail.isiKeranjang.isNotEmpty()){
-                    if(userDetail.username != "kosong"){
+                    if(userDetail.isiKeranjang != "kosong"){
                         val nama = userDetail.isiKeranjang.split("$")
                         for (i in nama.indices){
                             if(i > 0){
@@ -90,6 +90,7 @@ class KeranjangActivity : AppCompatActivity() {
                         loadKursus(namaKursus)
                     }
                     else{
+                        keranajng_progressbar.visibility = View.GONE
                         keranjang_cons_utama.setBackgroundColor(resources.getColor((R.color.white)))
                         iv_keranjang_kosong.visibility = View.VISIBLE
                         tv_keranjang_kosong.visibility = View.VISIBLE
@@ -141,12 +142,6 @@ class KeranjangActivity : AppCompatActivity() {
                     rv_keranjang.adapter = adapter
 
                     keranajng_progressbar.visibility = View.GONE
-
-                    cb_keranjang_semua.setOnCheckedChangeListener { buttonView, isChecked ->
-                        if (isChecked){
-                        }else{
-                        }
-                    }
                 }
                 else{
                     loadKursus(namaKursus)

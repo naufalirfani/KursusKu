@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".AkunActivity">
     <include
@@ -12,23 +13,23 @@
         layout="@layout/actionbar"
         app:layout_constraintTop_toTopOf="parent"/>
     <LinearLayout
+        android:id="@+id/linear_photo"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/colorAbuMuda"
+        android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:orientation="vertical"
         android:layout_marginTop="48dp">
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/img_my_photo"
-            android:layout_width="175dp"
+            android:layout_width="200dp"
             android:scaleType="centerCrop"
             android:layout_marginTop="60dp"
-            android:layout_height="175dp"
+            android:layout_height="200dp"
             tools:src="@android:color/darker_gray" />
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:background="#00ffffff"
         android:gravity="center_horizontal"
         android:id="@+id/linier"
@@ -36,14 +37,49 @@
         android:orientation="vertical">
         <Button
             android:id="@+id/change_photo"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:background="@drawable/buttonshape"
-            android:drawableStart="@drawable/ic_photo_camera_white_24dp"
+            android:drawableStart="@drawable/ic_photo_camera_black_24dp"
             android:textColor="#FFFFFF"
-            android:padding="8dp"
+            android:padding="9dp"
             android:layout_marginTop="70dp"
             android:layout_marginLeft="70dp"
             android:textSize="15sp" />
     </LinearLayout>
+    <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:orientation="horizontal"
+    android:layout_below="@id/linear_photo">
+    <Button
+        android:id="@+id/btn_setting_batal"
+        android:layout_width="wrap_content"
+        android:layout_marginTop="32dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_height="wrap_content"
+        android:text="@string/batal"
+        android:textAllCaps="false"
+        android:textColor="@color/colorPrimary"
+        android:textSize="14sp"
+        android:background="@drawable/button_keranjang"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"/>
+    <Button
+        android:id="@+id/btn_setting_simpan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginRight="16dp"
+        android:text="@string/simpan"
+        android:textAllCaps="false"
+        android:textSize="14sp"
+        android:textColor="@color/white"
+        android:background="@drawable/button_round" />
+</LinearLayout>
 </RelativeLayout>

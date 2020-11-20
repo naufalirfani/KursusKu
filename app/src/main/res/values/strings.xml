@@ -39,4 +39,8 @@
     <string name="total_harga">Total Harga:</string>
     <string name="rp0">Rp0</string>
     <string name="pengaturan_akun">Pengaturan Akun</string>
+    <string name="simpan">Simpan</string>
+    <string name="batal">Batal</string>
+    <string name="versi">1.0</string>
+    <string name="versi_aplikasi">Versi aplikasi</string>
 </resources>

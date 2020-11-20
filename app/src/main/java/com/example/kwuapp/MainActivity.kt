@@ -1,6 +1,7 @@
 package com.example.kwuapp
 
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.os.Bundle
 import android.text.TextUtils
@@ -9,15 +10,21 @@ import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager.widget.ViewPager
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DecodeFormat
+import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.request.target.Target
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_main.*
+import java.net.URL
 import kotlin.random.Random
 
 
@@ -28,15 +35,16 @@ class MainActivity : AppCompatActivity() {
     private var arrayList = ArrayList<DataKursus>()
     private var arrayList2 = ArrayList<DataKursus>()
     private var arrayList3 = ArrayList<DataKursus>()
-    private val kategori = arrayOf("Desain", "Bisnis", "Finansial", "Kantor", "Pendidikan", "Pengembangan")
     private var angka1: Int = 0
     private var angka2: Int = 0
+    private lateinit var kategori1: String
+    private lateinit var kategori2: String
 
     private lateinit var userDetail: UserDetail
     private lateinit var dataUser: UserDetail
     private var userId: String = ""
     private lateinit var auth: FirebaseAuth
-    private lateinit var btnAkun: Button
+    private lateinit var btnAkun: ImageView
     private lateinit var btnKeranjang: Button
     private lateinit var btnSearch: Button
 
@@ -48,6 +56,12 @@ class MainActivity : AppCompatActivity() {
         arrayList.clear()
         arrayList2.clear()
         arrayList3.clear()
+
+        arrayList = intent.getParcelableArrayListExtra<DataKursus>("arrayList")!!
+        arrayList2 = intent.getParcelableArrayListExtra<DataKursus>("arrayList2")!!
+        arrayList3 = intent.getParcelableArrayListExtra<DataKursus>("arrayList3")!!
+        kategori1 = intent.getStringExtra("kategori1")!!
+        kategori2 = intent.getStringExtra("kategori2")!!
 
         val displayMetrics = DisplayMetrics()
         windowManager.defaultDisplay.getMetrics(displayMetrics)
@@ -62,6 +76,11 @@ class MainActivity : AppCompatActivity() {
         params.width = dpwidth-350
         tabLayout1.layoutParams = params
 
+        val pagerAdapter = PagerAdapter(supportFragmentManager, arrayList, arrayList2, arrayList3, kategori1, kategori2)
+        val pager = findViewById<View>(R.id.pager) as ViewPager
+        pager.adapter = pagerAdapter
+        tabLayout1.setupWithViewPager(pager)
+
         btnSearch = main_constraint.findViewById(R.id.btn_search)
         btnAkun = main_constraint.findViewById(R.id.btn_akun)
         btnKeranjang = main_constraint.findViewById(R.id.btn_keranjang)
@@ -75,15 +94,13 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        main_progressBar.visibility = View.VISIBLE
-        loadKursus()
-
         auth = FirebaseAuth.getInstance()
         val user = auth.currentUser
         if (user != null) {
             val name = intent.getStringExtra("username")
             val id = user.uid
             userId = id
+            main_progressBar.visibility = View.VISIBLE
             loadUser()
             val email2 = user.email
             if(!TextUtils.isEmpty(name)){
@@ -95,7 +112,12 @@ class MainActivity : AppCompatActivity() {
             }
         }
         else{
-            btnAkun.background = resources.getDrawable(R.drawable.login)
+            Glide.with(applicationContext)
+                .load(resources.getDrawable(R.drawable.login))
+                .apply(
+                    RequestOptions().fitCenter().format(DecodeFormat.PREFER_ARGB_8888).override(
+                        Target.SIZE_ORIGINAL))
+                .into(btnAkun)
             btnAkun.setOnClickListener {
                 val intent = Intent(this, SignInActivity::class.java)
                 startActivity(intent)
@@ -103,75 +125,6 @@ class MainActivity : AppCompatActivity() {
 
             userDetail = UserDetail("kosong", "kosong", "kosong", "kosong", "kosong", "kosong")
         }
-    }
-
-    private fun loadKursus(){
-        randomAngka()
-        val kategori1 = kategori[angka1]
-        val kategori2 = kategori[angka2]
-        val db = FirebaseFirestore.getInstance()
-        db.collection("kursus")
-            .get()
-            .addOnSuccessListener { result ->
-                arrayList.clear()
-                arrayList2.clear()
-                arrayList3.clear()
-                for (document in result) {
-                    arrayList.add(DataKursus(document.getString("deskripsi")!!,
-                        document.getString("dilihat")!!,
-                        document.getString("gambar")!!,
-                        document.getString("harga")!!,
-                        document.getString("kategori")!!,
-                        document.getString("nama")!!,
-                        document.getString("pembuat")!!,
-                        document.getString("pengguna")!!,
-                        document.getString("rating")!!,
-                        document.getString("remaining")!!))
-                }
-
-                if(arrayList.isNotEmpty()){
-                    for(i in 0 until arrayList.size){
-                        if(arrayList[i].kategori == kategori1){
-                            arrayList2.add(arrayList[i])
-                        }
-                        if(arrayList[i].kategori == kategori2){
-                            arrayList3.add(arrayList[i])
-                        }
-                    }
-                    val pagerAdapter = PagerAdapter(supportFragmentManager, arrayList, arrayList2, arrayList3, kategori1, kategori2)
-                    val pager = findViewById<View>(R.id.pager) as ViewPager
-                    pager.adapter = pagerAdapter
-                    tabLayout1.setupWithViewPager(pager)
-
-                    main_progressBar.visibility = View.GONE
-                }
-                else{
-                    loadKursus()
-                }
-            }
-            .addOnFailureListener { exception ->
-                main_progressBar.visibility = View.GONE
-                Log.d("Error", "Error getting documents: ", exception)
-                val snackBar = Snackbar.make(
-                    currentFocus!!, "    Connection Failure",
-                    Snackbar.LENGTH_INDEFINITE
-                )
-                val snackBarView = snackBar.view
-                snackBarView.setBackgroundColor(Color.BLACK)
-                val textView = snackBarView.findViewById<TextView>(R.id.snackbar_text)
-                textView.setTextColor(Color.WHITE)
-                textView.textSize = 16F
-                textView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.warning, 0, 0, 0)
-                val snack_action_view = snackBarView.findViewById<Button>(R.id.snackbar_action)
-                snack_action_view.setTextColor(Color.YELLOW)
-
-                // Set an action for snack bar
-                snackBar.setAction("Retry") {
-                    loadKursus()
-
-                }
-                snackBar.show()
-            }
     }
 
     private fun loadUser() {
@@ -195,10 +148,14 @@ class MainActivity : AppCompatActivity() {
                         userDetail.isiKeranjang,
                         userDetail.jumlahKeranjang
                     )
-                    btnAkun.background = resources.getDrawable(R.drawable.akun)
+                    Glide.with(applicationContext)
+                        .load(userDetail.gambar)
+                        .apply(
+                            RequestOptions().fitCenter().format(DecodeFormat.PREFER_ARGB_8888).override(
+                                Target.SIZE_ORIGINAL))
+                        .into(btnAkun)
                     btnAkun.setOnClickListener {
                         val intent2 = Intent(this, AkunActivity::class.java)
-                        intent2.putExtra("userDetail", dataUser)
                         startActivity(intent2)
                     }
                     main_progressBar.visibility = View.GONE

@@ -21,6 +21,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_sign_in.*
+import java.lang.Exception
 
 @Suppress("DEPRECATION")
 class SignInActivity : AppCompatActivity() {
@@ -133,8 +134,14 @@ class SignInActivity : AppCompatActivity() {
         db.collection("users").document(username)
             .get()
             .addOnSuccessListener { result ->
-                dataAkun =  UserAkun(result.getString("username")!!,
+                try{
+                    dataAkun =  UserAkun(result.getString("username")!!,
                         result.getString("email")!!)
+                }
+                catch (e: Exception){
+                    Toast.makeText(this,"Login gagal", Toast.LENGTH_SHORT).show()
+                }
+
 
                 if(dataAkun?.email?.isNotEmpty()!!){
                     email = dataAkun?.email

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".AkunActivity">
+    <include
+        android:id="@+id/actionbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        layout="@layout/actionbar"
+        app:layout_constraintTop_toTopOf="parent"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorAbuMuda"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:layout_marginTop="48dp">
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/img_my_photo"
+            android:layout_width="175dp"
+            android:scaleType="centerCrop"
+            android:layout_marginTop="60dp"
+            android:layout_height="175dp"
+            tools:src="@android:color/darker_gray" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#00ffffff"
+        android:gravity="center_horizontal"
+        android:id="@+id/linier"
+        android:layout_marginTop="48dp"
+        android:orientation="vertical">
+        <Button
+            android:id="@+id/change_photo"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/buttonshape"
+            android:drawableStart="@drawable/ic_photo_camera_white_24dp"
+            android:textColor="#FFFFFF"
+            android:padding="8dp"
+            android:layout_marginTop="70dp"
+            android:layout_marginLeft="70dp"
+            android:textSize="15sp" />
+    </LinearLayout>
+</RelativeLayout>

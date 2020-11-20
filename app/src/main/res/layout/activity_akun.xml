@@ -180,7 +180,7 @@
         android:id="@+id/btn_akun_setting2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Pengaturan Akun"
+        android:text="@string/pengaturan_akun"
         android:textSize="14sp"
         android:layout_marginTop="1dp"
         android:background="@color/white"

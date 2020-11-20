@@ -48,6 +48,16 @@ class AkunActivity : AppCompatActivity(){
             finish()
         }
 
+        btn_akun_setting.setOnClickListener {
+            val intent = Intent(this, AkunActivity::class.java)
+            startActivity(intent)
+        }
+
+        btn_akun_setting2.setOnClickListener {
+            val intent = Intent(this, AkunActivity::class.java)
+            startActivity(intent)
+        }
+
         loadUser()
     }
 

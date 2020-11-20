@@ -79,7 +79,6 @@
             android:text="@string/harga"
             android:textColor="@color/colorPrimary"
             android:textSize="18sp"
-            app:layout_constraintBottom_toBottomOf="@id/keranjang_cons"
             app:layout_constraintLeft_toRightOf="@id/iv_item_keranjang"
             app:layout_constraintTop_toTopOf="@id/keranjang_cons"/>
     </androidx.constraintlayout.widget.ConstraintLayout>

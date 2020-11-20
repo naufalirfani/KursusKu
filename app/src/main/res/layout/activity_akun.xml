@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,153 +7,158 @@
     android:background="@color/colorAbuMuda"
     android:orientation="vertical"
     tools:context=".AkunActivity">
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cons_akun"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:background="@color/colorPrimary">
-        <LinearLayout
-            android:id="@+id/linear1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="10dp"
-            android:elevation="8dp">
-            <Button
-                android:id="@+id/btn_akun_back"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_marginLeft="4dp"
-                android:layout_marginTop="4dp"
-                android:layout_marginRight="4dp"
-                android:layout_marginBottom="4dp"
-                android:background="@drawable/ic_arrow_back_white_24dp"/>
-            <View
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="match_parent"
-                android:textSize="16sp"
-                android:maxLines="1"
-                android:layout_margin="4dp"/>
-            <Button
-                android:id="@+id/btn_akun_setting"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_marginLeft="6dp"
-                android:layout_marginTop="4dp"
-                android:layout_marginRight="6dp"
-                android:layout_marginBottom="4dp"
-                android:background="@drawable/ic_settings_white_24dp"/>
+        android:background="@color/colorPrimary"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:padding="10dp">
+        <Button
+            android:id="@+id/btn_akun_back"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginLeft="4dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginRight="4dp"
+            android:layout_marginBottom="4dp"
+            android:background="@drawable/ic_arrow_back_white_24dp"
+            app:layout_constraintTop_toTopOf="@id/cons_akun"
+            app:layout_constraintLeft_toLeftOf="@id/cons_akun"/>
+        <Button
+            android:id="@+id/btn_akun_setting"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginLeft="6dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginRight="6dp"
+            android:layout_marginBottom="4dp"
+            android:background="@drawable/ic_settings_white_24dp"
+            app:layout_constraintTop_toTopOf="@id/cons_akun"
+            app:layout_constraintRight_toLeftOf="@id/btn_akun_keranjang"/>
 
-            <Button
-                android:id="@+id/btn_akun_keranjang"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_marginLeft="6dp"
-                android:layout_marginTop="4dp"
-                android:layout_marginRight="6dp"
-                android:layout_marginBottom="4dp"
-                android:background="@drawable/ic_shopping_cart_white_24dp" />
-            <Button
-                android:id="@+id/btn_akun_chat"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_marginLeft="6dp"
-                android:layout_marginTop="4dp"
-                android:layout_marginRight="6dp"
-                android:layout_marginBottom="4dp"
-                android:background="@drawable/ic_chat_black_24dp"/>
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
+        <Button
+            android:id="@+id/btn_akun_keranjang"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginLeft="6dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginRight="6dp"
+            android:layout_marginBottom="4dp"
+            android:background="@drawable/ic_shopping_cart_white_24dp"
+            app:layout_constraintTop_toTopOf="@id/cons_akun"
+            app:layout_constraintRight_toLeftOf="@id/btn_akun_chat"/>
+        <Button
+            android:id="@+id/btn_akun_chat"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginLeft="6dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginRight="6dp"
+            android:layout_marginBottom="4dp"
+            android:background="@drawable/ic_chat_black_24dp"
+            app:layout_constraintTop_toTopOf="@id/cons_akun"
+            app:layout_constraintRight_toRightOf="@id/cons_akun"/>
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/iv_akun_foto"
+            android:layout_width="50dp"
+            android:scaleType="centerCrop"
+            android:layout_height="50dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp"
+            tools:src="@android:color/darker_gray"
+            app:layout_constraintTop_toBottomOf="@id/btn_akun_back"
+            app:layout_constraintBottom_toBottomOf="@id/cons_akun"
+            app:layout_constraintLeft_toLeftOf="@id/cons_akun" />
+
+        <TextView
+            android:id="@+id/tv_akun_username"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
-            android:paddingBottom="16dp"
-            android:paddingTop="8dp"
-            android:orientation="horizontal"
-            android:gravity="center|left">
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/iv_akun_foto"
-                android:layout_width="50dp"
-                android:scaleType="centerCrop"
-                android:layout_height="50dp"
-                tools:src="@android:color/darker_gray" />
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp">
-                <TextView
-                    android:id="@+id/tv_akun_username"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/user_name"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/white"
-                    android:maxLines="1"/>
-                <TextView
-                    android:id="@+id/tv_akun_email"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/emailEt"
-                    android:textSize="14sp"
-                    android:textColor="@color/white"
-                    android:maxLines="1"/>
-            </LinearLayout>
-        </LinearLayout>
-    </LinearLayout>
-    <LinearLayout
+            android:layout_marginTop="8dp"
+            android:maxLines="1"
+            android:text="@string/user_name"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginRight="16dp"
+            android:layout_marginLeft="16dp"
+            app:layout_constraintLeft_toRightOf="@id/iv_akun_foto"
+            app:layout_constraintTop_toBottomOf="@id/btn_akun_back" />
+
+        <TextView
+            android:id="@+id/tv_akun_email"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/emailEt"
+            android:textSize="14sp"
+            android:textColor="@color/white"
+            android:maxLines="1"
+            android:layout_marginRight="16dp"
+            android:layout_marginLeft="16dp"
+            app:layout_constraintLeft_toRightOf="@id/iv_akun_foto"
+            app:layout_constraintTop_toBottomOf="@id/tv_akun_username" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    <TextView
+        android:id="@+id/tv_saldo_kursusku"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:text="@string/saldo_di_kursusku"
+        android:layout_marginTop="8dp"
+        android:padding="16dp"
+        android:background="@color/white"
+        app:layout_constraintTop_toBottomOf="@id/cons_akun"
+        app:layout_constraintLeft_toLeftOf="parent"/>
+    <View
+        android:id="@+id/v_akun_bg"
+        android:layout_width="match_parent"
+        android:layout_height="136dp"
+        android:background="@color/white"
+        app:layout_constraintTop_toBottomOf="@id/tv_saldo_kursusku"
+        app:layout_constraintLeft_toLeftOf="parent"/>
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
-        android:layout_marginTop="8dp"
-        android:padding="16dp"
-        android:orientation="vertical">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="14sp"
-            android:textColor="@color/black"
-            android:textStyle="bold"
-            android:text="@string/saldo_di_kursusku"/>
-        <androidx.cardview.widget.CardView
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="4dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_saldo_kursusku">
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:orientation="horizontal"
             android:background="@color/white"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="16dp"
-            app:cardCornerRadius="10dp"
-            app:cardElevation="4dp">
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:background="@color/white"
-                android:padding="16dp"
-                android:gravity="center|left">
-                <ImageView
-                    android:layout_width="70dp"
-                    android:layout_height="70dp"
-                    android:src="@drawable/saldo"/>
+            android:padding="16dp"
+            android:gravity="center|left">
+            <ImageView
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:src="@drawable/saldo"/>
 
-                <TextView
-                    android:id="@+id/tv_akun_saldo"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp"
-                    android:text="@string/saldo"
-                    android:textColor="@color/black"
-                    android:maxLines="1"
-                    android:textSize="24sp" />
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
-    </LinearLayout>
+            <TextView
+                android:id="@+id/tv_akun_saldo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:text="@string/saldo"
+                android:textColor="@color/black"
+                android:maxLines="1"
+                android:textSize="24sp" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
     <Button
         android:id="@+id/btn_akun_isisaldo"
         android:layout_width="match_parent"
@@ -168,7 +173,9 @@
         android:drawableLeft="@drawable/button_topup"
         android:drawablePadding="12dp"
         android:paddingLeft="12dp"
-        android:paddingRight="12dp"/>
+        android:paddingRight="12dp"
+        app:layout_constraintTop_toBottomOf="@id/v_akun_bg"
+        app:layout_constraintLeft_toLeftOf="parent"/>
     <Button
         android:id="@+id/btn_akun_setting2"
         android:layout_width="match_parent"
@@ -183,7 +190,9 @@
         android:drawableLeft="@drawable/button_setting"
         android:drawablePadding="12dp"
         android:paddingLeft="12dp"
-        android:paddingRight="12dp"/>
+        android:paddingRight="12dp"
+        app:layout_constraintTop_toBottomOf="@id/btn_akun_isisaldo"
+        app:layout_constraintLeft_toLeftOf="parent"/>
     <Button
         android:id="@+id/btn_akun_keluar"
         android:layout_width="match_parent"
@@ -198,5 +207,7 @@
         android:drawableLeft="@drawable/button_keluar"
         android:drawablePadding="12dp"
         android:paddingLeft="12dp"
-        android:paddingRight="12dp"/>
-</LinearLayout>
+        android:paddingRight="12dp"
+        app:layout_constraintTop_toBottomOf="@id/btn_akun_setting2"
+        app:layout_constraintLeft_toLeftOf="parent"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

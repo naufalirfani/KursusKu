@@ -9,10 +9,12 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.content.res.Resources
+import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.provider.Settings
 import android.view.ContextThemeWrapper
 import android.view.View
@@ -33,7 +35,6 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import kotlinx.android.synthetic.main.activity_keranjang.actionbar
 import kotlinx.android.synthetic.main.activity_setting.*
-import java.io.File
 
 @Suppress("DEPRECATION")
 class SettingActivity : AppCompatActivity() {
@@ -47,8 +48,10 @@ class SettingActivity : AppCompatActivity() {
     private lateinit var firebaseDatabase: FirebaseDatabase
     private var storageReference: StorageReference? = null
     val MY_PERMISSIONS_REQUEST_CAMERA = 100
+    private val CAMERA_REQUEST = 1888
     val ALLOW_KEY = "ALLOWED"
     val CAMERA_PREF = "camera_pref"
+    private var mImageUri: Uri? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -96,39 +99,6 @@ class SettingActivity : AppCompatActivity() {
         }
 
         btn_setting_batal.setOnClickListener { onBackPressed() }
-
-        if (ContextCompat.checkSelfPermission(
-                this,
-                Manifest.permission.CAMERA
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            if (getFromPref(this, ALLOW_KEY)!!) {
-                showSettingsAlert()
-            } else if (ContextCompat.checkSelfPermission(
-                    this,
-                    Manifest.permission.CAMERA
-                )
-                != PackageManager.PERMISSION_GRANTED
-            ) {
-
-                // Should we show an explanation?
-                if (ActivityCompat.shouldShowRequestPermissionRationale(
-                        this,
-                        Manifest.permission.CAMERA
-                    )
-                ) {
-                    showAlert()
-                } else {
-                    // No explanation needed, we can request the permission.
-                    ActivityCompat.requestPermissions(
-                        this, arrayOf(Manifest.permission.CAMERA),
-                        MY_PERMISSIONS_REQUEST_CAMERA
-                    )
-                }
-            }
-        } else {
-            openCamera()
-        }
     }
 
     fun saveToPreferences(
@@ -248,8 +218,9 @@ class SettingActivity : AppCompatActivity() {
     }
 
     private fun openCamera() {
-        val intent = Intent("android.media.action.IMAGE_CAPTURE")
-        startActivity(intent)
+        val cameraIntent =
+            Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        startActivityForResult(cameraIntent, CAMERA_REQUEST)
     }
 
     private fun dispatchTakePictureIntent() {
@@ -368,9 +339,14 @@ class SettingActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
-            100 -> if (resultCode == Activity.RESULT_OK) {
-                val imgFile = File(currentPhotoPath)
-                filePath = Uri.fromFile(imgFile)
+            CAMERA_REQUEST -> if (resultCode == Activity.RESULT_OK) {
+//                val imgFile = File(currentPhotoPath)
+//                filePath = Uri.fromFile(imgFile)
+                val imageBitmap: Bitmap? = data!!.extras!!["data"] as Bitmap?
+                img_my_photo.setImageBitmap(imageBitmap)
+
+                mImageUri = data.getData()
+                img_my_photo2.setImageURI(mImageUri)
             }
             101 -> if (resultCode == Activity.RESULT_OK) {
                 filePath = data!!.data

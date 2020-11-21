@@ -1,42 +1,39 @@
 package com.example.kwuapp
 
-import android.annotation.SuppressLint
+import android.Manifest
 import android.app.Activity
 import android.app.AlertDialog
 import android.app.ProgressDialog
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
+import android.content.pm.PackageManager
 import android.content.res.Resources
 import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Handler
-import android.provider.MediaStore
+import android.provider.Settings
 import android.view.ContextThemeWrapper
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import androidx.core.content.FileProvider
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DecodeFormat
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target
-import com.google.android.gms.tasks.OnFailureListener
-import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.OnProgressListener
 import com.google.firebase.storage.StorageReference
-import com.google.firebase.storage.UploadTask
-import kotlinx.android.synthetic.main.activity_keranjang.*
 import kotlinx.android.synthetic.main.activity_keranjang.actionbar
 import kotlinx.android.synthetic.main.activity_setting.*
 import java.io.File
-import java.io.IOException
 
 @Suppress("DEPRECATION")
 class SettingActivity : AppCompatActivity() {
@@ -49,6 +46,9 @@ class SettingActivity : AppCompatActivity() {
     private lateinit var dbReference3: DatabaseReference
     private lateinit var firebaseDatabase: FirebaseDatabase
     private var storageReference: StorageReference? = null
+    val MY_PERMISSIONS_REQUEST_CAMERA = 100
+    val ALLOW_KEY = "ALLOWED"
+    val CAMERA_PREF = "camera_pref"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -96,9 +96,162 @@ class SettingActivity : AppCompatActivity() {
         }
 
         btn_setting_batal.setOnClickListener { onBackPressed() }
+
+        if (ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.CAMERA
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            if (getFromPref(this, ALLOW_KEY)!!) {
+                showSettingsAlert()
+            } else if (ContextCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.CAMERA
+                )
+                != PackageManager.PERMISSION_GRANTED
+            ) {
+
+                // Should we show an explanation?
+                if (ActivityCompat.shouldShowRequestPermissionRationale(
+                        this,
+                        Manifest.permission.CAMERA
+                    )
+                ) {
+                    showAlert()
+                } else {
+                    // No explanation needed, we can request the permission.
+                    ActivityCompat.requestPermissions(
+                        this, arrayOf(Manifest.permission.CAMERA),
+                        MY_PERMISSIONS_REQUEST_CAMERA
+                    )
+                }
+            }
+        } else {
+            openCamera()
+        }
     }
 
-    val REQUEST_TAKE_PHOTO = 100
+    fun saveToPreferences(
+        context: Context,
+        key: String?,
+        allowed: Boolean?
+    ) {
+        val myPrefs: SharedPreferences = context.getSharedPreferences(
+            CAMERA_PREF,
+            Context.MODE_PRIVATE
+        )
+        val prefsEditor: SharedPreferences.Editor = myPrefs.edit()
+        if (allowed != null) {
+            prefsEditor.putBoolean(key, allowed)
+        }
+        prefsEditor.apply()
+    }
+
+    fun getFromPref(context: Context, key: String?): Boolean? {
+        val myPrefs = context.getSharedPreferences(
+            CAMERA_PREF,
+            Context.MODE_PRIVATE
+        )
+        return myPrefs.getBoolean(key, false)
+    }
+
+    private fun showAlert() {
+        val alertDialog =
+            AlertDialog.Builder(this@SettingActivity).create()
+        alertDialog.setTitle("Alert")
+        alertDialog.setMessage("App needs to access the Camera.")
+        alertDialog.setButton(
+            AlertDialog.BUTTON_NEGATIVE, "DONT ALLOW"
+        ) { dialog, which ->
+            dialog.dismiss()
+            finish()
+        }
+        alertDialog.setButton(
+            AlertDialog.BUTTON_POSITIVE, "ALLOW"
+        ) { dialog, which ->
+            dialog.dismiss()
+            ActivityCompat.requestPermissions(
+                this@SettingActivity,
+                arrayOf(Manifest.permission.CAMERA),
+                MY_PERMISSIONS_REQUEST_CAMERA
+            )
+        }
+        alertDialog.show()
+    }
+
+    private fun showSettingsAlert() {
+        val alertDialog =
+            AlertDialog.Builder(this@SettingActivity).create()
+        alertDialog.setTitle("Alert")
+        alertDialog.setMessage("App needs to access the Camera.")
+        alertDialog.setButton(
+            AlertDialog.BUTTON_NEGATIVE, "DONT ALLOW"
+        ) { dialog, which ->
+            dialog.dismiss()
+            //finish();
+        }
+        alertDialog.setButton(
+            AlertDialog.BUTTON_POSITIVE, "SETTINGS"
+        ) { dialog, which ->
+            dialog.dismiss()
+            startInstalledAppDetailsActivity(this@SettingActivity)
+        }
+        alertDialog.show()
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String?>,
+        grantResults: IntArray
+    ) {
+        when (requestCode) {
+            MY_PERMISSIONS_REQUEST_CAMERA -> {
+                var i = 0
+                val len = permissions.size
+                while (i < len) {
+                    val permission = permissions[i]
+                    if (grantResults[i] == PackageManager.PERMISSION_DENIED) {
+                        val showRationale: Boolean =
+                            ActivityCompat.shouldShowRequestPermissionRationale(
+                                this, permission!!
+                            )
+                        if (showRationale) {
+                            showAlert()
+                        } else if (!showRationale) {
+                            // user denied flagging NEVER ASK AGAIN
+                            // you can either enable some fall back,
+                            // disable features of your app
+                            // or open another dialog explaining
+                            // again the permission and directing to
+                            // the app setting
+                            saveToPreferences(this@SettingActivity, ALLOW_KEY, true)
+                        }
+                    }
+                    i++
+                }
+            }
+        }
+    }
+
+    fun startInstalledAppDetailsActivity(context: Activity?) {
+        if (context == null) {
+            return
+        }
+        val i = Intent()
+        i.action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
+        i.addCategory(Intent.CATEGORY_DEFAULT)
+        i.data = Uri.parse("package:" + context.packageName)
+        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        i.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
+        i.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS)
+        context.startActivity(i)
+    }
+
+    private fun openCamera() {
+        val intent = Intent("android.media.action.IMAGE_CAPTURE")
+        startActivity(intent)
+    }
+
     private fun dispatchTakePictureIntent() {
         val options =
             arrayOf<CharSequence>("Camera", "Choose from Gallery", "Delete")
@@ -136,7 +289,38 @@ class SettingActivity : AppCompatActivity() {
             .setAdapter(adapter) { dialog, item ->
                 when {
                     options[item] == "Camera" -> {
-                        Toast.makeText(this,"Open Camera", Toast.LENGTH_SHORT).show()
+                        if (ContextCompat.checkSelfPermission(
+                                this,
+                                Manifest.permission.CAMERA
+                            ) != PackageManager.PERMISSION_GRANTED
+                        ) {
+                            if (getFromPref(this, ALLOW_KEY)!!) {
+                                showSettingsAlert()
+                            } else if (ContextCompat.checkSelfPermission(
+                                    this,
+                                    Manifest.permission.CAMERA
+                                )
+                                != PackageManager.PERMISSION_GRANTED
+                            ) {
+
+                                // Should we show an explanation?
+                                if (ActivityCompat.shouldShowRequestPermissionRationale(
+                                        this,
+                                        Manifest.permission.CAMERA
+                                    )
+                                ) {
+                                    showAlert()
+                                } else {
+                                    // No explanation needed, we can request the permission.
+                                    ActivityCompat.requestPermissions(
+                                        this, arrayOf(Manifest.permission.CAMERA),
+                                        MY_PERMISSIONS_REQUEST_CAMERA
+                                    )
+                                }
+                            }
+                        } else {
+                            openCamera()
+                        }
                         dialog.dismiss()
                     }
                     options[item] == "Choose from Gallery" -> {
@@ -163,6 +347,10 @@ class SettingActivity : AppCompatActivity() {
                                 .addOnFailureListener { exception ->
                                 }
                             Toast.makeText(this, "Perubahan disimpan", Toast.LENGTH_LONG).show()
+
+                            btn_setting_simpan.setOnClickListener {
+                                Toast.makeText(this, "Tidak ada perubahan", Toast.LENGTH_LONG).show()
+                            }
                         }
                         dialog.dismiss()
                     }
@@ -195,6 +383,10 @@ class SettingActivity : AppCompatActivity() {
 
                 btn_setting_simpan.setOnClickListener {
                     uploadImage()
+
+                    btn_setting_simpan.setOnClickListener {
+                        Toast.makeText(this, "Tidak ada perubahan", Toast.LENGTH_LONG).show()
+                    }
                 }
             }
         }

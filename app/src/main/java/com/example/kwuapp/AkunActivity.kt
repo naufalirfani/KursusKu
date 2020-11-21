@@ -42,9 +42,7 @@ class AkunActivity : AppCompatActivity(){
 
         btn_akun_keluar.setOnClickListener {
             FirebaseAuth.getInstance().signOut()
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
-            finish()
+            onBackPressed()
         }
         loadUser2()
     }

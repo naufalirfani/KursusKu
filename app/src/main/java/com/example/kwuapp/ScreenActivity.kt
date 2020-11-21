@@ -8,6 +8,7 @@ import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.firestore.FirebaseFirestore
@@ -22,8 +23,6 @@ class ScreenActivity : AppCompatActivity() {
     private val kategori = arrayOf("Desain", "Bisnis", "Finansial", "Kantor", "Pendidikan", "Pengembangan")
     private var angka1: Int = 0
     private var angka2: Int = 0
-
-    private lateinit var userDetail: UserDetail
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -86,25 +85,7 @@ class ScreenActivity : AppCompatActivity() {
             }
             .addOnFailureListener { exception ->
                 Log.d("Error", "Error getting documents: ", exception)
-                val snackBar = Snackbar.make(
-                    currentFocus!!, "    Connection Failure",
-                    Snackbar.LENGTH_INDEFINITE
-                )
-                val snackBarView = snackBar.view
-                snackBarView.setBackgroundColor(Color.BLACK)
-                val textView = snackBarView.findViewById<TextView>(R.id.snackbar_text)
-                textView.setTextColor(Color.WHITE)
-                textView.textSize = 16F
-                textView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.warning, 0, 0, 0)
-                val snack_action_view = snackBarView.findViewById<Button>(R.id.snackbar_action)
-                snack_action_view.setTextColor(Color.YELLOW)
-
-                // Set an action for snack bar
-                snackBar.setAction("Retry") {
-                    loadKursus()
-
-                }
-                snackBar.show()
+                Toast.makeText(this, "Koneksi error", Toast.LENGTH_SHORT).show()
             }
     }
 

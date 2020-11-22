@@ -176,7 +176,7 @@ class MainActivity : AppCompatActivity() {
         val handler = Handler()
         handler.postDelayed(Runnable { // Do something after 5s = 5000ms
             doubleBackToExitPressedOnce = false
-        }, 2000)
+        }, 1500)
     }
 
     private fun loadUser() {

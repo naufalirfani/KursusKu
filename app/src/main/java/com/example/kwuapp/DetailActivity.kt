@@ -2,18 +2,22 @@ package com.example.kwuapp
 
 import android.content.Intent
 import android.graphics.Color
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.view.View
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_detail.*
+
 
 @Suppress("DEPRECATION")
 class DetailActivity : AppCompatActivity() {
@@ -57,6 +61,22 @@ class DetailActivity : AppCompatActivity() {
         }
         btn_detail_keranjang.setOnClickListener {
             val intent = Intent(this, KeranjangActivity::class.java)
+            startActivity(intent)
+        }
+
+        cv_addtochart.visibility = View.GONE
+    }
+
+    override fun onResume() {
+        super.onResume()
+        auth = FirebaseAuth.getInstance()
+        val user = auth.currentUser
+        if (user != null) {
+            userId = user.uid
+            loadUser()
+        }
+        else{
+            val intent = Intent(this, SignInActivity::class.java)
             startActivity(intent)
         }
     }
@@ -133,6 +153,7 @@ class DetailActivity : AppCompatActivity() {
                         db2.collection("users2").document(userId)
                             .update("isiKeranjang", userDetail.isiKeranjang + "$${kursus.nama}")
                             .addOnSuccessListener { result ->
+                                loadUser()
                             }
                             .addOnFailureListener { exception ->
                             }
@@ -140,9 +161,43 @@ class DetailActivity : AppCompatActivity() {
                         db2.collection("users2").document(userId)
                             .update("jumlahKeranjang", jumlahKeranjang.toString())
                             .addOnSuccessListener { result ->
+                                loadUser()
                             }
                             .addOnFailureListener { exception ->
                             }
+
+                        cv_addtochart.visibility = View.VISIBLE
+                        val expandIn: Animation = AnimationUtils.loadAnimation(this, R.anim.expand_in)
+                        cv_addtochart.startAnimation(expandIn)
+                        val handler = Handler()
+                        handler.postDelayed({ // Do something after 5s = 5000ms
+                            cv_addtochart.visibility = View.GONE
+                        }, 2500)
+
+                    }
+
+                    btn_detail_bayar.setOnClickListener {
+                        val db2 = FirebaseFirestore.getInstance()
+                        db2.collection("users2").document(userId)
+                            .update("isiKeranjang", userDetail.isiKeranjang + "$${kursus.nama}")
+                            .addOnSuccessListener { result ->
+                            }
+                            .addOnFailureListener { exception ->
+                            }
+
+                        val jumlahKeranjang = userDetail.jumlahKeranjang.toInt() + 1
+                        db2.collection("users2").document(userId)
+                            .update("jumlahKeranjang", jumlahKeranjang.toString())
+                            .addOnSuccessListener { result ->
+                            }
+                            .addOnFailureListener { exception ->
+                            }
+
+                        val intent = Intent(this, KeranjangActivity::class.java)
+                        intent.putExtra("berasalDari", "DetailActivity")
+                        intent.putExtra("kursusDibeli", kursus.nama)
+                        startActivity(intent)
+
                     }
                     datail_progressBar.visibility = View.GONE
                 }

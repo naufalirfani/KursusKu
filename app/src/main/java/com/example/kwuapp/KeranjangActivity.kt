@@ -23,12 +23,19 @@ class KeranjangActivity : AppCompatActivity() {
     private var arrayList = ArrayList<DataKursus>()
     private  var namaKursus: ArrayList<String> = arrayListOf()
     private var widthfix: Int = 0
+    private var berasalDari: String? = null
+    private var kursusDibeli: String? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_keranjang)
 
         supportActionBar?.hide()
 
+        berasalDari = intent.getStringExtra("berasalDari")
+        if (berasalDari == "DetailActivity"){
+            kursusDibeli =intent.getStringExtra("kursusDibeli")
+        }
         val displayMetrics = DisplayMetrics()
         windowManager.defaultDisplay.getMetrics(displayMetrics)
         val dpheight = displayMetrics.heightPixels
@@ -137,7 +144,17 @@ class KeranjangActivity : AppCompatActivity() {
 
                     rv_keranjang.setHasFixedSize(true)
                     rv_keranjang.layoutManager = LinearLayoutManager(this)
-                    val adapter = RVAKeranjangList(this, arrayList, widthfix, userDetail.isiKeranjang, userDetail.jumlahKeranjang, userId, tv_keranjang_totalharga)
+                    val adapter = RVAKeranjangList(this,
+                        arrayList,
+                        widthfix,
+                        userDetail.isiKeranjang,
+                        userDetail.jumlahKeranjang,
+                        userId,
+                        tv_keranjang_totalharga,
+                        kursusDibeli,
+                        iv_keranjang_kosong,
+                        tv_keranjang_kosong,
+                        tv_keranjang_kosong2)
                     adapter.notifyDataSetChanged()
                     rv_keranjang.adapter = adapter
 

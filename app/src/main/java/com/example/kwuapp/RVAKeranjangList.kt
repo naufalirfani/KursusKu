@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
@@ -15,10 +16,14 @@ import kotlinx.android.synthetic.main.list_keranjang.view.*
 class RVAKeranjangList(private val context: Context?,
                        private val dataKursus: ArrayList<DataKursus>,
                        private val width: Int,
-                       private val isiKeranjang: String,
-                       private val jumlahKeranjang: String,
+                       private var isiKeranjang: String,
+                       private var jumlahKeranjang: String,
                        private val userId: String,
-                       private val tv_total: TextView) : RecyclerView.Adapter<RVAKeranjangList.Holder>() {
+                       private val tv_total: TextView,
+                       private var kursusDibeli: String?,
+                       private var iv_kosong: ImageView,
+                       private var tv_kosong: TextView,
+                       private var tv_kosong2: TextView) : RecyclerView.Adapter<RVAKeranjangList.Holder>() {
 
     private var isShow = false
     override fun onCreateViewHolder(viewGroup: ViewGroup, i: Int): Holder {
@@ -42,38 +47,25 @@ class RVAKeranjangList(private val context: Context?,
         val harga = "Rp${kursus.harga}"
         holder.view.tv_item_keranjang_harga.text = harga
 
-        holder.view.cb_item_keranjang.setOnCheckedChangeListener { buttonView, isChecked ->
-            if (isChecked){
-                val hargaSebelum = tv_total.text.split("p")
-                val hargaSebelumFix = hargaSebelum[1].replace(".", "").toInt()
-                val hargaKursus = 29000
-                val totalHarga = hargaSebelumFix + hargaKursus
-                if(totalHarga.toString().length > 3){
-                    var x = totalHarga.toString()
-                    x = x.substring(0, x.length-3) + "." + x.substring(x.length -3, x.length)
-                    val textHarga = "Rp${x}"
-                    tv_total.text = textHarga
-                }
-                else{
-                    val textHarga = "Rp${totalHarga}"
-                    tv_total.text = textHarga
-                }
-            }else{
-                val hargaSebelum = tv_total.text.split("p")
-                val hargaSebelumFix = hargaSebelum[1].replace(".", "").toInt()
-                val hargaKursus = 29000
-                val totalHarga = hargaSebelumFix - hargaKursus
-                if(totalHarga.toString().length > 3){
-                    var x = totalHarga.toString()
-                    x = x.substring(0, x.length-3) + "." + x.substring(x.length -3, x.length)
-                    val textHarga = "Rp${x}"
-                    tv_total.text = textHarga
-                }
-                else{
-                    val textHarga = "Rp${totalHarga}"
-                    tv_total.text = textHarga
-                }
+        if (kursus.nama == kursusDibeli){
+            holder.view.cb_item_keranjang.isChecked = true
+            val hargaSebelum = tv_total.text.split("p")
+            val hargaSebelumFix = hargaSebelum[1].replace(".", "").toInt()
+            val hargaKursus = 29900
+            val totalHarga = hargaSebelumFix + hargaKursus
+            if(totalHarga.toString().length > 3){
+                var x = totalHarga.toString()
+                x = x.substring(0, x.length-3) + "." + x.substring(x.length -3, x.length)
+                val textHarga = "Rp${x}"
+                tv_total.text = textHarga
             }
+            else{
+                val textHarga = "Rp${totalHarga}"
+                tv_total.text = textHarga
+            }
+        }
+        holder.view.cb_item_keranjang.setOnCheckedChangeListener { buttonView, isChecked ->
+            inisiasiTotalharga(isChecked)
         }
 
         holder.view.tv_item_keranjang_ubah.setOnClickListener {
@@ -104,6 +96,7 @@ class RVAKeranjangList(private val context: Context?,
         holder.view.btn_item_keranjang_hapus.setOnClickListener {
             val db = FirebaseFirestore.getInstance()
             val kata = isiKeranjang.replace("$${kursus.nama}", "")
+            isiKeranjang = kata
             db.collection("users2").document(userId)
                 .update("isiKeranjang", kata)
                 .addOnSuccessListener { result ->
@@ -111,6 +104,7 @@ class RVAKeranjangList(private val context: Context?,
                 .addOnFailureListener { exception ->
                 }
             val jumlahKeranjangNew = jumlahKeranjang.toInt() - 1
+            jumlahKeranjang = jumlahKeranjangNew.toString()
             db.collection("users2").document(userId)
                 .update("jumlahKeranjang", jumlahKeranjangNew.toString())
                 .addOnSuccessListener { result ->
@@ -121,11 +115,51 @@ class RVAKeranjangList(private val context: Context?,
             dataKursus.removeAt(position)
             notifyItemRemoved(position)
             notifyItemRangeChanged(position, dataKursus.size)
+
+            if(dataKursus.size == 0){
+                iv_kosong.visibility = View.VISIBLE
+                tv_kosong.visibility = View.VISIBLE
+                tv_kosong2.visibility = View.VISIBLE
+            }
         }
     }
 
     override fun getItemCount(): Int {
         return dataKursus.size
+    }
+
+    private fun inisiasiTotalharga(isChecked: Boolean){
+        if (isChecked){
+            val hargaSebelum = tv_total.text.split("p")
+            val hargaSebelumFix = hargaSebelum[1].replace(".", "").toInt()
+            val hargaKursus = 29000
+            val totalHarga = hargaSebelumFix + hargaKursus
+            if(totalHarga.toString().length > 3){
+                var x = totalHarga.toString()
+                x = x.substring(0, x.length-3) + "." + x.substring(x.length -3, x.length)
+                val textHarga = "Rp${x}"
+                tv_total.text = textHarga
+            }
+            else{
+                val textHarga = "Rp${totalHarga}"
+                tv_total.text = textHarga
+            }
+        }else{
+            val hargaSebelum = tv_total.text.split("p")
+            val hargaSebelumFix = hargaSebelum[1].replace(".", "").toInt()
+            val hargaKursus = 29900
+            val totalHarga = hargaSebelumFix - hargaKursus
+            if(totalHarga.toString().length > 3){
+                var x = totalHarga.toString()
+                x = x.substring(0, x.length-3) + "." + x.substring(x.length -3, x.length)
+                val textHarga = "Rp${x}"
+                tv_total.text = textHarga
+            }
+            else{
+                val textHarga = "Rp${totalHarga}"
+                tv_total.text = textHarga
+            }
+        }
     }
 
     class Holder(val view: View) : RecyclerView.ViewHolder(view)

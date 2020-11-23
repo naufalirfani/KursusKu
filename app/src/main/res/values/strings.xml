@@ -48,4 +48,10 @@
     <string name="nominal_isi_saldo">Nominal Isi Saldo</string>
     <string name="rp">Rp</string>
     <string name="pilih_metode_pembayaran">Pilih Metode Pembayaran</string>
+    <string name="transfer_virtual_account">Transfer Virtual Account</string>
+    <string name="bri_virtual_account">BRI Virtual Account</string>
+    <string name="mandiri_virtual_account">Mandiri Virtual Account</string>
+    <string name="transfer_pulsa">Transfer Pulsa</string>
+    <string name="indosat">Indosat</string>
+    <string name="telkomsel">Telkomsel</string>
 </resources>

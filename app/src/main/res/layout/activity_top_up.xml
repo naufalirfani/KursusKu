@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorAbuMuda"
+    android:background="@color/white"
     tools:context=".TopUpActivity">
     <include
         android:id="@+id/actionbar"
@@ -24,6 +24,7 @@
         android:background="@color/white"
         app:layout_constraintTop_toBottomOf="@id/actionbar"/>
     <androidx.cardview.widget.CardView
+        android:id="@+id/cv_nominal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
@@ -60,11 +61,12 @@
         </LinearLayout>
     </androidx.cardview.widget.CardView>
     <View
-        android:id="@+id/v_saldo_bg"
+        android:id="@+id/v_transfer_pemisah_nominal"
         android:layout_width="match_parent"
-        android:layout_height="64dp"
-        android:background="@color/white"
-        app:layout_constraintTop_toBottomOf="@id/tv_isisaldo_nominal"/>
+        android:layout_height="8dp"
+        android:layout_marginTop="16dp"
+        android:background="@color/colorAbuMuda"
+        app:layout_constraintTop_toBottomOf="@id/cv_nominal"/>
     <TextView
         android:id="@+id/tv_metodepembayaran"
         android:layout_width="match_parent"
@@ -75,9 +77,9 @@
         android:textStyle="bold"
         android:textColor="@color/black"
         android:background="@color/white"
-        android:layout_marginTop="8dp"
-        app:layout_constraintTop_toBottomOf="@id/v_saldo_bg"/>
+        app:layout_constraintTop_toBottomOf="@id/v_transfer_pemisah_nominal"/>
     <androidx.cardview.widget.CardView
+        android:id="@+id/cv_transferbank"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
@@ -87,13 +89,283 @@
         app:cardElevation="4dp"
         app:layout_constraintTop_toBottomOf="@id/tv_metodepembayaran"
         app:layout_constraintLeft_toLeftOf="parent">
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:background="@color/white">
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            android:orientation="vertical">
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cons_metodebayar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="16dp"
+                android:background="@color/white">
+                <ImageView
+                    android:id="@+id/iv_trasnfer"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/transfer"
+                    app:layout_constraintLeft_toLeftOf="@id/cons_metodebayar"
+                    app:layout_constraintTop_toTopOf="@id/cons_metodebayar"/>
+                <TextView
+                    android:id="@+id/tv_transfer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/transfer_virtual_account"
+                    android:textStyle="bold"
+                    android:textSize="14sp"
+                    android:textColor="@color/black"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginRight="12dp"
+                    app:layout_constraintLeft_toRightOf="@id/iv_trasnfer"
+                    app:layout_constraintTop_toTopOf="@id/cons_metodebayar"
+                    app:layout_constraintBottom_toBottomOf="@id/cons_metodebayar"/>
+                <ImageView
+                    android:id="@+id/iv_trasnfer_down"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/ic_keyboard_arrow_down_black_24dp"
+                    app:layout_constraintRight_toRightOf="@id/cons_metodebayar"
+                    app:layout_constraintTop_toTopOf="@id/cons_metodebayar"/>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:paddingBottom="16dp"
+                android:layout_below="@id/cons_metodebayar"
+                android:id="@+id/cons_transferbank">
+                <View
+                    android:id="@+id/v_transfer_pemisah"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/colorAbuMuda"
+                    app:layout_constraintTop_toTopOf="@id/cons_transferbank"/>
+                <ImageView
+                    android:id="@+id/iv_trasnfer_bri"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/bri"
+                    android:layout_marginTop="16dp"
+                    app:layout_constraintLeft_toLeftOf="@id/cons_transferbank"
+                    app:layout_constraintTop_toBottomOf="@id/v_transfer_pemisah"/>
+                <TextView
+                    android:id="@+id/tv_transfer_bri"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/bri_virtual_account"
+                    android:textStyle="bold"
+                    android:textSize="14sp"
+                    android:textColor="@color/black"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginRight="12dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="16dp"
+                    app:layout_constraintLeft_toRightOf="@id/iv_trasnfer_bri"
+                    app:layout_constraintTop_toBottomOf="@id/v_transfer_pemisah"
+                    app:layout_constraintBottom_toTopOf="@id/v_transfer_pemisah2"/>
+                <RadioButton
+                    android:id="@+id/rb_transfer_bri"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    app:layout_constraintTop_toBottomOf="@id/v_transfer_pemisah"
+                    app:layout_constraintRight_toRightOf="@id/cons_transferbank"/>
+                <View
+                    android:id="@+id/v_transfer_pemisah2"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="16dp"
+                    android:background="@color/colorAbuMuda"
+                    app:layout_constraintTop_toBottomOf="@id/iv_trasnfer_bri"/>
+                <ImageView
+                    android:id="@+id/iv_trasnfer_mandiri"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/mandiri"
+                    android:layout_marginTop="16dp"
+                    app:layout_constraintLeft_toLeftOf="@id/cons_transferbank"
+                    app:layout_constraintTop_toBottomOf="@id/v_transfer_pemisah2"/>
+                <TextView
+                    android:id="@+id/tv_transfer_mandiri"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/mandiri_virtual_account"
+                    android:textStyle="bold"
+                    android:textSize="14sp"
+                    android:textColor="@color/black"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginRight="12dp"
+                    android:layout_marginTop="16dp"
+                    app:layout_constraintLeft_toRightOf="@id/iv_trasnfer_bri"
+                    app:layout_constraintTop_toBottomOf="@id/v_transfer_pemisah2"
+                    app:layout_constraintBottom_toBottomOf="@id/cons_transferbank"/>
+                <RadioButton
+                    android:id="@+id/rb_transfer_mandiri"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    app:layout_constraintTop_toBottomOf="@id/v_transfer_pemisah2"
+                    app:layout_constraintRight_toRightOf="@id/cons_transferbank"/>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </RelativeLayout>
     </androidx.cardview.widget.CardView>
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cv_pulsa"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:background="@drawable/border_white"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="4dp"
+        app:layout_constraintTop_toBottomOf="@id/cv_transferbank"
+        app:layout_constraintLeft_toLeftOf="parent">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cons_bayarpulsa"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="16dp"
+                android:background="@color/white">
+                <ImageView
+                    android:id="@+id/iv_pulsa"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/pulsa"
+                    app:layout_constraintLeft_toLeftOf="@id/cons_bayarpulsa"
+                    app:layout_constraintTop_toTopOf="@id/cons_bayarpulsa"/>
+                <TextView
+                    android:id="@+id/tv_pulsa"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/transfer_pulsa"
+                    android:textStyle="bold"
+                    android:textSize="14sp"
+                    android:textColor="@color/black"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginRight="12dp"
+                    app:layout_constraintLeft_toRightOf="@id/iv_pulsa"
+                    app:layout_constraintTop_toTopOf="@id/cons_bayarpulsa"
+                    app:layout_constraintBottom_toBottomOf="@id/cons_bayarpulsa"/>
+                <ImageView
+                    android:id="@+id/iv_pulsa_down"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/ic_keyboard_arrow_down_black_24dp"
+                    app:layout_constraintRight_toRightOf="@id/cons_bayarpulsa"
+                    app:layout_constraintTop_toTopOf="@id/cons_bayarpulsa"/>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:paddingBottom="16dp"
+                android:layout_below="@id/cons_bayarpulsa"
+                android:id="@+id/cons_pulsadetail">
+                <View
+                    android:id="@+id/v_pulsa_pemisah"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/colorAbuMuda"
+                    app:layout_constraintTop_toTopOf="@id/cons_pulsadetail"/>
+                <ImageView
+                    android:id="@+id/iv_pulsa_indosat"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/indosat"
+                    android:layout_marginTop="16dp"
+                    app:layout_constraintLeft_toLeftOf="@id/cons_pulsadetail"
+                    app:layout_constraintTop_toBottomOf="@id/v_pulsa_pemisah"/>
+                <TextView
+                    android:id="@+id/tv_pulsa_indosat"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/indosat"
+                    android:textStyle="bold"
+                    android:textSize="14sp"
+                    android:textColor="@color/black"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginRight="12dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="16dp"
+                    app:layout_constraintLeft_toRightOf="@id/iv_pulsa_indosat"
+                    app:layout_constraintTop_toBottomOf="@id/v_pulsa_pemisah"
+                    app:layout_constraintBottom_toTopOf="@id/v_pulsa_pemisah2"/>
+                <RadioButton
+                    android:id="@+id/rb_pulsa_indosat"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    app:layout_constraintTop_toBottomOf="@id/v_pulsa_pemisah"
+                    app:layout_constraintRight_toRightOf="@id/cons_pulsadetail"/>
+                <View
+                    android:id="@+id/v_pulsa_pemisah2"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="16dp"
+                    android:background="@color/colorAbuMuda"
+                    app:layout_constraintTop_toBottomOf="@id/iv_pulsa_indosat"/>
+                <ImageView
+                    android:id="@+id/iv_pulsa_mandiri"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/tsel"
+                    android:layout_marginTop="16dp"
+                    app:layout_constraintLeft_toLeftOf="@id/cons_pulsadetail"
+                    app:layout_constraintTop_toBottomOf="@id/v_pulsa_pemisah2"/>
+                <TextView
+                    android:id="@+id/tv_pulsa_mandiri"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/telkomsel"
+                    android:textStyle="bold"
+                    android:textSize="14sp"
+                    android:textColor="@color/black"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginRight="12dp"
+                    android:layout_marginTop="16dp"
+                    app:layout_constraintLeft_toRightOf="@id/iv_pulsa_indosat"
+                    app:layout_constraintTop_toBottomOf="@id/v_pulsa_pemisah2"
+                    app:layout_constraintBottom_toBottomOf="@id/cons_pulsadetail"/>
+                <RadioButton
+                    android:id="@+id/rb_pulsa_mandiri"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    app:layout_constraintTop_toBottomOf="@id/v_pulsa_pemisah2"
+                    app:layout_constraintRight_toRightOf="@id/cons_pulsadetail"/>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </RelativeLayout>
+    </androidx.cardview.widget.CardView>
+
+    <Button
+        android:id="@+id/btn_detail_bayar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginRight="16dp"
+        android:text="@string/isi_saldo"
+        android:textAllCaps="false"
+        android:textSize="14sp"
+        android:textColor="@color/white"
+        android:background="@drawable/button_round"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+    <View
+        android:id="@+id/v_bg_btn"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:layout_marginTop="16dp"
+        android:background="@color/colorAbuMuda"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

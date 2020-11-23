@@ -144,7 +144,8 @@ class DetailActivity : AppCompatActivity() {
                     result.getString("gambar").toString(),
                     result.getString("saldo").toString(),
                     result.getString("isiKeranjang").toString(),
-                    result.getString("jumlahKeranjang").toString())
+                    result.getString("jumlahKeranjang").toString(),
+                    result.getString("wa").toString())
 
                 if(userDetail.isiKeranjang.isNotEmpty()){
 

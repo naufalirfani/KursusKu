@@ -44,4 +44,8 @@
     <string name="versi">1.0</string>
     <string name="versi_aplikasi">Versi aplikasi</string>
     <string name="dimasukkan_ke_keranjang">Dimasukkan ke keranjang</string>
+    <string name="isi_saldo">Isi Saldo</string>
+    <string name="nominal_isi_saldo">Nominal Isi Saldo</string>
+    <string name="rp">Rp</string>
+    <string name="pilih_metode_pembayaran">Pilih Metode Pembayaran</string>
 </resources>

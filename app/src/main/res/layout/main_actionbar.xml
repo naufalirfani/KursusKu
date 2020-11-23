@@ -1,4 +1,4 @@
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_constraint"
@@ -21,11 +21,7 @@
         android:layout_marginTop="4dp"
         android:layout_marginRight="4dp"
         android:layout_marginBottom="4dp"
-        android:background="@drawable/login"
-        app:layout_constraintRight_toLeftOf="@id/btn_keranjang"
-        app:layout_constraintLeft_toLeftOf="@id/main_constraint"
-        app:layout_constraintTop_toTopOf="@id/main_constraint"
-        app:layout_constraintBottom_toBottomOf="@id/main_constraint"/>
+        android:background="@drawable/login"/>
     <Button
         android:id="@+id/btn_keranjang"
         android:layout_width="30dp"
@@ -33,41 +29,26 @@
         android:layout_marginTop="4dp"
         android:layout_marginBottom="4dp"
         android:layout_marginRight="4dp"
-        android:background="@drawable/keranjang"
-        app:layout_constraintLeft_toRightOf="@id/btn_akun"
-        app:layout_constraintRight_toLeftOf="@id/tabLayout"
-        app:layout_constraintTop_toTopOf="@id/main_constraint"
-        app:layout_constraintBottom_toBottomOf="@id/main_constraint"/>
+        android:background="@drawable/keranjang" />
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabLayout"
-        android:layout_width="180dp"
+        android:layout_width="0dp"
+        android:layout_weight="1"
         android:layout_height="match_parent"
         android:background="@android:color/white"
         app:tabTextAppearance="@style/MyCustomTabText"
         app:tabTextColor="@color/black"
-        app:tabIndicatorColor="@color/white"
-        app:layout_constraintLeft_toRightOf="@id/btn_keranjang"
-        app:layout_constraintRight_toRightOf="@id/btn_search"
-        app:layout_constraintTop_toTopOf="@id/main_constraint"
-        app:layout_constraintBottom_toBottomOf="@id/main_constraint"/>
+        app:tabIndicatorColor="@color/white" />
     <Button
         android:id="@+id/btn_search"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_margin="4dp"
-        android:background="@drawable/search"
-        app:layout_constraintLeft_toRightOf="@id/tabLayout"
-        app:layout_constraintRight_toLeftOf="@id/btn_chat"
-        app:layout_constraintTop_toTopOf="@id/main_constraint"
-        app:layout_constraintBottom_toBottomOf="@id/main_constraint"/>
+        android:background="@drawable/search"/>
     <Button
         android:id="@+id/btn_chat"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_margin="4dp"
-        android:background="@drawable/chat"
-        app:layout_constraintLeft_toRightOf="@id/btn_search"
-        app:layout_constraintRight_toRightOf="@id/main_constraint"
-        app:layout_constraintTop_toTopOf="@id/main_constraint"
-        app:layout_constraintBottom_toBottomOf="@id/main_constraint"/>
-</androidx.constraintlayout.widget.ConstraintLayout>
+        android:background="@drawable/chat" />
+</LinearLayout>

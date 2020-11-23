@@ -90,7 +90,8 @@ class AkunActivity : AppCompatActivity(){
                     result.getString("gambar").toString(),
                     result.getString("saldo").toString(),
                     result.getString("isiKeranjang").toString(),
-                    result.getString("jumlahKeranjang").toString())
+                    result.getString("jumlahKeranjang").toString(),
+                    result.getString("wa").toString())
 
                 if(userDetail.isiKeranjang.isNotEmpty()){
                     btn_akun_setting.setOnClickListener {
@@ -102,6 +103,15 @@ class AkunActivity : AppCompatActivity(){
                     btn_akun_setting2.setOnClickListener {
                         val intent = Intent(this, SettingActivity::class.java)
                         intent.putExtra("userDetail", userDetail)
+                        startActivity(intent)
+                    }
+                    iv_akun_foto.setOnClickListener {
+                        val intent = Intent(this, SettingActivity::class.java)
+                        intent.putExtra("userDetail", userDetail)
+                        startActivity(intent)
+                    }
+                    btn_akun_isisaldo.setOnClickListener {
+                        val intent = Intent(this, TopUpActivity::class.java)
                         startActivity(intent)
                     }
                     loadUser()

@@ -62,18 +62,10 @@ class MainActivity : AppCompatActivity() {
         kategori1 = intent.getStringExtra("kategori1")!!
         kategori2 = intent.getStringExtra("kategori2")!!
 
-        val displayMetrics = DisplayMetrics()
-        windowManager.defaultDisplay.getMetrics(displayMetrics)
-        val dpheight = displayMetrics.heightPixels
-        val dpwidth = displayMetrics.widthPixels
-
         tabLayout1 = findViewById<View>(R.id.tabLayout) as TabLayout
         tabLayout1.addTab(tabLayout1.newTab().setText("BERANDA"))
         tabLayout1.addTab(tabLayout1.newTab().setText("KATEGORi"))
         tabLayout1.setTabTextColors(Color.parseColor("#BDBDBD"), Color.parseColor("#000000"))
-        val params: ViewGroup.LayoutParams = tabLayout1.layoutParams
-        params.width = dpwidth-350
-        tabLayout1.layoutParams = params
 
         val pagerAdapter = PagerAdapter(supportFragmentManager, arrayList, arrayList2, arrayList3, kategori1, kategori2)
         val pager = findViewById<View>(R.id.pager) as ViewPager
@@ -101,14 +93,6 @@ class MainActivity : AppCompatActivity() {
             userId = id
             main_progressBar.visibility = View.VISIBLE
             loadUser()
-            val email2 = user.email
-            if(!TextUtils.isEmpty(name)){
-                if(!(name!!.contains("@"))){
-                    val db = FirebaseFirestore.getInstance()
-                    val userDetail = UserDetail(name, email2.toString(), "kosong", "0", "kosong", "0")
-                    db.collection("users2").document(id).set(userDetail)
-                }
-            }
         }
         else{
             main_progressBar.visibility = View.GONE
@@ -137,14 +121,6 @@ class MainActivity : AppCompatActivity() {
             userId = id
             main_progressBar.visibility = View.VISIBLE
             loadUser()
-            val email2 = user.email
-            if(!TextUtils.isEmpty(name)){
-                if(!(name!!.contains("@"))){
-                    val db = FirebaseFirestore.getInstance()
-                    val userDetail = UserDetail(name, email2.toString(), "kosong", "0", "kosong", "0")
-                    db.collection("users2").document(id).set(userDetail)
-                }
-            }
         }
         else{
             main_progressBar.visibility = View.GONE
@@ -189,7 +165,8 @@ class MainActivity : AppCompatActivity() {
                     result.getString("gambar").toString(),
                     result.getString("saldo").toString(),
                     result.getString("isiKeranjang").toString(),
-                    result.getString("jumlahKeranjang").toString())
+                    result.getString("jumlahKeranjang").toString(),
+                    result.getString("wa").toString())
 
                 if(userDetail.isiKeranjang.isNotEmpty()){
                     dataUser = UserDetail(

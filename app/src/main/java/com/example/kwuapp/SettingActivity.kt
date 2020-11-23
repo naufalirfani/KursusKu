@@ -344,9 +344,6 @@ class SettingActivity : AppCompatActivity() {
 //                filePath = Uri.fromFile(imgFile)
                 val imageBitmap: Bitmap? = data!!.extras!!["data"] as Bitmap?
                 img_my_photo.setImageBitmap(imageBitmap)
-
-                mImageUri = data.getData()
-                img_my_photo2.setImageURI(mImageUri)
             }
             101 -> if (resultCode == Activity.RESULT_OK) {
                 filePath = data!!.data

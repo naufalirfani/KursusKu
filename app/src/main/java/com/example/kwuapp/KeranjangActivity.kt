@@ -50,6 +50,7 @@ class KeranjangActivity : AppCompatActivity() {
             loadUser()
         }
         else{
+            keranajng_progressbar.visibility = View.GONE
             keranjang_cons_utama.setBackgroundColor(resources.getColor((R.color.white)))
             iv_keranjang_kosong.visibility = View.VISIBLE
             tv_keranjang_kosong.visibility = View.VISIBLE
@@ -84,7 +85,8 @@ class KeranjangActivity : AppCompatActivity() {
                     result.getString("gambar").toString(),
                     result.getString("saldo").toString(),
                     result.getString("isiKeranjang").toString(),
-                    result.getString("jumlahKeranjang").toString())
+                    result.getString("jumlahKeranjang").toString(),
+                    result.getString("wa").toString())
 
                 if(userDetail.isiKeranjang.isNotEmpty()){
                     if(userDetail.isiKeranjang != "kosong"){

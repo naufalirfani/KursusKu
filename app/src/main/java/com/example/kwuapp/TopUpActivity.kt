@@ -36,51 +36,55 @@ class TopUpActivity : AppCompatActivity() {
     }
 
     private fun hideShow(){
+        val dialogTransfer: ConstraintLayout = findViewById(R.id.cons_transferbank)
+        val dialogPulsa: ConstraintLayout = findViewById(R.id.cons_pulsadetail)
         cons_metodebayar.bringToFront()
         cons_transferbank.visibility = View.GONE
         iv_trasnfer_down.setOnClickListener {
-            val dialog: ConstraintLayout = findViewById(R.id.cons_transferbank)
-            if(dialog.visibility == View.VISIBLE){
+            dialogPulsa.visibility = View.GONE
+            iv_pulsa_down.setImageResource(R.drawable.ic_keyboard_arrow_down_black_24dp)
+            if(dialogTransfer.visibility == View.VISIBLE){
                 iv_trasnfer_down.setImageResource(R.drawable.ic_keyboard_arrow_down_black_24dp)
                 val animation = AnimationUtils.loadAnimation(applicationContext, R.anim.up)
                 animation.duration = 500
-                dialog.animation = animation
-                dialog.animate()
+                dialogTransfer.animation = animation
+                dialogTransfer.animate()
                 animation.start()
-                dialog.visibility = View.GONE
+                dialogTransfer.visibility = View.GONE
             }
             else{
                 iv_trasnfer_down.setImageResource(R.drawable.ic_keyboard_arrow_up_black_24dp)
                 val animation = AnimationUtils.loadAnimation(applicationContext, R.anim.down)
                 animation.duration = 500
-                dialog.animation = animation
-                dialog.animate()
+                dialogTransfer.animation = animation
+                dialogTransfer.animate()
                 animation.start()
-                dialog.visibility = View.VISIBLE
+                dialogTransfer.visibility = View.VISIBLE
             }
         }
 
         cons_bayarpulsa.bringToFront()
         cons_pulsadetail.visibility = View.GONE
         iv_pulsa_down.setOnClickListener {
-            val dialog: ConstraintLayout = findViewById(R.id.cons_pulsadetail)
-            if(dialog.visibility == View.VISIBLE){
+            dialogTransfer.visibility = View.GONE
+            iv_trasnfer_down.setImageResource(R.drawable.ic_keyboard_arrow_down_black_24dp)
+            if(dialogPulsa.visibility == View.VISIBLE){
                 iv_pulsa_down.setImageResource(R.drawable.ic_keyboard_arrow_down_black_24dp)
                 val animation = AnimationUtils.loadAnimation(applicationContext, R.anim.up)
                 animation.duration = 300
-                dialog.animation = animation
-                dialog.animate()
+                dialogPulsa.animation = animation
+                dialogPulsa.animate()
                 animation.start()
-                dialog.visibility = View.GONE
+                dialogPulsa.visibility = View.GONE
             }
             else{
                 iv_pulsa_down.setImageResource(R.drawable.ic_keyboard_arrow_up_black_24dp)
                 val animation = AnimationUtils.loadAnimation(applicationContext, R.anim.down)
                 animation.duration = 300
-                dialog.animation = animation
-                dialog.animate()
+                dialogPulsa.animation = animation
+                dialogPulsa.animate()
                 animation.start()
-                dialog.visibility = View.VISIBLE
+                dialogPulsa.visibility = View.VISIBLE
             }
         }
         val dialog2: TextView = findViewById(R.id.tv_transfer_bri_carabayar)

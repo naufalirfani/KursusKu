@@ -54,4 +54,27 @@
     <string name="transfer_pulsa">Transfer Pulsa</string>
     <string name="indosat">Indosat</string>
     <string name="telkomsel">Telkomsel</string>
+    <string name="carabayarbri"><b>ATM BRI</b>\n
+1.  Masukan Kartu ATM\n
+2.  Pilih \"Bahasa Indnesia\"\n
+2.  Masukan PIN\n
+4.  Pilih Transaksi Lain\n
+5.  Pilih Transfer\n
+6.  Pilih Bank BRI\n
+7.  Masukan Nomor Rekening Tujuan\n
+8.  Masukan Jumlah Transfer\n
+9.  Konfirmasi Pembayaran\n
+10. Pembayaran Selesai\n
+\n
+<b>Mobile Banking BRI</b>\n
+1.  Buka aplikasi, kemudian pilih menu Mobile Banking BRI\n
+2.  Tap menu Transfer\n
+3.  Tap menu Sesama BRI\n
+4.  Masukkan nomor rekening BRI yang dituju\n
+5.  Masukkan jumlah transfer\n
+6.  Klik OK. Lalu, masukkan PIN. Klik SEND\n
+7.  Untuk melakukan verifikasi SMS, Klik OK\n
+8.  Terima SMS dari Mobile Banking BRI, lalu ketik YA &lt;spasi&gt; Kode Transaksi. Kalau bingung, ikuti saja petunjuk yang ada pada SMS tersebut\n
+9.  Kalau sudah benar, langsung Kirim SMS\n
+10. Pembayaran Selesai</string>
 </resources>

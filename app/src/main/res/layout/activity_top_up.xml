@@ -343,7 +343,7 @@
                             android:background="@color/colorAbuMuda"
                             app:layout_constraintTop_toBottomOf="@id/iv_pulsa_indosat"/>
                         <ImageView
-                            android:id="@+id/iv_pulsa_mandiri"
+                            android:id="@+id/iv_pulsa_tsel"
                             android:layout_width="30dp"
                             android:layout_height="30dp"
                             android:src="@drawable/tsel"
@@ -351,7 +351,7 @@
                             app:layout_constraintLeft_toLeftOf="@id/cons_pulsadetail"
                             app:layout_constraintTop_toBottomOf="@id/v_pulsa_pemisah2"/>
                         <TextView
-                            android:id="@+id/tv_pulsa_mandiri"
+                            android:id="@+id/tv_pulsa_tsel"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/telkomsel"
@@ -365,7 +365,7 @@
                             app:layout_constraintTop_toBottomOf="@id/v_pulsa_pemisah2"
                             app:layout_constraintBottom_toBottomOf="@id/cons_pulsadetail"/>
                         <RadioButton
-                            android:id="@+id/rb_pulsa_mandiri"
+                            android:id="@+id/rb_pulsa_tsel"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="16dp"

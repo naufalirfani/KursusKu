@@ -55,26 +55,45 @@
     <string name="indosat">Indosat</string>
     <string name="telkomsel">Telkomsel</string>
     <string name="carabayarbri"><b>ATM BRI</b>\n
-1.  Masukan Kartu ATM\n
-2.  Pilih \"Bahasa Indnesia\"\n
-2.  Masukan PIN\n
-4.  Pilih Transaksi Lain\n
-5.  Pilih Transfer\n
-6.  Pilih Bank BRI\n
-7.  Masukan Nomor Rekening Tujuan\n
-8.  Masukan Jumlah Transfer\n
-9.  Konfirmasi Pembayaran\n
-10. Pembayaran Selesai\n
-\n
-<b>Mobile Banking BRI</b>\n
-1.  Buka aplikasi, kemudian pilih menu Mobile Banking BRI\n
-2.  Tap menu Transfer\n
-3.  Tap menu Sesama BRI\n
-4.  Masukkan nomor rekening BRI yang dituju\n
-5.  Masukkan jumlah transfer\n
-6.  Klik OK. Lalu, masukkan PIN. Klik SEND\n
-7.  Untuk melakukan verifikasi SMS, Klik OK\n
-8.  Terima SMS dari Mobile Banking BRI, lalu ketik YA &lt;spasi&gt; Kode Transaksi. Kalau bingung, ikuti saja petunjuk yang ada pada SMS tersebut\n
-9.  Kalau sudah benar, langsung Kirim SMS\n
-10. Pembayaran Selesai</string>
+        1.  Masukan Kartu ATM\n
+        2.  Pilih \"Bahasa Indnesia\"\n
+        2.  Masukan PIN\n
+        4.  Pilih Transaksi Lain\n
+        5.  Pilih Transfer\n
+        6.  Pilih Bank BRI\n
+        7.  Masukan Nomor Rekening Tujuan\n
+        8.  Masukan Jumlah Transfer\n
+        9.  Konfirmasi Pembayaran\n
+        10. Pembayaran Selesai\n
+        \n
+        <b>Mobile Banking BRI</b>\n
+        1.  Buka aplikasi, kemudian pilih menu Mobile Banking BRI\n
+        2.  Tap menu Transfer\n
+        3.  Tap menu Sesama BRI\n
+        4.  Masukkan nomor rekening BRI yang dituju\n
+        5.  Masukkan jumlah transfer\n
+        6.  Klik OK. Lalu, masukkan PIN. Klik SEND\n
+        7.  Untuk melakukan verifikasi SMS, Klik OK\n
+        8.  Terima SMS dari Mobile Banking BRI, lalu ketik YA &lt;spasi&gt; Kode Transaksi. Kalau bingung, ikuti saja petunjuk yang ada pada SMS tersebut\n
+        9.  Kalau sudah benar, langsung Kirim SMS\n
+        10. Pembayaran Selesai</string>
+    <string name="carabayarmandiri"><b>ATM Mandiri</b>\n
+        1. Masukkan kartu ATM Mandiri dan PIN kamu\n
+        2. Pilih Transaksi Lainnya\n
+        3. pilih Transfer\n
+        4. pilih ke Rekening Mandiri\n
+        5. Masukkan nomor Rekening Tujuan\n
+        6. Masukkan nominal sesuai tagihan\n
+        7. Validasi pembaayaran
+        8. Pembayaran selesai\n
+        \n
+        <b>Mobile Banking Mandiri</b>\n
+        1. Login ke Mandiri Mobile Application kamu\n
+        2. pilih Transfer\n
+        3. Pilih Ke Rekening Mandiri\n
+        4. Pilih Rekening Sumber\n
+        5. Masukkan nomor Rekening Tujuan\n
+        6. Masukkan nominal sesuai tagihan\n
+        7. Validasi pembaayaran dan Masukkan \"MPIN\"\n
+        8. Pembayaran selesai</string>
 </resources>

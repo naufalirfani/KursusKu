@@ -111,7 +111,11 @@ class AkunActivity : AppCompatActivity(){
                         startActivity(intent)
                     }
                     btn_akun_isisaldo.setOnClickListener {
-                        val intent = Intent(this, TopUpActivity::class.java)
+//                        val intent = Intent(this, TopUpActivity::class.java)
+//                        startActivity(intent)
+                        val intent = Intent(this, InvoiceActivity::class.java)
+                        intent.putExtra("akun", userDetail)
+                        intent.putExtra("userid", userId)
                         startActivity(intent)
                     }
                     loadUser()

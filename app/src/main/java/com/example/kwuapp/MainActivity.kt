@@ -56,6 +56,8 @@ class MainActivity : AppCompatActivity() {
         arrayList2.clear()
         arrayList3.clear()
 
+        Glide.with(this).load(R.drawable.bouncy_balls).into(main_progressBar)
+
         arrayList = intent.getParcelableArrayListExtra<DataKursus>("arrayList")!!
         arrayList2 = intent.getParcelableArrayListExtra<DataKursus>("arrayList2")!!
         arrayList3 = intent.getParcelableArrayListExtra<DataKursus>("arrayList3")!!

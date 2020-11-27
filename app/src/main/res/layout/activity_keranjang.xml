@@ -52,12 +52,11 @@
         app:layout_constraintTop_toBottomOf="@id/tv_keranjang_kosong"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"/>
-    <ProgressBar
-        android:id="@+id/keranajng_progressbar"
-        android:layout_width="70dp"
+    <ImageView
+        android:id="@+id/keranjang_progressbar"
+        android:layout_width="90dp"
         android:layout_height="70dp"
-        android:layout_gravity="center"
-        android:visibility="visible"
+        android:src="@drawable/bouncy_balls"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"

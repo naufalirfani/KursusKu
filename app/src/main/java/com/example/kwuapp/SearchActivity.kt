@@ -15,6 +15,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
@@ -50,6 +51,8 @@ class SearchActivity : AppCompatActivity() {
         loadKursus()
         loadSearch()
         menuClick()
+
+        Glide.with(this).load(R.drawable.bouncy_balls).into(search_progressBar)
 
         search_btn.setOnClickListener { perfomSearch() }
 

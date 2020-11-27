@@ -13,6 +13,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -38,6 +39,8 @@ class DetailActivity : AppCompatActivity() {
 
         kursus = intent.getParcelableExtra("kursus")!!
         tv_nama.text = kursus.nama
+
+        Glide.with(this).load(R.drawable.bouncy_balls).into(datail_progressBar)
 
         auth = FirebaseAuth.getInstance()
         val user = auth.currentUser

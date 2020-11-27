@@ -4,8 +4,10 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.os.Handler
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.bumptech.glide.Glide
 import com.google.firebase.database.*
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_invoice.*
@@ -40,38 +42,63 @@ class InvoiceActivity : AppCompatActivity() {
         tv_invoice_jumlah.text = getString(R.string.jumlah_pembayaran)
         tv_invoice_harga.text = ""
 
+        Glide.with(this)
+            .load(R.drawable.bouncy_balls)
+            .into(invoice_progressbar)
+
         dbReference = FirebaseDatabase.getInstance().getReference("statusBayar")
         val postListener = object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 for (data: DataSnapshot in dataSnapshot.children){
                     val hasil = data.getValue(Pesanan::class.java)
-                    if(hasil?.status == "batal"){
-                        loadPesanan()
-                    }
-                    else if(hasil?.status == "selesai"){
-                        val db2 = FirebaseFirestore.getInstance()
-                        db2.collection("statusBayar").document(userid!!)
-                            .update("waktu", 0)
-                            .addOnSuccessListener { result2 ->
-                            }
-                            .addOnFailureListener { exception ->
-                            }
-                        db2.collection("statusBayar").document(userid!!)
-                            .update("durasi", 0)
-                            .addOnSuccessListener { result2 ->
-                            }
-                            .addOnFailureListener { exception ->
-                            }
-                        db2.collection("statusBayar").document(userid!!)
-                            .update("status", "selesai")
-                            .addOnSuccessListener { result2 ->
-                                loadPesanan()
-                            }
-                            .addOnFailureListener { exception ->
-                            }
-                    }
-                    else if(hasil?.status == "pending"){
-                        loadPesanan()
+                    when (hasil?.status) {
+                        "batal" -> {
+                            val db2 = FirebaseFirestore.getInstance()
+                            db2.collection("statusBayar").document(userid!!)
+                                .update("waktu", 0)
+                                .addOnSuccessListener { result2 ->
+                                }
+                                .addOnFailureListener { exception ->
+                                }
+                            db2.collection("statusBayar").document(userid!!)
+                                .update("durasi", 0)
+                                .addOnSuccessListener { result2 ->
+                                }
+                                .addOnFailureListener { exception ->
+                                }
+                            db2.collection("statusBayar").document(userid!!)
+                                .update("status", "batal")
+                                .addOnSuccessListener { result2 ->
+                                    loadPesanan()
+                                }
+                                .addOnFailureListener { exception ->
+                                }
+                        }
+                        "selesai" -> {
+                            val db2 = FirebaseFirestore.getInstance()
+                            db2.collection("statusBayar").document(userid!!)
+                                .update("waktu", 0)
+                                .addOnSuccessListener { result2 ->
+                                }
+                                .addOnFailureListener { exception ->
+                                }
+                            db2.collection("statusBayar").document(userid!!)
+                                .update("durasi", 0)
+                                .addOnSuccessListener { result2 ->
+                                }
+                                .addOnFailureListener { exception ->
+                                }
+                            db2.collection("statusBayar").document(userid!!)
+                                .update("status", "selesai")
+                                .addOnSuccessListener { result2 ->
+                                    loadPesanan()
+                                }
+                                .addOnFailureListener { exception ->
+                                }
+                        }
+                        "pending" -> {
+                            loadPesanan()
+                        }
                     }
                 }
             }
@@ -120,6 +147,7 @@ class InvoiceActivity : AppCompatActivity() {
                     result.getLong("waktu"))
 
                 if(pesanan != null){
+                    invoice_progressbar.visibility = View.GONE
                     val totalHarga = pesanan?.jumlah
                     if(totalHarga.toString().length > 3){
                         var x = totalHarga.toString()
@@ -163,56 +191,22 @@ class InvoiceActivity : AppCompatActivity() {
                         timer(remainWaktu)
                     }
                     else if(pesanan?.status.toString() == "selesai"){
-                        val db2 = FirebaseFirestore.getInstance()
-                        db2.collection("statusBayar").document(userid!!)
-                            .update("waktu", 0)
-                            .addOnSuccessListener { result2 ->
-                            }
-                            .addOnFailureListener { exception ->
-                            }
-                        db2.collection("statusBayar").document(userid!!)
-                            .update("durasi", 0)
-                            .addOnSuccessListener { result2 ->
-                            }
-                            .addOnFailureListener { exception ->
-                            }
-                        db2.collection("statusBayar").document(userid!!)
-                            .update("status", "selesai")
-                            .addOnSuccessListener { result2 ->
-                            }
-                            .addOnFailureListener { exception ->
-                            }
+                        invoice_progressbar.visibility = View.VISIBLE
                         Toast.makeText(this@InvoiceActivity, "Pembayaran Anda Berhasil", Toast.LENGTH_SHORT).show()
                         val handler = Handler()
                         handler.postDelayed(Runnable { // Do something after 5s = 5000ms
+                            invoice_progressbar.visibility = View.GONE
                             val intent = Intent(this@InvoiceActivity, AkunActivity::class.java)
                             startActivity(intent)
                             finish()
                         }, 3000)
                     }
                     else if(pesanan?.status == "batal"){
-                        val db2 = FirebaseFirestore.getInstance()
-                        db2.collection("statusBayar").document(userid!!)
-                            .update("waktu", 0)
-                            .addOnSuccessListener { result2 ->
-                            }
-                            .addOnFailureListener { exception ->
-                            }
-                        db2.collection("statusBayar").document(userid!!)
-                            .update("durasi", 0)
-                            .addOnSuccessListener { result2 ->
-                            }
-                            .addOnFailureListener { exception ->
-                            }
-                        db2.collection("statusBayar").document(userid!!)
-                            .update("status", "batal")
-                            .addOnSuccessListener { result2 ->
-                            }
-                            .addOnFailureListener { exception ->
-                            }
+                        invoice_progressbar.visibility = View.VISIBLE
                         Toast.makeText(this@InvoiceActivity, "Pesanan Anda telah Dibatalkan", Toast.LENGTH_SHORT).show()
                         val handler = Handler()
                         handler.postDelayed(Runnable { // Do something after 5s = 5000ms
+                            invoice_progressbar.visibility = View.GONE
                             val intent = Intent(this@InvoiceActivity, AkunActivity::class.java)
                             startActivity(intent)
                             finish()

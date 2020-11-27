@@ -8,6 +8,7 @@ import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.GridLayoutManager
+import com.bumptech.glide.Glide
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_kategori.*
@@ -23,6 +24,8 @@ class KategoriActivity : AppCompatActivity() {
         setContentView(R.layout.activity_kategori)
 
         supportActionBar?.hide()
+
+        Glide.with(this).load(R.drawable.bouncy_balls).into(kategori_progressBar)
 
         kategori = intent.getStringExtra("kategori")
         tv_kategori3.text = kategori

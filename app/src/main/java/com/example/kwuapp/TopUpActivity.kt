@@ -9,6 +9,7 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
+import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.activity_keranjang.actionbar
 import kotlinx.android.synthetic.main.activity_top_up.*
 import java.text.SimpleDateFormat
@@ -28,6 +29,9 @@ class TopUpActivity : AppCompatActivity() {
         setContentView(R.layout.activity_top_up)
 
         supportActionBar?.hide()
+
+        Glide.with(this).load(R.drawable.bouncy_balls).into(topup_progressBar)
+        topup_progressBar.visibility = View.GONE
 
         val btnBack: Button = actionbar.findViewById(R.id.btn_actionbar_back)
         val tvTitle: TextView = actionbar.findViewById(R.id.tv_actionbar)

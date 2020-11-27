@@ -9,6 +9,7 @@ import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_keranjang.*
@@ -32,6 +33,8 @@ class KeranjangActivity : AppCompatActivity() {
 
         supportActionBar?.hide()
 
+        Glide.with(this).load(R.drawable.bouncy_balls).into(keranjang_progressbar)
+
         berasalDari = intent.getStringExtra("berasalDari")
         if (berasalDari == "DetailActivity"){
             kursusDibeli =intent.getStringExtra("kursusDibeli")
@@ -46,11 +49,11 @@ class KeranjangActivity : AppCompatActivity() {
         val user = auth.currentUser
         if (user != null) {
             userId = user.uid
-            keranajng_progressbar.visibility = View.VISIBLE
+            keranjang_progressbar.visibility = View.VISIBLE
             loadUser()
         }
         else{
-            keranajng_progressbar.visibility = View.GONE
+            keranjang_progressbar.visibility = View.GONE
             keranjang_cons_utama.setBackgroundColor(resources.getColor((R.color.white)))
             iv_keranjang_kosong.visibility = View.VISIBLE
             tv_keranjang_kosong.visibility = View.VISIBLE
@@ -99,7 +102,7 @@ class KeranjangActivity : AppCompatActivity() {
                         loadKursus(namaKursus)
                     }
                     else{
-                        keranajng_progressbar.visibility = View.GONE
+                        keranjang_progressbar.visibility = View.GONE
                         keranjang_cons_utama.setBackgroundColor(resources.getColor((R.color.white)))
                         iv_keranjang_kosong.visibility = View.VISIBLE
                         tv_keranjang_kosong.visibility = View.VISIBLE
@@ -111,7 +114,7 @@ class KeranjangActivity : AppCompatActivity() {
                 }
             }
             .addOnFailureListener { exception ->
-                keranajng_progressbar.visibility = View.GONE
+                keranjang_progressbar.visibility = View.GONE
                 Toast.makeText(this, "Connection error", Toast.LENGTH_SHORT).show()
             }
     }
@@ -160,14 +163,14 @@ class KeranjangActivity : AppCompatActivity() {
                     adapter.notifyDataSetChanged()
                     rv_keranjang.adapter = adapter
 
-                    keranajng_progressbar.visibility = View.GONE
+                    keranjang_progressbar.visibility = View.GONE
                 }
                 else{
                     loadKursus(namaKursus)
                 }
             }
             .addOnFailureListener { exception ->
-                keranajng_progressbar.visibility = View.GONE
+                keranjang_progressbar.visibility = View.GONE
                 Toast.makeText(this, "Connection error", Toast.LENGTH_SHORT).show()
             }
     }

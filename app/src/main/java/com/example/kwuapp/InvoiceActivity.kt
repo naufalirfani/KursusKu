@@ -35,6 +35,10 @@ class InvoiceActivity : AppCompatActivity() {
         val selesaikan = "Selesaikan pembayaran sebelum"
         tv_invoice_selesaikan.text = selesaikan
         tv_invoice_waktu.text = ""
+        tv_invoice_hpwa.text = userDetail?.wa
+        tv_invoice_bayar.text = ""
+        tv_invoice_jumlah.text = getString(R.string.jumlah_pembayaran)
+        tv_invoice_harga.text = ""
 
         dbReference = FirebaseDatabase.getInstance().getReference("statusBayar")
         val postListener = object : ValueEventListener {
@@ -83,6 +87,27 @@ class InvoiceActivity : AppCompatActivity() {
         cdt?.cancel()
     }
 
+    private fun caraBayar(cara: String){
+        when (cara) {
+            "bri" -> {
+                iv_invoice_bayar.setImageResource(R.drawable.bri)
+                tv_invoice_bayar.text = "2290-01-002180-50-8"
+            }
+            "mandiri" -> {
+                iv_invoice_bayar.setImageResource(R.drawable.mandiri)
+                tv_invoice_bayar.text = "1370-0166-1237-2"
+            }
+            "indosat" -> {
+                iv_invoice_bayar.setImageResource(R.drawable.indosat)
+                tv_invoice_bayar.text = "0857-8578-2582"
+            }
+            "tsel" -> {
+                iv_invoice_bayar.setImageResource(R.drawable.tsel)
+                tv_invoice_bayar.text = "0823-3199-7759"
+            }
+        }
+    }
+
     private fun loadPesanan(){
         val db = FirebaseFirestore.getInstance()
         db.collection("statusBayar").document(userid!!)
@@ -95,6 +120,20 @@ class InvoiceActivity : AppCompatActivity() {
                     result.getLong("waktu"))
 
                 if(pesanan != null){
+                    val totalHarga = pesanan?.jumlah
+                    if(totalHarga.toString().length > 3){
+                        var x = totalHarga.toString()
+                        x = x.substring(0, x.length-3) + "." + x.substring(x.length -3, x.length)
+                        val textHarga = "Rp $x"
+                        tv_invoice_harga.text = textHarga
+                    }
+                    else{
+                        val textHarga = "Rp $totalHarga"
+                        tv_invoice_harga.text = textHarga
+                    }
+
+                    caraBayar(pesanan?.caraBayar!!.toString())
+
                     if(pesanan?.waktu?.toInt() == 0 && pesanan?.status.toString() == "pending"){
                         remainWaktu = System.currentTimeMillis()
                         val date: String = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())

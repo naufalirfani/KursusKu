@@ -65,6 +65,7 @@
         8.  Masukan Jumlah Transfer\n
         9.  Konfirmasi Pembayaran\n
         10. Pembayaran Selesai\n
+        11. Kirim bukti pembayaran ke \"085865027669 (WA)\"\n
         \n
         <b>Mobile Banking BRI</b>\n
         1.  Buka aplikasi, kemudian pilih menu Mobile Banking BRI\n
@@ -76,7 +77,8 @@
         7.  Untuk melakukan verifikasi SMS, Klik OK\n
         8.  Terima SMS dari Mobile Banking BRI, lalu ketik YA &lt;spasi&gt; Kode Transaksi. Kalau bingung, ikuti saja petunjuk yang ada pada SMS tersebut\n
         9.  Kalau sudah benar, langsung Kirim SMS\n
-        10. Pembayaran Selesai</string>
+        10. Pembayaran Selesai\n
+        11. Kirim bukti pembayaran ke \"085865027669 (WA)\"</string>
     <string name="carabayarmandiri"><b>ATM Mandiri</b>\n
         1. Masukkan kartu ATM Mandiri dan PIN kamu\n
         2. Pilih Transaksi Lainnya\n
@@ -86,6 +88,7 @@
         6. Masukkan nominal sesuai tagihan\n
         7. Validasi pembaayaran
         8. Pembayaran selesai\n
+        9. Kirim bukti pembayaran ke \"085865027669 (WA)\"\n
         \n
         <b>Mobile Banking Mandiri</b>\n
         1. Login ke Mandiri Mobile Application kamu\n
@@ -95,5 +98,9 @@
         5. Masukkan nomor Rekening Tujuan\n
         6. Masukkan nominal sesuai tagihan\n
         7. Validasi pembaayaran dan Masukkan \"MPIN\"\n
-        8. Pembayaran selesai</string>
+        8. Pembayaran selesai\n
+        9. Kirim bukti pembayaran ke \"085865027669 (WA)\"</string>
+    <string name="nomor_hp_wa">Nomor HP (WA)</string>
+    <string name="lihat_panduan_pembayaran"><u>Lihat Panduan Pembayaran</u></string>
+    <string name="jumlah_pembayaran">Jumlah Pembayaran</string>
 </resources>

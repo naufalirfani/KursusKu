@@ -13,6 +13,7 @@ import com.bumptech.glide.load.DecodeFormat
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.*
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_akun.*
 
@@ -23,6 +24,7 @@ class AkunActivity : AppCompatActivity(){
     lateinit var userDetail: UserDetail
     private lateinit var auth: FirebaseAuth
     private var userId: String = ""
+    private lateinit var dbReference: DatabaseReference
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_akun)
@@ -145,12 +147,36 @@ class AkunActivity : AppCompatActivity(){
                         startActivity(intent)
                     }
                     btn_akun_isisaldo.setOnClickListener {
-//                        val intent = Intent(this, TopUpActivity::class.java)
-//                        startActivity(intent)
-                        val intent = Intent(this, InvoiceActivity::class.java)
-                        intent.putExtra("akun", userDetail)
-                        intent.putExtra("userid", userId)
-                        startActivity(intent)
+                        akun_progressbar_utama.visibility = View.VISIBLE
+                        dbReference = FirebaseDatabase.getInstance().getReference("statusBayar")
+                        val postListener = object : ValueEventListener {
+                            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                                for (data: DataSnapshot in dataSnapshot.children){
+                                    akun_progressbar_utama.visibility = View.GONE
+                                    val hasil = data.getValue(Pesanan::class.java)
+                                    when (hasil?.status) {
+                                        "batal" -> {
+                                            val intent = Intent(applicationContext, TopUpActivity::class.java)
+                                            startActivity(intent)
+                                        }
+                                        "selesai" -> {
+                                            val intent = Intent(applicationContext, TopUpActivity::class.java)
+                                            startActivity(intent)
+                                        }
+                                        "pending" -> {
+                                            val intent = Intent(applicationContext, InvoiceActivity::class.java)
+                                            intent.putExtra("akun", userDetail)
+                                            intent.putExtra("userid", userId)
+                                            startActivity(intent)
+                                        }
+                                    }
+                                }
+                            }
+
+                            override fun onCancelled(databaseError: DatabaseError) {
+                            }
+                        }
+                        dbReference.addValueEventListener(postListener)
                     }
                     loadUser()
                 }

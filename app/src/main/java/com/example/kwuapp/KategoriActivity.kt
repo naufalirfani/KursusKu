@@ -69,7 +69,7 @@ class KategoriActivity : AppCompatActivity() {
                     kategori_progressBar.visibility = View.GONE
                     rv_katergori.setHasFixedSize(true)
                     rv_katergori.layoutManager = GridLayoutManager(this, 2)
-                    val adapter = RVAdapterKursus(applicationContext, dataKursus)
+                    val adapter = RVAdapterKursus(this, dataKursus)
                     adapter.notifyDataSetChanged()
                     rv_katergori.adapter = adapter
                 }

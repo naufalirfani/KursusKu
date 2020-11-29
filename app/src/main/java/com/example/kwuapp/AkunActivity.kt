@@ -197,12 +197,16 @@ class AkunActivity : AppCompatActivity(){
                         "batal" -> {
                             btn_akun_isisaldo.setOnClickListener {
                                 val intent = Intent(applicationContext, TopUpActivity::class.java)
+                                intent.putExtra("akun", user)
+                                intent.putExtra("userid", id)
                                 startActivity(intent)
                             }
                         }
                         "selesai" -> {
                             btn_akun_isisaldo.setOnClickListener {
                                 val intent = Intent(applicationContext, TopUpActivity::class.java)
+                                intent.putExtra("akun", user)
+                                intent.putExtra("userid", id)
                                 startActivity(intent)
                             }
                         }

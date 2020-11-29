@@ -27,7 +27,6 @@
         <activity android:name=".SettingActivity" />
         <activity
             android:name=".AkunActivity"
-            android:launchMode="singleTop"
             android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -37,7 +36,6 @@
         <activity android:name=".SearchActivity" />
         <activity
             android:name=".SignInActivity"
-            android:launchMode="singleTop"
             android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -53,7 +51,6 @@
         <activity android:name=".DetailActivity" />
         <activity
             android:name=".KategoriActivity"
-            android:launchMode="singleTop"
             android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

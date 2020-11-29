@@ -1,12 +1,21 @@
 package com.example.kwuapp
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.os.Handler
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
+import androidx.core.app.TaskStackBuilder
+import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.google.firebase.database.*
 import com.google.firebase.firestore.FirebaseFirestore
@@ -14,6 +23,7 @@ import kotlinx.android.synthetic.main.activity_invoice.*
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
+
 
 @Suppress("DEPRECATION")
 class InvoiceActivity : AppCompatActivity() {
@@ -111,6 +121,7 @@ class InvoiceActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         super.onBackPressed()
+        finish()
         cdt?.cancel()
     }
 
@@ -192,7 +203,12 @@ class InvoiceActivity : AppCompatActivity() {
                     }
                     else if(pesanan?.status.toString() == "selesai"){
                         invoice_progressbar.visibility = View.VISIBLE
+                        showAlarmNotification("Pembayaran Berhasil", "Selamat! Pembayaran Kamu Berhasil.", 1)
                         Toast.makeText(this@InvoiceActivity, "Pembayaran Anda Berhasil", Toast.LENGTH_SHORT).show()
+
+                        val data = Pesanan("kosong",0,0,"selesai",0)
+                        dbReference.child(userid!!).setValue(data)
+
                         val handler = Handler()
                         handler.postDelayed(Runnable { // Do something after 5s = 5000ms
                             invoice_progressbar.visibility = View.GONE
@@ -281,5 +297,41 @@ class InvoiceActivity : AppCompatActivity() {
             }
         }
         cdt?.start()
+    }
+
+    private fun showAlarmNotification(title: String, message: String, notifId: Int) {
+
+        val CHANNEL_ID = "Channel_01"
+        val CHANNEL_NAME = "KursusKu channel"
+
+        val intent = Intent(this, AkunActivity::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            }
+        val pendingIntent: PendingIntent = PendingIntent.getActivity(this, 0, intent, 0)
+
+        val notificationManager = applicationContext.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+        val builder = NotificationCompat.Builder(this, CHANNEL_ID)
+            .setSmallIcon(R.drawable.logokursusku)
+            .setContentTitle(title)
+            .setContentText(message)
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setContentIntent(pendingIntent)
+            .setAutoCancel(true)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val importance = NotificationManager.IMPORTANCE_DEFAULT
+            val channel = NotificationChannel(CHANNEL_ID, CHANNEL_NAME, importance).apply {
+                description = message
+            }
+            val notificationManagerCompat: NotificationManager =
+                getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManagerCompat.createNotificationChannel(channel)
+        }
+
+        with(NotificationManagerCompat.from(this)) {
+            // notificationId is a unique int for each notification that you must define
+            notify(notifId, builder.build())
+        }
+
     }
 }

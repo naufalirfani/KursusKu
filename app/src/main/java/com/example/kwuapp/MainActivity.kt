@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.text.TextUtils
 import android.util.DisplayMetrics
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
@@ -28,13 +29,14 @@ import kotlin.random.Random
 class MainActivity : AppCompatActivity() {
 
     private lateinit var tabLayout1: TabLayout
-    private var arrayList = ArrayList<DataKursus>()
-    private var arrayList2 = ArrayList<DataKursus>()
-    private var arrayList3 = ArrayList<DataKursus>()
+    private var arrayList: ArrayList<DataKursus>? = arrayListOf()
+    private var arrayList2: ArrayList<DataKursus>? = arrayListOf()
+    private var arrayList3: ArrayList<DataKursus>? = arrayListOf()
     private var angka1: Int = 0
     private var angka2: Int = 0
-    private lateinit var kategori1: String
-    private lateinit var kategori2: String
+    private var kategori1: String? = null
+    private var kategori2: String? = null
+    private val kategori = arrayOf("Desain", "Bisnis", "Finansial", "Kantor", "Pendidikan", "Pengembangan")
 
     private lateinit var userDetail: UserDetail
     private lateinit var dataUser: UserDetail
@@ -52,27 +54,28 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         supportActionBar?.hide()
-        arrayList.clear()
-        arrayList2.clear()
-        arrayList3.clear()
+        arrayList?.clear()
+        arrayList2?.clear()
+        arrayList3?.clear()
 
         Glide.with(this).load(R.drawable.bouncy_balls).into(main_progressBar)
 
-        arrayList = intent.getParcelableArrayListExtra<DataKursus>("arrayList")!!
-        arrayList2 = intent.getParcelableArrayListExtra<DataKursus>("arrayList2")!!
-        arrayList3 = intent.getParcelableArrayListExtra<DataKursus>("arrayList3")!!
-        kategori1 = intent.getStringExtra("kategori1")!!
-        kategori2 = intent.getStringExtra("kategori2")!!
+        arrayList = intent.getParcelableArrayListExtra<DataKursus>("arrayList")
+        arrayList2 = intent.getParcelableArrayListExtra<DataKursus>("arrayList2")
+        arrayList3 = intent.getParcelableArrayListExtra<DataKursus>("arrayList3")
+        kategori1 = intent.getStringExtra("kategori1")
+        kategori2 = intent.getStringExtra("kategori2")
 
         tabLayout1 = findViewById<View>(R.id.tabLayout) as TabLayout
         tabLayout1.addTab(tabLayout1.newTab().setText("BERANDA"))
         tabLayout1.addTab(tabLayout1.newTab().setText("KATEGORi"))
         tabLayout1.setTabTextColors(Color.parseColor("#BDBDBD"), Color.parseColor("#000000"))
 
-        val pagerAdapter = PagerAdapter(supportFragmentManager, arrayList, arrayList2, arrayList3, kategori1, kategori2)
+        val pagerAdapter = PagerAdapter(supportFragmentManager, arrayList!!, arrayList2!!, arrayList3!!, kategori1!!, kategori2!!)
         val pager = findViewById<View>(R.id.pager) as ViewPager
         pager.adapter = pagerAdapter
         tabLayout1.setupWithViewPager(pager)
+
 
         btnSearch = main_constraint.findViewById(R.id.btn_search)
         btnAkun = main_constraint.findViewById(R.id.btn_akun)

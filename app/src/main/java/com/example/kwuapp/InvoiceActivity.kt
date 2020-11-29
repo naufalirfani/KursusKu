@@ -204,10 +204,19 @@ class InvoiceActivity : AppCompatActivity() {
                     else if(pesanan?.status.toString() == "selesai"){
                         invoice_progressbar.visibility = View.VISIBLE
                         showAlarmNotification("Pembayaran Berhasil", "Selamat! Pembayaran Kamu Berhasil.", 1)
-                        Toast.makeText(this@InvoiceActivity, "Pembayaran Anda Berhasil", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@InvoiceActivity, "Pembayaran Berhasil", Toast.LENGTH_SHORT).show()
 
-                        val data = Pesanan("kosong",0,0,"selesai",0)
+                        val data = Pesanan("kosong",0,pesanan?.jumlah,"selesai",0)
                         dbReference.child(userid!!).setValue(data)
+
+                        val saldo = userDetail?.saldo!!.toLong() + pesanan?.jumlah!!
+                        val db2 = FirebaseFirestore.getInstance()
+                        db2.collection("users2").document(userid!!)
+                            .update("saldo", saldo.toString())
+                            .addOnSuccessListener { result2 ->
+                            }
+                            .addOnFailureListener { exception ->
+                            }
 
                         val handler = Handler()
                         handler.postDelayed(Runnable { // Do something after 5s = 5000ms

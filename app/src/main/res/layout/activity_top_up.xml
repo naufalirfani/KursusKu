@@ -54,6 +54,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:hint="@string/nominal_isi_saldo"
+                android:inputType="number"
                 android:background="@android:color/transparent"
                 android:textSize="16sp"
                 android:paddingLeft="12dp"

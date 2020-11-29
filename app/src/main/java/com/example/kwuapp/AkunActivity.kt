@@ -125,8 +125,16 @@ class AkunActivity : AppCompatActivity(){
         }
         tv_akun_username.text = userDetail.username
         tv_akun_email.text = userDetail.email
-        val saldo = "Rp ${userDetail.saldo}"
-        tv_akun_saldo.text = saldo
+        if(userDetail.saldo.length > 3){
+            var x = userDetail.saldo
+            x = x.substring(0, x.length-3) + "." + x.substring(x.length -3, x.length)
+            val textHarga = "Rp $x"
+            tv_akun_saldo.text = textHarga
+        }
+        else{
+            val saldo = "Rp ${userDetail.saldo}"
+            tv_akun_saldo.text = saldo
+        }
     }
 
     private fun loadUser2() {

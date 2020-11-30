@@ -14,8 +14,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
-import androidx.core.app.TaskStackBuilder
-import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.google.firebase.database.*
 import com.google.firebase.firestore.FirebaseFirestore
@@ -29,7 +27,7 @@ import java.util.concurrent.TimeUnit
 class InvoiceActivity : AppCompatActivity() {
 
     private var userDetail: UserDetail? = null
-    private var pesanan: Pesanan? = null
+    private var dataPesanan: DataPesanan? = null
     private var userid: String? = null
     private var remainWaktu: Long = 0
     private var cdt: CountDownTimer? = null
@@ -56,59 +54,60 @@ class InvoiceActivity : AppCompatActivity() {
             .load(R.drawable.bouncy_balls)
             .into(invoice_progressbar)
 
-        dbReference = FirebaseDatabase.getInstance().getReference("statusBayar")
+        dbReference = FirebaseDatabase.getInstance().getReference("statusBayar").child(userid!!)
         val postListener = object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                for (data: DataSnapshot in dataSnapshot.children){
-                    val hasil = data.getValue(Pesanan::class.java)
-                    when (hasil?.status) {
-                        "batal" -> {
-                            val db2 = FirebaseFirestore.getInstance()
-                            db2.collection("statusBayar").document(userid!!)
-                                .update("waktu", 0)
-                                .addOnSuccessListener { result2 ->
-                                }
-                                .addOnFailureListener { exception ->
-                                }
-                            db2.collection("statusBayar").document(userid!!)
-                                .update("durasi", 0)
-                                .addOnSuccessListener { result2 ->
-                                }
-                                .addOnFailureListener { exception ->
-                                }
-                            db2.collection("statusBayar").document(userid!!)
-                                .update("status", "batal")
-                                .addOnSuccessListener { result2 ->
-                                    loadPesanan()
-                                }
-                                .addOnFailureListener { exception ->
-                                }
-                        }
-                        "selesai" -> {
-                            val db2 = FirebaseFirestore.getInstance()
-                            db2.collection("statusBayar").document(userid!!)
-                                .update("waktu", 0)
-                                .addOnSuccessListener { result2 ->
-                                }
-                                .addOnFailureListener { exception ->
-                                }
-                            db2.collection("statusBayar").document(userid!!)
-                                .update("durasi", 0)
-                                .addOnSuccessListener { result2 ->
-                                }
-                                .addOnFailureListener { exception ->
-                                }
-                            db2.collection("statusBayar").document(userid!!)
-                                .update("status", "selesai")
-                                .addOnSuccessListener { result2 ->
-                                    loadPesanan()
-                                }
-                                .addOnFailureListener { exception ->
-                                }
-                        }
-                        "pending" -> {
-                            loadPesanan()
-                        }
+                val hasil = dataSnapshot.getValue(DataPesanan::class.java)
+                when (hasil?.status) {
+                    "batal" -> {
+                        val db2 = FirebaseFirestore.getInstance()
+                        db2.collection("statusBayar").document(userid!!)
+                            .update("waktu", 0)
+                            .addOnSuccessListener { result2 ->
+                            }
+                            .addOnFailureListener { exception ->
+                            }
+                        db2.collection("statusBayar").document(userid!!)
+                            .update("durasi", 0)
+                            .addOnSuccessListener { result2 ->
+                            }
+                            .addOnFailureListener { exception ->
+                            }
+                        db2.collection("statusBayar").document(userid!!)
+                            .update("status", "batal")
+                            .addOnSuccessListener { result2 ->
+                                loadPesanan()
+                            }
+                            .addOnFailureListener { exception ->
+                            }
+                    }
+                    "selesai" -> {
+                        val db2 = FirebaseFirestore.getInstance()
+                        db2.collection("statusBayar").document(userid!!)
+                            .update("waktu", 0)
+                            .addOnSuccessListener { result2 ->
+                            }
+                            .addOnFailureListener { exception ->
+                            }
+                        db2.collection("statusBayar").document(userid!!)
+                            .update("durasi", 0)
+                            .addOnSuccessListener { result2 ->
+                            }
+                            .addOnFailureListener { exception ->
+                            }
+                        db2.collection("statusBayar").document(userid!!)
+                            .update("status", "selesai")
+                            .addOnSuccessListener { result2 ->
+                                loadPesanan()
+                            }
+                            .addOnFailureListener { exception ->
+                            }
+                    }
+                    "pending" -> {
+                        loadPesanan()
+                    }
+                    else -> {
+                        Toast.makeText(this@InvoiceActivity, "Gagal", Toast.LENGTH_SHORT).show()
                     }
                 }
             }
@@ -151,15 +150,15 @@ class InvoiceActivity : AppCompatActivity() {
         db.collection("statusBayar").document(userid!!)
             .get()
             .addOnSuccessListener { result ->
-                pesanan = Pesanan(result.getString("caraBayar"),
+                dataPesanan = DataPesanan(result.getString("caraBayar"),
                     result.getLong("durasi"),
                     result.getLong("jumlah"),
                     result.getString("status"),
                     result.getLong("waktu"))
 
-                if(pesanan != null){
+                if(dataPesanan != null){
                     invoice_progressbar.visibility = View.GONE
-                    val totalHarga = pesanan?.jumlah
+                    val totalHarga = dataPesanan?.jumlah
                     if(totalHarga.toString().length > 3){
                         var x = totalHarga.toString()
                         x = x.substring(0, x.length-3) + "." + x.substring(x.length -3, x.length)
@@ -171,9 +170,9 @@ class InvoiceActivity : AppCompatActivity() {
                         tv_invoice_harga.text = textHarga
                     }
 
-                    caraBayar(pesanan?.caraBayar!!.toString())
+                    caraBayar(dataPesanan?.caraBayar!!.toString())
 
-                    if(pesanan?.waktu?.toInt() == 0 && pesanan?.status.toString() == "pending"){
+                    if(dataPesanan?.waktu?.toInt() == 0 && dataPesanan?.status.toString() == "pending"){
                         remainWaktu = System.currentTimeMillis()
                         val date: String = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
                         val dateArray = date.split("-")
@@ -201,15 +200,15 @@ class InvoiceActivity : AppCompatActivity() {
                             }
                         timer(remainWaktu)
                     }
-                    else if(pesanan?.status.toString() == "selesai"){
+                    else if(dataPesanan?.status.toString() == "selesai"){
                         invoice_progressbar.visibility = View.VISIBLE
                         showAlarmNotification("Pembayaran Berhasil", "Selamat! Pembayaran Kamu Berhasil.", 1)
                         Toast.makeText(this@InvoiceActivity, "Pembayaran Berhasil", Toast.LENGTH_SHORT).show()
 
-                        val data = Pesanan("kosong",0,pesanan?.jumlah,"selesai",0)
-                        dbReference.child(userid!!).setValue(data)
+                        val data = DataPesanan("kosong",0,dataPesanan?.jumlah,"selesai",0)
+                        dbReference.setValue(data)
 
-                        val saldo = userDetail?.saldo!!.toLong() + pesanan?.jumlah!!
+                        val saldo = userDetail?.saldo!!.toLong() + dataPesanan?.jumlah!!
                         val db2 = FirebaseFirestore.getInstance()
                         db2.collection("users2").document(userid!!)
                             .update("saldo", saldo.toString())
@@ -226,7 +225,7 @@ class InvoiceActivity : AppCompatActivity() {
                             finish()
                         }, 3000)
                     }
-                    else if(pesanan?.status == "batal"){
+                    else if(dataPesanan?.status == "batal"){
                         invoice_progressbar.visibility = View.VISIBLE
                         Toast.makeText(this@InvoiceActivity, "Pesanan Anda telah Dibatalkan", Toast.LENGTH_SHORT).show()
                         val handler = Handler()
@@ -237,9 +236,9 @@ class InvoiceActivity : AppCompatActivity() {
                             finish()
                         }, 3000)
                     }
-                    else if(pesanan?.waktu?.toInt() != 0 && pesanan?.status.toString() == "pending"){
-                        val sekarang = System.currentTimeMillis() - pesanan?.waktu!!
-                        timer2(sekarang, pesanan?.durasi!!)
+                    else if(dataPesanan?.waktu?.toInt() != 0 && dataPesanan?.status.toString() == "pending"){
+                        val sekarang = System.currentTimeMillis() - dataPesanan?.waktu!!
+                        timer2(sekarang, dataPesanan?.durasi!!)
                     }
                 }
                 else{
@@ -277,8 +276,8 @@ class InvoiceActivity : AppCompatActivity() {
             }
 
             override fun onFinish() {
-                val data = Pesanan("kosong",0,0,"batal",0)
-                dbReference.child(userid!!).setValue(data)
+                val data = DataPesanan("kosong",0,0,"batal",0)
+                dbReference.setValue(data)
             }
         }
         cdt?.start()
@@ -301,8 +300,8 @@ class InvoiceActivity : AppCompatActivity() {
             }
 
             override fun onFinish() {
-                val data = Pesanan("kosong",0,0,"batal",0)
-                dbReference.child(userid!!).setValue(data)
+                val data = DataPesanan("kosong",0,0,"batal",0)
+                dbReference.setValue(data)
             }
         }
         cdt?.start()

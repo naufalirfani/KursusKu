@@ -3,7 +3,6 @@ package com.example.kwuapp
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
-import android.os.CountDownTimer
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.Button
@@ -17,9 +16,6 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_keranjang.actionbar
 import kotlinx.android.synthetic.main.activity_top_up.*
-import java.text.SimpleDateFormat
-import java.util.*
-import java.util.concurrent.TimeUnit
 
 
 @Suppress("DEPRECATION")
@@ -89,7 +85,7 @@ class TopUpActivity : AppCompatActivity() {
                     .addOnFailureListener { exception ->
                     }
 
-                val data = Pesanan(bayarDipilih,0,jumlah.toLong(),"pending",0)
+                val data = DataPesanan(bayarDipilih,0,jumlah.toLong(),"pending",0)
                 dbReference.child(userid!!).setValue(data)
 
                 val intent = Intent(applicationContext, InvoiceActivity::class.java)

@@ -1,5 +1,6 @@
 package com.example.kwuapp
 
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
@@ -16,6 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.*
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_detail.*
 
@@ -30,6 +32,8 @@ class DetailActivity : AppCompatActivity() {
     private lateinit var dataUser: UserDetail
     private var userId: String = ""
     private lateinit var auth: FirebaseAuth
+    private lateinit var dbReference: DatabaseReference
+    private lateinit var dbReference2: DatabaseReference
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,13 +44,16 @@ class DetailActivity : AppCompatActivity() {
         kursus = intent.getParcelableExtra("kursus")!!
         tv_nama.text = kursus.nama
 
+        dbReference2 = FirebaseDatabase.getInstance().getReference("keranjang")
+
         Glide.with(this).load(R.drawable.bouncy_balls).into(datail_progressBar)
 
         auth = FirebaseAuth.getInstance()
         val user = auth.currentUser
         if (user != null) {
             userId = user.uid
-            loadUser()
+            dbReference = FirebaseDatabase.getInstance().getReference("keranjang").child(userId).child(kursus.nama)
+            tambahKeKeranjang(this)
         }
         else{
             val intent = Intent(this, SignInActivity::class.java)
@@ -68,6 +75,8 @@ class DetailActivity : AppCompatActivity() {
         }
 
         cv_addtochart.visibility = View.GONE
+
+        btn_detail_addtokeranjang.setOnClickListener {  }
     }
 
     override fun onResume() {
@@ -76,7 +85,7 @@ class DetailActivity : AppCompatActivity() {
         val user = auth.currentUser
         if (user != null) {
             userId = user.uid
-            loadUser()
+            tambahKeKeranjang(this)
         }
         else{
             val intent = Intent(this, SignInActivity::class.java)
@@ -137,81 +146,60 @@ class DetailActivity : AppCompatActivity() {
             }
     }
 
-    private fun loadUser() {
-        val db = FirebaseFirestore.getInstance()
-        db.collection("users2").document(userId)
-            .get()
-            .addOnSuccessListener { result ->
-                userDetail = UserDetail(result.getString("username").toString(),
-                    result.getString("email").toString(),
-                    result.getString("gambar").toString(),
-                    result.getString("saldo").toString(),
-                    result.getString("isiKeranjang").toString(),
-                    result.getString("jumlahKeranjang").toString(),
-                    result.getString("wa").toString())
+    private fun tambahKeKeranjang(context: Context){
 
-                if(userDetail.isiKeranjang.isNotEmpty()){
-
+        val postListener = object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                val hasil = dataSnapshot.getValue(DataKeranjang::class.java)
+                if(hasil == null){
                     btn_detail_addtokeranjang.setOnClickListener {
-                        val db2 = FirebaseFirestore.getInstance()
-                        db2.collection("users2").document(userId)
-                            .update("isiKeranjang", userDetail.isiKeranjang + "$${kursus.nama}")
-                            .addOnSuccessListener { result ->
-                                loadUser()
-                            }
-                            .addOnFailureListener { exception ->
-                            }
-                        val jumlahKeranjang = userDetail.jumlahKeranjang.toInt() + 1
-                        db2.collection("users2").document(userId)
-                            .update("jumlahKeranjang", jumlahKeranjang.toString())
-                            .addOnSuccessListener { result ->
-                                loadUser()
-                            }
-                            .addOnFailureListener { exception ->
-                            }
-
+                        val dataKeranjang = DataKeranjang(kursus.nama,1)
+                        dbReference2.child(userId).child(kursus.nama).setValue(dataKeranjang)
                         cv_addtochart.visibility = View.VISIBLE
-                        val expandIn: Animation = AnimationUtils.loadAnimation(this, R.anim.expand_in)
+                        val expandIn: Animation = AnimationUtils.loadAnimation(context, R.anim.expand_in)
                         cv_addtochart.startAnimation(expandIn)
                         val handler = Handler()
                         handler.postDelayed({ // Do something after 5s = 5000ms
                             cv_addtochart.visibility = View.GONE
                         }, 2500)
-
                     }
 
                     btn_detail_bayar.setOnClickListener {
-                        val db2 = FirebaseFirestore.getInstance()
-                        db2.collection("users2").document(userId)
-                            .update("isiKeranjang", userDetail.isiKeranjang + "$${kursus.nama}")
-                            .addOnSuccessListener { result ->
-                            }
-                            .addOnFailureListener { exception ->
-                            }
-
-                        val jumlahKeranjang = userDetail.jumlahKeranjang.toInt() + 1
-                        db2.collection("users2").document(userId)
-                            .update("jumlahKeranjang", jumlahKeranjang.toString())
-                            .addOnSuccessListener { result ->
-                            }
-                            .addOnFailureListener { exception ->
-                            }
-
-                        val intent = Intent(this, KeranjangActivity::class.java)
+                        val dataKeranjang = DataKeranjang(kursus.nama,1)
+                        dbReference2.child(userId).child(kursus.nama).setValue(dataKeranjang)
+                        val intent = Intent(context, KeranjangActivity::class.java)
                         intent.putExtra("berasalDari", "DetailActivity")
                         intent.putExtra("kursusDibeli", kursus.nama)
                         startActivity(intent)
-
                     }
-                    datail_progressBar.visibility = View.GONE
                 }
                 else{
-                    loadUser()
+                    btn_detail_addtokeranjang.setOnClickListener {
+                        val dataKeranjang = DataKeranjang(kursus.nama, hasil.jumlah?.plus(1))
+                        dbReference2.child(userId).child(kursus.nama).setValue(dataKeranjang)
+                        cv_addtochart.visibility = View.VISIBLE
+                        val expandIn: Animation = AnimationUtils.loadAnimation(context, R.anim.expand_in)
+                        cv_addtochart.startAnimation(expandIn)
+                        val handler = Handler()
+                        handler.postDelayed({ // Do something after 5s = 5000ms
+                            cv_addtochart.visibility = View.GONE
+                        }, 2500)
+                    }
+
+                    btn_detail_bayar.setOnClickListener {
+                        val dataKeranjang = DataKeranjang(kursus.nama, hasil.jumlah?.plus(1))
+                        dbReference2.child(userId).child(kursus.nama).setValue(dataKeranjang)
+                        val intent = Intent(context, KeranjangActivity::class.java)
+                        intent.putExtra("berasalDari", "DetailActivity")
+                        intent.putExtra("kursusDibeli", kursus.nama)
+                        startActivity(intent)
+                    }
                 }
             }
-            .addOnFailureListener { exception ->
-                datail_progressBar.visibility = View.GONE
-                Toast.makeText(this, "Connection error", Toast.LENGTH_SHORT).show()
+
+            override fun onCancelled(databaseError: DatabaseError) {
             }
+        }
+        dbReference.addValueEventListener(postListener)
     }
 }

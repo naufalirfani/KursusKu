@@ -28,7 +28,7 @@ class AkunActivity : AppCompatActivity(){
     private lateinit var auth: FirebaseAuth
     private var userId: String = ""
     private lateinit var dbReference: DatabaseReference
-    private var pesanan: Pesanan? = null
+    private var dataPesanan: DataPesanan? = null
 
     private var arrayList = ArrayList<DataKursus>()
     private var arrayList2 = ArrayList<DataKursus>()
@@ -185,15 +185,15 @@ class AkunActivity : AppCompatActivity(){
         db.collection("statusBayar").document(userId)
             .get()
             .addOnSuccessListener { result ->
-                pesanan = Pesanan(result.getString("caraBayar"),
+                dataPesanan = DataPesanan(result.getString("caraBayar"),
                     result.getLong("durasi"),
                     result.getLong("jumlah"),
                     result.getString("status"),
                     result.getLong("waktu"))
 
-                if(pesanan != null){
+                if(dataPesanan != null){
                     akun_progressbar.visibility = View.GONE
-                    when (pesanan?.status) {
+                    when (dataPesanan?.status) {
                         "batal" -> {
                             btn_akun_isisaldo.setOnClickListener {
                                 val intent = Intent(applicationContext, TopUpActivity::class.java)

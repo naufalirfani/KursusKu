@@ -79,9 +79,43 @@
             android:maxLines="1"
             android:text="@string/harga"
             android:textColor="@color/colorPrimary"
-            android:textSize="18sp"
+            android:textSize="20sp"
             app:layout_constraintLeft_toRightOf="@id/iv_item_keranjang"
             app:layout_constraintTop_toTopOf="@id/keranjang_cons"/>
+        <ImageView
+            android:id="@+id/iv_item_keranjang_remove"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:cropToPadding="true"
+            android:padding="2dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginLeft="10dp"
+            android:src="@drawable/ic_remove_abuabu_24dp"
+            android:background="@drawable/border_add_remove"
+            app:layout_constraintTop_toBottomOf="@id/tv_item_keranjang_harga"
+            app:layout_constraintLeft_toRightOf="@id/iv_item_keranjang"/>
+        <TextView
+            android:id="@+id/tv_item_keranjang_jumlah"
+            android:layout_width="50dp"
+            android:layout_height="25dp"
+            android:gravity="center"
+            android:text="1"
+            android:textSize="12sp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/border_top_bottom"
+            app:layout_constraintTop_toBottomOf="@id/tv_item_keranjang_harga"
+            app:layout_constraintLeft_toRightOf="@id/iv_item_keranjang_remove"/>
+        <ImageView
+            android:id="@+id/iv_item_keranjang_add"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:cropToPadding="true"
+            android:padding="2dp"
+            android:layout_marginTop="8dp"
+            android:src="@drawable/ic_add_abuabu_24dp"
+            android:background="@drawable/border_add_remove"
+            app:layout_constraintTop_toBottomOf="@id/tv_item_keranjang_harga"
+            app:layout_constraintLeft_toRightOf="@id/tv_item_keranjang_jumlah"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView

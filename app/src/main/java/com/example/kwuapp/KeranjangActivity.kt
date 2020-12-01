@@ -1,8 +1,10 @@
 package com.example.kwuapp
 
+import android.content.Intent
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
 import android.util.DisplayMetrics
 import android.view.View
 import android.widget.Button
@@ -11,6 +13,7 @@ import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.*
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_keranjang.*
 import kotlinx.android.synthetic.main.activity_keranjang.actionbar
@@ -18,14 +21,15 @@ import kotlinx.android.synthetic.main.activity_keranjang.actionbar
 @Suppress("DEPRECATION")
 class KeranjangActivity : AppCompatActivity() {
 
-    private lateinit var userDetail: UserDetail
     private lateinit var auth: FirebaseAuth
     private var userId: String = ""
     private var arrayList = ArrayList<DataKursus>()
-    private  var namaKursus: ArrayList<String> = arrayListOf()
+    private  var namaKursus: ArrayList<DataKeranjang> = arrayListOf()
     private var widthfix: Int = 0
     private var berasalDari: String? = null
     private var kursusDibeli: String? = null
+    private lateinit var dbReference: DatabaseReference
+    private lateinit var adapter: RVAKeranjangList
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,8 +53,9 @@ class KeranjangActivity : AppCompatActivity() {
         val user = auth.currentUser
         if (user != null) {
             userId = user.uid
+            dbReference = FirebaseDatabase.getInstance().getReference("keranjang").child(userId)
+            loadKeranjang()
             keranjang_progressbar.visibility = View.VISIBLE
-            loadUser()
         }
         else{
             keranjang_progressbar.visibility = View.GONE
@@ -71,6 +76,20 @@ class KeranjangActivity : AppCompatActivity() {
         iv_keranjang_kosong.visibility = View.GONE
         tv_keranjang_kosong.visibility = View.GONE
         tv_keranjang_kosong2.visibility = View.GONE
+
+        adapter = RVAKeranjangList(this,
+            widthfix,
+            userId,
+            tv_keranjang_totalharga,
+            kursusDibeli,
+            iv_keranjang_kosong,
+            tv_keranjang_kosong,
+            tv_keranjang_kosong2)
+        adapter.notifyDataSetChanged()
+        rv_keranjang.setHasFixedSize(true)
+        rv_keranjang.layoutManager = LinearLayoutManager(this)
+        rv_keranjang.adapter = adapter
+
     }
 
     override fun onBackPressed() {
@@ -78,28 +97,15 @@ class KeranjangActivity : AppCompatActivity() {
         finish()
     }
 
-    private fun loadUser() {
-        val db = FirebaseFirestore.getInstance()
-        db.collection("users2").document(userId)
-            .get()
-            .addOnSuccessListener { result ->
-                userDetail = UserDetail(result.getString("username").toString(),
-                    result.getString("email").toString(),
-                    result.getString("gambar").toString(),
-                    result.getString("saldo").toString(),
-                    result.getString("isiKeranjang").toString(),
-                    result.getString("jumlahKeranjang").toString(),
-                    result.getString("wa").toString())
-
-                if(userDetail.isiKeranjang.isNotEmpty()){
-                    if(userDetail.isiKeranjang != "kosong"){
-                        val nama = userDetail.isiKeranjang.split("$")
-                        for (i in nama.indices){
-                            if(i > 0){
-                                namaKursus.add(nama[i])
-                            }
-                        }
-                        loadKursus(namaKursus)
+    private fun loadKeranjang(){
+        val postListener = object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                namaKursus.clear()
+                arrayList.clear()
+                for( data in dataSnapshot.children){
+                    val hasil = data.getValue(DataKeranjang::class.java)
+                    if(hasil != null){
+                        namaKursus.add(hasil)
                     }
                     else{
                         keranjang_progressbar.visibility = View.GONE
@@ -109,25 +115,24 @@ class KeranjangActivity : AppCompatActivity() {
                         tv_keranjang_kosong2.visibility = View.VISIBLE
                     }
                 }
-                else{
-                    loadUser()
-                }
+                loadKursus(namaKursus)
             }
-            .addOnFailureListener { exception ->
-                keranjang_progressbar.visibility = View.GONE
-                Toast.makeText(this, "Connection error", Toast.LENGTH_SHORT).show()
+
+            override fun onCancelled(databaseError: DatabaseError) {
             }
+        }
+        dbReference.addValueEventListener(postListener)
     }
 
-    private fun loadKursus(nama: ArrayList<String>){
+    private fun loadKursus(nama: ArrayList<DataKeranjang>){
         val db = FirebaseFirestore.getInstance()
         db.collection("kursus")
             .get()
             .addOnSuccessListener { result ->
                 arrayList.clear()
                 for (document in result) {
-                    for(i in 0 until namaKursus.size){
-                        if(document.getString("nama") == namaKursus[i]){
+                    for(i in 0 until nama.size){
+                        if(document.getString("nama") == nama[i].namaKursus){
                             arrayList.add(DataKursus(document.getString("deskripsi")!!,
                                 document.getString("dilihat")!!,
                                 document.getString("gambar")!!,
@@ -147,21 +152,7 @@ class KeranjangActivity : AppCompatActivity() {
                     tv_keranjang_kosong.visibility = View.GONE
                     tv_keranjang_kosong2.visibility = View.GONE
 
-                    rv_keranjang.setHasFixedSize(true)
-                    rv_keranjang.layoutManager = LinearLayoutManager(this)
-                    val adapter = RVAKeranjangList(this,
-                        arrayList,
-                        widthfix,
-                        userDetail.isiKeranjang,
-                        userDetail.jumlahKeranjang,
-                        userId,
-                        tv_keranjang_totalharga,
-                        kursusDibeli,
-                        iv_keranjang_kosong,
-                        tv_keranjang_kosong,
-                        tv_keranjang_kosong2)
-                    adapter.notifyDataSetChanged()
-                    rv_keranjang.adapter = adapter
+                    adapter.setData(arrayList, namaKursus)
 
                     keranjang_progressbar.visibility = View.GONE
                 }

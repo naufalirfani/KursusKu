@@ -10,14 +10,13 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.list_keranjang.view.*
 
 class RVAKeranjangList(private val context: Context?,
-                       private val dataKursus: ArrayList<DataKursus>,
                        private val width: Int,
-                       private var isiKeranjang: String,
-                       private var jumlahKeranjang: String,
                        private val userId: String,
                        private val tv_total: TextView,
                        private var kursusDibeli: String?,
@@ -26,13 +25,26 @@ class RVAKeranjangList(private val context: Context?,
                        private var tv_kosong2: TextView) : RecyclerView.Adapter<RVAKeranjangList.Holder>() {
 
     private var isShow = false
+    private val mData = ArrayList<DataKursus>()
+    private val dataKursus = ArrayList<DataKeranjang>()
+    private lateinit var dbReference: DatabaseReference
+    fun setData(items: ArrayList<DataKursus>, items2: ArrayList<DataKeranjang>) {
+        mData.clear()
+        mData.addAll(items)
+        dataKursus.clear()
+        dataKursus.addAll(items2)
+        notifyDataSetChanged()
+    }
+
     override fun onCreateViewHolder(viewGroup: ViewGroup, i: Int): Holder {
         val view: View = LayoutInflater.from(viewGroup.context).inflate(R.layout.list_keranjang, viewGroup, false)
         return Holder(view)
     }
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
-        val kursus = dataKursus[position]
+        val kursus = mData[position]
+        val keranjang = dataKursus[position]
+        dbReference = FirebaseDatabase.getInstance().getReference("keranjang")
 
         val params: ViewGroup.LayoutParams = holder.view.iv_item_keranjang.layoutParams
         params.width = width
@@ -43,9 +55,11 @@ class RVAKeranjangList(private val context: Context?,
 //            .apply(RequestOptions().fitCenter().format(DecodeFormat.PREFER_ARGB_8888).override(Target.SIZE_ORIGINAL))
             .into(holder.view.iv_item_keranjang)
         holder.view.btn_item_keranjang_hapus.visibility = View.GONE
+
         holder.view.tv_item_keranjang_nama_utama.text = kursus.nama
         val harga = "Rp${kursus.harga}"
         holder.view.tv_item_keranjang_harga.text = harga
+        holder.view.tv_item_keranjang_jumlah.text = keranjang.jumlah.toString()
 
         if (kursus.nama == kursusDibeli){
             holder.view.cb_item_keranjang.isChecked = true
@@ -64,8 +78,25 @@ class RVAKeranjangList(private val context: Context?,
                 tv_total.text = textHarga
             }
         }
+
+        holder.view.iv_item_keranjang_add.setOnClickListener {
+            val jumlah = holder.view.tv_item_keranjang_jumlah.text.toString()
+            if(jumlah.toInt() > 0){
+                val dataKeranjang = DataKeranjang(kursus.nama, keranjang.jumlah?.plus(1))
+                dbReference.child(userId).child(kursus.nama).setValue(dataKeranjang)
+            }
+        }
+
+        holder.view.iv_item_keranjang_remove.setOnClickListener {
+            val jumlah = holder.view.tv_item_keranjang_jumlah.text.toString()
+            if(jumlah.toInt() > 1){
+                val dataKeranjang = DataKeranjang(kursus.nama, keranjang.jumlah?.minus(1))
+                dbReference.child(userId).child(kursus.nama).setValue(dataKeranjang)
+            }
+        }
+
         holder.view.cb_item_keranjang.setOnCheckedChangeListener { buttonView, isChecked ->
-            inisiasiTotalharga(isChecked)
+            inisiasiTotalharga(isChecked, keranjang.jumlah)
         }
 
         holder.view.tv_item_keranjang_ubah.setOnClickListener {
@@ -94,46 +125,26 @@ class RVAKeranjangList(private val context: Context?,
         }
 
         holder.view.btn_item_keranjang_hapus.setOnClickListener {
-            val db = FirebaseFirestore.getInstance()
-            val kata = isiKeranjang.replace("$${kursus.nama}", "")
-            isiKeranjang = kata
-            db.collection("users2").document(userId)
-                .update("isiKeranjang", kata)
-                .addOnSuccessListener { result ->
-                }
-                .addOnFailureListener { exception ->
-                }
-            val jumlahKeranjangNew = jumlahKeranjang.toInt() - 1
-            jumlahKeranjang = jumlahKeranjangNew.toString()
-            db.collection("users2").document(userId)
-                .update("jumlahKeranjang", jumlahKeranjangNew.toString())
-                .addOnSuccessListener { result ->
-                }
-                .addOnFailureListener { exception ->
-                }
+            dbReference.child(userId).child(kursus.nama).removeValue()
+        }
 
-            dataKursus.removeAt(position)
-            notifyItemRemoved(position)
-            notifyItemRangeChanged(position, dataKursus.size)
-
-            if(dataKursus.size == 0){
-                iv_kosong.visibility = View.VISIBLE
-                tv_kosong.visibility = View.VISIBLE
-                tv_kosong2.visibility = View.VISIBLE
-            }
+        if(mData.size == 0){
+            iv_kosong.visibility = View.VISIBLE
+            tv_kosong.visibility = View.VISIBLE
+            tv_kosong2.visibility = View.VISIBLE
         }
     }
 
     override fun getItemCount(): Int {
-        return dataKursus.size
+        return mData.size
     }
 
-    private fun inisiasiTotalharga(isChecked: Boolean){
+    private fun inisiasiTotalharga(isChecked: Boolean, jumlah: Long?){
         if (isChecked){
             val hargaSebelum = tv_total.text.split("p")
             val hargaSebelumFix = hargaSebelum[1].replace(".", "").toInt()
-            val hargaKursus = 29000
-            val totalHarga = hargaSebelumFix + hargaKursus
+            val hargaKursus = 29900
+            val totalHarga = hargaSebelumFix + (hargaKursus * jumlah!!)
             if(totalHarga.toString().length > 3){
                 var x = totalHarga.toString()
                 x = x.substring(0, x.length-3) + "." + x.substring(x.length -3, x.length)
@@ -148,7 +159,7 @@ class RVAKeranjangList(private val context: Context?,
             val hargaSebelum = tv_total.text.split("p")
             val hargaSebelumFix = hargaSebelum[1].replace(".", "").toInt()
             val hargaKursus = 29900
-            val totalHarga = hargaSebelumFix - hargaKursus
+            val totalHarga = hargaSebelumFix - (hargaKursus * jumlah!!)
             if(totalHarga.toString().length > 3){
                 var x = totalHarga.toString()
                 x = x.substring(0, x.length-3) + "." + x.substring(x.length -3, x.length)

@@ -20,7 +20,13 @@ class KategoriFragment : Fragment() {
     lateinit var kategori: String
     lateinit var kategori2: String
     var listKategori: ArrayList<String> = arrayListOf("Bisnis", "Desain", "Finansial", "Fotografi", "Kantor", "Pendidikan", "Pengembangan")
-    val fotoKategori: ArrayList<Int> = arrayListOf(R.drawable.bisnis, R.drawable.desain, R.drawable.finansial, R.drawable.fotografi, R.drawable.kantor, R.drawable.pendidikan, R.drawable.pengembangan)
+    val fotoKategori: ArrayList<Int> = arrayListOf(R.drawable.bisnissmall,
+        R.drawable.desainsmall,
+        R.drawable.finansialsmall,
+        R.drawable.fotografismall,
+        R.drawable.kantorsmall,
+        R.drawable.pendidikansmall,
+        R.drawable.pengembangansmall)
 
     fun newInstance(dataKursus: ArrayList<DataKursus>,
                     dataKursus2: ArrayList<DataKursus>,

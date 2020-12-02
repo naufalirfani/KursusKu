@@ -1,7 +1,12 @@
 package com.example.kwuapp
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.text.TextUtils
@@ -13,6 +18,8 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import androidx.viewpager.widget.ViewPager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DecodeFormat
@@ -212,13 +219,5 @@ class MainActivity : AppCompatActivity() {
                 main_progressBar.visibility = View.GONE
                 Toast.makeText(this, "Connection error", Toast.LENGTH_SHORT).show()
             }
-    }
-
-    fun randomAngka(){
-        angka1 = Random.nextInt(0,5)
-        angka2 = Random.nextInt(0,5)
-        if(angka1 == angka2){
-            randomAngka()
-        }
     }
 }

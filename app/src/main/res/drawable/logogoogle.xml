@@ -2,7 +2,7 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <item
-        android:drawable="@drawable/google"
+        android:drawable="@drawable/googlesmall"
         android:width="30dp"
         android:height="30dp"
         />

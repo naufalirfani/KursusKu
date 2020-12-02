@@ -101,6 +101,11 @@ class SettingActivity : AppCompatActivity() {
         btn_setting_batal.setOnClickListener { onBackPressed() }
     }
 
+    override fun onBackPressed() {
+        super.onBackPressed()
+        finish()
+    }
+
     fun saveToPreferences(
         context: Context,
         key: String?,

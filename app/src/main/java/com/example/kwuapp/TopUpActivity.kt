@@ -114,10 +114,20 @@ class TopUpActivity : AppCompatActivity() {
             iv_pulsa_down.setImageResource(R.drawable.ic_keyboard_arrow_down_black_24dp)
             if(dialogTransfer.visibility == View.VISIBLE){
                 iv_trasnfer_down.setImageResource(R.drawable.ic_keyboard_arrow_down_black_24dp)
+                val animation = AnimationUtils.loadAnimation(applicationContext, R.anim.up)
+                animation.duration = 300
+                dialogTransfer.animation = animation
+                dialogTransfer.animate()
+                animation.start()
                 dialogTransfer.visibility = View.GONE
             }
             else{
                 iv_trasnfer_down.setImageResource(R.drawable.ic_keyboard_arrow_up_black_24dp)
+                val animation = AnimationUtils.loadAnimation(applicationContext, R.anim.down)
+                animation.duration = 300
+                dialogTransfer.animation = animation
+                dialogTransfer.animate()
+                animation.start()
                 dialogTransfer.visibility = View.VISIBLE
             }
         }
@@ -138,10 +148,20 @@ class TopUpActivity : AppCompatActivity() {
             iv_trasnfer_down.setImageResource(R.drawable.ic_keyboard_arrow_down_black_24dp)
             if(dialogPulsa.visibility == View.VISIBLE){
                 iv_pulsa_down.setImageResource(R.drawable.ic_keyboard_arrow_down_black_24dp)
+                val animation = AnimationUtils.loadAnimation(applicationContext, R.anim.up)
+                animation.duration = 300
+                dialogPulsa.animation = animation
+                dialogPulsa.animate()
+                animation.start()
                 dialogPulsa.visibility = View.GONE
             }
             else{
                 iv_pulsa_down.setImageResource(R.drawable.ic_keyboard_arrow_up_black_24dp)
+                val animation = AnimationUtils.loadAnimation(applicationContext, R.anim.down)
+                animation.duration = 300
+                dialogPulsa.animation = animation
+                dialogPulsa.animate()
+                animation.start()
                 dialogPulsa.visibility = View.VISIBLE
             }
         }

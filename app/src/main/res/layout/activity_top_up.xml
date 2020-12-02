@@ -114,7 +114,7 @@
                             android:id="@+id/iv_trasnfer"
                             android:layout_width="30dp"
                             android:layout_height="30dp"
-                            android:src="@drawable/transfer"
+                            android:src="@drawable/transfersmall"
                             app:layout_constraintLeft_toLeftOf="@id/cons_metodebayar"
                             app:layout_constraintTop_toTopOf="@id/cons_metodebayar"/>
                         <TextView

@@ -76,7 +76,6 @@ class InvoiceActivity : AppCompatActivity() {
                         db2.collection("statusBayar").document(userid!!)
                             .update("status", "batal")
                             .addOnSuccessListener { result2 ->
-                                loadPesanan()
                             }
                             .addOnFailureListener { exception ->
                             }
@@ -98,18 +97,12 @@ class InvoiceActivity : AppCompatActivity() {
                         db2.collection("statusBayar").document(userid!!)
                             .update("status", "selesai")
                             .addOnSuccessListener { result2 ->
-                                loadPesanan()
                             }
                             .addOnFailureListener { exception ->
                             }
                     }
-                    "pending" -> {
-                        loadPesanan()
-                    }
-                    else -> {
-                        Toast.makeText(this@InvoiceActivity, "Gagal", Toast.LENGTH_SHORT).show()
-                    }
                 }
+                loadPesanan()
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
@@ -120,6 +113,8 @@ class InvoiceActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         super.onBackPressed()
+        val intent  = Intent(this, AkunActivity::class.java)
+        startActivity(intent)
         finish()
         cdt?.cancel()
     }
@@ -202,7 +197,7 @@ class InvoiceActivity : AppCompatActivity() {
                     }
                     else if(dataPesanan?.status.toString() == "selesai"){
                         invoice_progressbar.visibility = View.VISIBLE
-                        showAlarmNotification("Pembayaran Berhasil", "Selamat! Pembayaran Kamu Berhasil.", 1)
+                        showNotification("Pembayaran Berhasil", "Selamat! Pembayaran Kamu Berhasil.", 1)
                         Toast.makeText(this@InvoiceActivity, "Pembayaran Berhasil", Toast.LENGTH_SHORT).show()
 
                         val data = DataPesanan("kosong",0,dataPesanan?.jumlah,"selesai",0)
@@ -307,7 +302,7 @@ class InvoiceActivity : AppCompatActivity() {
         cdt?.start()
     }
 
-    private fun showAlarmNotification(title: String, message: String, notifId: Int) {
+    private fun showNotification(title: String, message: String, notifId: Int) {
 
         val CHANNEL_ID = "Channel_01"
         val CHANNEL_NAME = "KursusKu channel"
@@ -319,7 +314,7 @@ class InvoiceActivity : AppCompatActivity() {
 
         val notificationManager = applicationContext.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
         val builder = NotificationCompat.Builder(this, CHANNEL_ID)
-            .setSmallIcon(R.drawable.logokursusku)
+            .setSmallIcon(R.drawable.logokursuskusmall)
             .setContentTitle(title)
             .setContentText(message)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)

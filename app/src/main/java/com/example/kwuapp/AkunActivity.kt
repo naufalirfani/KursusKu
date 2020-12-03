@@ -24,7 +24,7 @@ import kotlin.random.Random
 @Suppress("DEPRECATION")
 class AkunActivity : AppCompatActivity(){
 
-    lateinit var userDetail: UserDetail
+    private lateinit var userDetail: UserDetail
     private lateinit var auth: FirebaseAuth
     private var userId: String = ""
     private lateinit var dbReference: DatabaseReference

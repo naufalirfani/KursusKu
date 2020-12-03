@@ -6,12 +6,14 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.util.DisplayMetrics
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.google.firebase.firestore.FirebaseFirestore
@@ -90,6 +92,13 @@ class KeranjangActivity : AppCompatActivity() {
         rv_keranjang.layoutManager = LinearLayoutManager(this)
         rv_keranjang.adapter = adapter
 
+        btn_keranajng_bayar.setOnClickListener {
+            val intent = Intent(this, InvoiceBayarActivity::class.java)
+            intent.putExtra("totalHarga", tv_keranjang_totalharga.text)
+            startActivity(intent)
+            finish()
+        }
+
     }
 
     override fun onBackPressed() {
@@ -115,10 +124,37 @@ class KeranjangActivity : AppCompatActivity() {
                         tv_keranjang_kosong2.visibility = View.VISIBLE
                     }
                 }
+                if(namaKursus.isEmpty()){
+                    keranjang_progressbar.visibility = View.GONE
+                    keranjang_cons_utama.setBackgroundColor(resources.getColor((R.color.white)))
+                    iv_keranjang_kosong.visibility = View.VISIBLE
+                    tv_keranjang_kosong.visibility = View.VISIBLE
+                    tv_keranjang_kosong2.visibility = View.VISIBLE
+                }
                 loadKursus(namaKursus)
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
+                keranjang_progressbar.visibility = View.GONE
+                val snackBar = Snackbar.make(
+                    currentFocus!!, "    Connection Failure",
+                    Snackbar.LENGTH_INDEFINITE
+                )
+                val snackBarView = snackBar.view
+                snackBarView.setBackgroundColor(Color.BLACK)
+                val textView = snackBarView.findViewById<TextView>(R.id.snackbar_text)
+                textView.setTextColor(Color.WHITE)
+                textView.textSize = 16F
+                textView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.warning, 0, 0, 0)
+                val snack_action_view = snackBarView.findViewById<Button>(R.id.snackbar_action)
+                snack_action_view.setTextColor(Color.YELLOW)
+
+                // Set an action for snack bar
+                snackBar.setAction("Retry") {
+                    loadKeranjang()
+
+                }
+                snackBar.show()
             }
         }
         dbReference.addValueEventListener(postListener)

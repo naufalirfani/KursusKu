@@ -28,6 +28,7 @@ class RVAKeranjangList(private val context: Context?,
     private val mData = ArrayList<DataKursus>()
     private val dataKursus = ArrayList<DataKeranjang>()
     private lateinit var dbReference: DatabaseReference
+    private var isChecked: Boolean = false
     fun setData(items: ArrayList<DataKursus>, items2: ArrayList<DataKeranjang>) {
         mData.clear()
         mData.addAll(items)
@@ -62,6 +63,7 @@ class RVAKeranjangList(private val context: Context?,
         holder.view.tv_item_keranjang_jumlah.text = keranjang.jumlah.toString()
 
         if (kursus.nama == kursusDibeli){
+            isChecked = true
             holder.view.cb_item_keranjang.isChecked = true
             val hargaSebelum = tv_total.text.split("p")
             val hargaSebelumFix = hargaSebelum[1].replace(".", "").toInt()
@@ -85,6 +87,23 @@ class RVAKeranjangList(private val context: Context?,
                 val dataKeranjang = DataKeranjang(kursus.nama, keranjang.jumlah?.plus(1))
                 dbReference.child(userId).child(kursus.nama).setValue(dataKeranjang)
             }
+
+            if (isChecked){
+                val hargaSebelum = tv_total.text.split("p")
+                val hargaSebelumFix = hargaSebelum[1].replace(".", "").toInt()
+                val hargaKursus = 29900
+                val totalHarga = hargaSebelumFix + hargaKursus
+                if(totalHarga.toString().length > 3){
+                    var x = totalHarga.toString()
+                    x = x.substring(0, x.length-3) + "." + x.substring(x.length -3, x.length)
+                    val textHarga = "Rp${x}"
+                    tv_total.text = textHarga
+                }
+                else{
+                    val textHarga = "Rp${totalHarga}"
+                    tv_total.text = textHarga
+                }
+            }
         }
 
         holder.view.iv_item_keranjang_remove.setOnClickListener {
@@ -93,10 +112,28 @@ class RVAKeranjangList(private val context: Context?,
                 val dataKeranjang = DataKeranjang(kursus.nama, keranjang.jumlah?.minus(1))
                 dbReference.child(userId).child(kursus.nama).setValue(dataKeranjang)
             }
+
+            if (isChecked){
+                val hargaSebelum = tv_total.text.split("p")
+                val hargaSebelumFix = hargaSebelum[1].replace(".", "").toInt()
+                val hargaKursus = 29900
+                val totalHarga = hargaSebelumFix - hargaKursus
+                if(totalHarga.toString().length > 3){
+                    var x = totalHarga.toString()
+                    x = x.substring(0, x.length-3) + "." + x.substring(x.length -3, x.length)
+                    val textHarga = "Rp${x}"
+                    tv_total.text = textHarga
+                }
+                else{
+                    val textHarga = "Rp${totalHarga}"
+                    tv_total.text = textHarga
+                }
+            }
         }
 
         holder.view.cb_item_keranjang.setOnCheckedChangeListener { buttonView, isChecked ->
             inisiasiTotalharga(isChecked, keranjang.jumlah)
+            this.isChecked = isChecked
         }
 
         holder.view.tv_item_keranjang_ubah.setOnClickListener {
@@ -125,6 +162,22 @@ class RVAKeranjangList(private val context: Context?,
         }
 
         holder.view.btn_item_keranjang_hapus.setOnClickListener {
+            if (isChecked){
+                val hargaSebelum = tv_total.text.split("p")
+                val hargaSebelumFix = hargaSebelum[1].replace(".", "").toInt()
+                val hargaKursus = 29900
+                val totalHarga = hargaSebelumFix - (hargaKursus * keranjang.jumlah!!)
+                if(totalHarga.toString().length > 3){
+                    var x = totalHarga.toString()
+                    x = x.substring(0, x.length-3) + "." + x.substring(x.length -3, x.length)
+                    val textHarga = "Rp${x}"
+                    tv_total.text = textHarga
+                }
+                else{
+                    val textHarga = "Rp${totalHarga}"
+                    tv_total.text = textHarga
+                }
+            }
             dbReference.child(userId).child(kursus.nama).removeValue()
         }
 

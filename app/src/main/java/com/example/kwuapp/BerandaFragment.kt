@@ -3,6 +3,7 @@ package com.example.kwuapp
 
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,6 +18,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout.OnRefreshListener
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.fragment_beranda.*
+import java.lang.Exception
 
 @Suppress("DEPRECATION")
 class BerandaFragment : Fragment() {
@@ -80,14 +82,20 @@ class BerandaFragment : Fragment() {
                     View.VISIBLE
                 }
                 else {
-                    View.GONE
+                    View.INVISIBLE
                 }
                 btn_back_to_top.visibility = visibility
+
+
 
                 if(btn_back_to_top.visibility == View.VISIBLE){
                     val handler = Handler()
                     handler.postDelayed(Runnable { // Do something after 5s = 5000ms
-                        btn_back_to_top.visibility = View.GONE
+                        try {
+                            btn_back_to_top.visibility = View.INVISIBLE
+                        }
+                        catch (e:Exception){
+                        }
                     }, 4000)
                 }
 
@@ -110,7 +118,7 @@ class BerandaFragment : Fragment() {
                     btn_back_to_top.setOnClickListener{
                         smoothScroller.targetPosition = dataKursus.size
                         (mRecyclerView1.layoutManager as GridLayoutManager).startSmoothScroll(smoothScroller)
-                        btn_back_to_top.visibility = View.GONE
+                        btn_back_to_top.visibility = View.INVISIBLE
                     }
                 }
                 else if(dy < 0){
@@ -129,7 +137,7 @@ class BerandaFragment : Fragment() {
                     btn_back_to_top.setOnClickListener{
                         smoothScroller.targetPosition = 0
                         (mRecyclerView1.layoutManager as GridLayoutManager).startSmoothScroll(smoothScroller)
-                        btn_back_to_top.visibility = View.GONE
+                        btn_back_to_top.visibility = View.INVISIBLE
                     }
                 }
             }

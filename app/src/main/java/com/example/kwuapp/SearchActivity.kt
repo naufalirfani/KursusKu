@@ -3,8 +3,12 @@ package com.example.kwuapp
 import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
+import android.util.DisplayMetrics
 import android.util.Log
+import android.util.TypedValue
+import android.view.KeyEvent
 import android.view.View
+import android.view.ViewTreeObserver.OnGlobalLayoutListener
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
@@ -26,16 +30,17 @@ import kotlinx.android.synthetic.main.activity_search.*
 @Suppress("DEPRECATION")
 class SearchActivity : AppCompatActivity() {
 
-    var dataKursus = ArrayList<DataKursus>()
-    val search = Search()
+    private var dataKursus = ArrayList<DataKursus>()
+    private val search = Search()
     private lateinit var dbReference: DatabaseReference
     private lateinit var etSearch: EditText
     private var listSearch: ArrayList<String> = arrayListOf()
     private var listSearch2: ArrayList<String> = arrayListOf()
     private var listSearchKategori = ArrayList<DataKursus>()
     private var listKosong: ArrayList<String> = arrayListOf()
-    var kataSearch: String? = null
-    var iterator: Int = 0
+    private var kataSearch: String? = null
+    private var iterator: Int = 0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
@@ -59,12 +64,30 @@ class SearchActivity : AppCompatActivity() {
         etSearch = findViewById(R.id.search_et)
         etSearch.setOnEditorActionListener(OnEditorActionListener { v, actionId, event ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                etSearch.isCursorVisible = false
                 perfomSearch()
                 return@OnEditorActionListener true
             }
             false
         })
 
+        etSearch.setOnClickListener { etSearch.isCursorVisible = true }
+
+        val searchcontext = this
+        val activityRootView: View = findViewById(R.id.search_root)
+        activityRootView.viewTreeObserver
+            .addOnGlobalLayoutListener(object : OnGlobalLayoutListener {
+                override fun onGlobalLayout() {
+                    val heightDiff =
+                        activityRootView.rootView.height - activityRootView.height
+                    if (heightDiff > dpToPx(searchcontext, 0F)) { // if more than 200 dp, it's probably a keyboard...
+                        etSearch.isCursorVisible = false
+                    }
+                    if (heightDiff > dpToPx(searchcontext, 200F)) { // if more than 200 dp, it's probably a keyboard...
+                        etSearch.isCursorVisible = true
+                    }
+                }
+            })
 
         btn_search_clear.setOnClickListener {
             listSearch.clear()
@@ -85,6 +108,11 @@ class SearchActivity : AppCompatActivity() {
     override fun onBackPressed() {
         super.onBackPressed()
         finish()
+    }
+
+    fun dpToPx(context: Context, valueInDp: Float): Float {
+        val metrics: DisplayMetrics = context.resources.displayMetrics
+        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, valueInDp, metrics)
     }
 
     fun perfomSearch(){
@@ -124,10 +152,12 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun closeKeyBoard() {
+
         val view = this.currentFocus
         if (view != null) {
             val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             imm.hideSoftInputFromWindow(view.windowToken, 0)
+
         }
     }
 

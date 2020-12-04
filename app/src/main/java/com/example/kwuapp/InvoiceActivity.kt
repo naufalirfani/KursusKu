@@ -5,6 +5,7 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.media.RingtoneManager
 import android.os.Build
 import android.os.Bundle
 import android.os.CountDownTimer
@@ -14,6 +15,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.google.firebase.database.*
 import com.google.firebase.firestore.FirebaseFirestore
@@ -197,7 +199,7 @@ class InvoiceActivity : AppCompatActivity() {
                     }
                     else if(dataPesanan?.status.toString() == "selesai"){
                         invoice_progressbar.visibility = View.VISIBLE
-                        showNotification("Pembayaran Berhasil", "Selamat! Pembayaran Kamu Berhasil.", 1)
+                        showNotification("Pembayaran Berhasil", "Selamat! Pembayaran Kamu Berhasil. Yuk, telusuri kursus keinginanmu!", 1)
                         Toast.makeText(this@InvoiceActivity, "Pembayaran Berhasil", Toast.LENGTH_SHORT).show()
 
                         val data = DataPesanan("kosong",0,dataPesanan?.jumlah,"selesai",0)
@@ -312,29 +314,35 @@ class InvoiceActivity : AppCompatActivity() {
             }
         val pendingIntent: PendingIntent = PendingIntent.getActivity(this, 0, intent, 0)
 
-        val notificationManager = applicationContext.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+        val notificationManagerCompat = this.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
         val builder = NotificationCompat.Builder(this, CHANNEL_ID)
             .setSmallIcon(R.drawable.logokursuskusmall)
             .setContentTitle(title)
             .setContentText(message)
-            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setColor(ContextCompat.getColor(this, android.R.color.transparent))
+            .setVibrate(longArrayOf(1000, 1000, 1000, 1000, 1000))
+            .setSound(alarmSound)
             .setContentIntent(pendingIntent)
             .setAutoCancel(true)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val importance = NotificationManager.IMPORTANCE_DEFAULT
-            val channel = NotificationChannel(CHANNEL_ID, CHANNEL_NAME, importance).apply {
-                description = message
-            }
-            val notificationManagerCompat: NotificationManager =
-                getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+            val channel = NotificationChannel(CHANNEL_ID,
+                CHANNEL_NAME,
+                NotificationManager.IMPORTANCE_DEFAULT)
+
+            channel.enableVibration(true)
+            channel.vibrationPattern = longArrayOf(1000, 1000, 1000, 1000, 1000)
+
+            builder.setChannelId(CHANNEL_ID)
+
             notificationManagerCompat.createNotificationChannel(channel)
         }
 
-        with(NotificationManagerCompat.from(this)) {
-            // notificationId is a unique int for each notification that you must define
-            notify(notifId, builder.build())
-        }
+        val notification = builder.build()
+
+        notificationManagerCompat.notify(notifId, notification)
 
     }
 }

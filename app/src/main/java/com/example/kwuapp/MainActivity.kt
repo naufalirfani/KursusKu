@@ -1,34 +1,31 @@
 package com.example.kwuapp
 
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.app.PendingIntent
-import android.content.Context
 import android.content.Intent
 import android.graphics.Color
-import android.os.Build
 import android.os.Bundle
 import android.os.Handler
-import android.text.TextUtils
-import android.util.DisplayMetrics
 import android.util.Log
 import android.view.View
-import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.NotificationCompat
-import androidx.core.app.NotificationManagerCompat
+import androidx.lifecycle.Observer
 import androidx.viewpager.widget.ViewPager
+import androidx.work.*
+import androidx.work.Data.Builder
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DecodeFormat
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.material.tabs.TabLayout
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
+import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.android.synthetic.main.activity_main.*
+import java.util.concurrent.TimeUnit
 import kotlin.random.Random
 
 
@@ -55,6 +52,7 @@ class MainActivity : AppCompatActivity() {
     private var doubleBackToExitPressedOnce = false
     private val TIME_DELAY = 2000
     private val back_pressed: Long = 0
+    private lateinit var periodicWorkRequest: PeriodicWorkRequest
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -105,6 +103,7 @@ class MainActivity : AppCompatActivity() {
             userId = id
             main_progressBar.visibility = View.VISIBLE
             loadUser()
+            getTokenFCM()
         }
         else{
             main_progressBar.visibility = View.GONE
@@ -123,8 +122,36 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+
+    override fun onDestroy() {
+        super.onDestroy()
+        startPeriodicTask()
+    }
+
+
+    fun getTokenFCM() {
+        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                return@OnCompleteListener
+            }
+
+            // Get new FCM registration token
+            val token = task.result
+
+            val msg = token
+            val db2 = FirebaseFirestore.getInstance()
+            db2.collection("users2").document(userId)
+                .update("isiKeranjang", msg)
+                .addOnSuccessListener { result2 ->
+                }
+                .addOnFailureListener { exception ->
+                }
+        })
+    }
+
     override fun onResume() {
         super.onResume()
+        loadKursus()
         auth = FirebaseAuth.getInstance()
         val user = auth.currentUser
         if (user != null) {
@@ -219,5 +246,90 @@ class MainActivity : AppCompatActivity() {
                 main_progressBar.visibility = View.GONE
                 Toast.makeText(this, "Connection error", Toast.LENGTH_SHORT).show()
             }
+    }
+
+    private fun loadKursus(){
+        main_progressBar.visibility = View.VISIBLE
+        randomAngka()
+        val kategori1 = kategori[angka1]
+        val kategori2 = kategori[angka2]
+        val db = FirebaseFirestore.getInstance()
+        db.collection("kursus")
+            .orderBy("dilihat", Query.Direction.DESCENDING)
+            .get()
+            .addOnSuccessListener { result ->
+                arrayList?.clear()
+                arrayList2?.clear()
+                arrayList3?.clear()
+                for (document in result) {
+                    arrayList?.add(DataKursus(document.getString("deskripsi")!!,
+                        document.getString("dilihat")!!,
+                        document.getString("gambar")!!,
+                        document.getString("harga")!!,
+                        document.getString("kategori")!!,
+                        document.getString("nama")!!,
+                        document.getString("pembuat")!!,
+                        document.getString("pengguna")!!,
+                        document.getString("rating")!!,
+                        document.getString("remaining")!!))
+                }
+
+                if(arrayList != null){
+                    for(i in 0 until arrayList!!.size){
+                        if(arrayList!![i].kategori == kategori1){
+                            arrayList2!!.add(arrayList!![i])
+                        }
+                        if(arrayList!![i].kategori == kategori2){
+                            arrayList3!!.add(arrayList!![i])
+                        }
+                    }
+
+                    main_progressBar.visibility = View.GONE
+                    val pagerAdapter = PagerAdapter(supportFragmentManager, arrayList!!, arrayList2!!, arrayList3!!,
+                        kategori1,
+                        kategori2
+                    )
+                    val pager = findViewById<View>(R.id.pager) as ViewPager
+                    pager.adapter = pagerAdapter
+                    tabLayout1.setupWithViewPager(pager)
+                }
+                else{
+                    loadKursus()
+                }
+            }
+            .addOnFailureListener { exception ->
+                Log.d("Error", "Error getting documents: ", exception)
+                Toast.makeText(this, "Koneksi error", Toast.LENGTH_SHORT).show()
+            }
+    }
+
+    fun randomAngka(){
+        angka1 = Random.nextInt(0,5)
+        angka2 = Random.nextInt(0,5)
+        if(angka1 == angka2){
+            randomAngka()
+        }
+    }
+
+    private fun startPeriodicTask() {
+        val data = Builder()
+            .build()
+        val constraints = Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .build()
+        periodicWorkRequest = PeriodicWorkRequest.Builder(MyWorker::class.java, 5, TimeUnit.MINUTES)
+            .setInputData(data)
+            .setConstraints(constraints)
+            .build()
+        WorkManager.getInstance().enqueue(periodicWorkRequest)
+        WorkManager.getInstance().getWorkInfoByIdLiveData(periodicWorkRequest.id).observe(this@MainActivity,
+            Observer<WorkInfo> { workInfo ->
+                val status = workInfo.state.name
+                Toast.makeText(this@MainActivity, status, Toast.LENGTH_SHORT).show()
+            })
+    }
+
+    private fun cancelPeriodicTask() {
+        WorkManager.getInstance().cancelWorkById(periodicWorkRequest.id)
     }
 }

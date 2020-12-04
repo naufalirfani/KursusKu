@@ -17,6 +17,7 @@ import com.bumptech.glide.request.target.Target
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import kotlinx.android.synthetic.main.activity_akun.*
 import kotlin.random.Random
 
@@ -236,6 +237,7 @@ class AkunActivity : AppCompatActivity(){
         val kategori2 = kategori[angka2]
         val db = FirebaseFirestore.getInstance()
         db.collection("kursus")
+            .orderBy("dilihat", Query.Direction.DESCENDING)
             .get()
             .addOnSuccessListener { result ->
                 arrayList.clear()

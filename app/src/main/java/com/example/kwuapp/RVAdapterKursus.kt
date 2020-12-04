@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.list_kursus.view.*
 
 class RVAdapterKursus(private val context: Context?, private val listKursus: ArrayList<DataKursus>) : RecyclerView.Adapter<RVAdapterKursus.Holder>() {
@@ -62,6 +63,14 @@ class RVAdapterKursus(private val context: Context?, private val listKursus: Arr
         )
 
         holder.view.cvList.setOnClickListener{
+            val dilihat= kursus.dilihat.toInt() + 1
+            val db2 = FirebaseFirestore.getInstance()
+            db2.collection("kursus").document(kursus.nama)
+                .update("dilihat", dilihat.toString())
+                .addOnSuccessListener { result2 ->
+                }
+                .addOnFailureListener { exception ->
+                }
             val intent = Intent(context, DetailActivity::class.java)
             intent.putExtra("kursus", data)
             context?.startActivity(intent)

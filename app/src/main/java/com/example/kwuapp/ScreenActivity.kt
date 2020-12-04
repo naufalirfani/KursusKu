@@ -12,6 +12,7 @@ import android.widget.Toast
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import kotlinx.android.synthetic.main.activity_screen.*
 import kotlin.random.Random
 
@@ -42,6 +43,7 @@ class ScreenActivity : AppCompatActivity() {
         val kategori2 = kategori[angka2]
         val db = FirebaseFirestore.getInstance()
         db.collection("kursus")
+            .orderBy("dilihat", Query.Direction.DESCENDING)
             .get()
             .addOnSuccessListener { result ->
                 arrayList.clear()

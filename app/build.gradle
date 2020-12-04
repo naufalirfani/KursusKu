@@ -37,6 +37,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-auth:16.0.5'
     implementation 'com.google.firebase:firebase-database:16.0.4'
     implementation 'com.google.firebase:firebase-firestore:17.1.2'
+    implementation 'com.google.firebase:firebase-messaging:10.2.6'
 
     implementation 'com.android.support:design:30.0.0'
     implementation "androidx.recyclerview:recyclerview:1.1.0"
@@ -52,4 +53,5 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
     implementation 'com.facebook.android:facebook-android-sdk:4.42.0'
     implementation group: 'io.grpc', name: 'protoc-gen-grpc-kotlin', version: '0.2.1', ext: 'pom'
+    implementation "android.arch.work:work-runtime:1.0.1"
 }

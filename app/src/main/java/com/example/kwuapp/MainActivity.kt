@@ -122,13 +122,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-
-    override fun onDestroy() {
-        super.onDestroy()
-        startPeriodicTask()
-    }
-
-
     fun getTokenFCM() {
         FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
             if (!task.isSuccessful) {
@@ -309,27 +302,5 @@ class MainActivity : AppCompatActivity() {
         if(angka1 == angka2){
             randomAngka()
         }
-    }
-
-    private fun startPeriodicTask() {
-        val data = Builder()
-            .build()
-        val constraints = Constraints.Builder()
-            .setRequiredNetworkType(NetworkType.CONNECTED)
-            .build()
-        periodicWorkRequest = PeriodicWorkRequest.Builder(MyWorker::class.java, 5, TimeUnit.MINUTES)
-            .setInputData(data)
-            .setConstraints(constraints)
-            .build()
-        WorkManager.getInstance().enqueue(periodicWorkRequest)
-        WorkManager.getInstance().getWorkInfoByIdLiveData(periodicWorkRequest.id).observe(this@MainActivity,
-            Observer<WorkInfo> { workInfo ->
-                val status = workInfo.state.name
-                Toast.makeText(this@MainActivity, status, Toast.LENGTH_SHORT).show()
-            })
-    }
-
-    private fun cancelPeriodicTask() {
-        WorkManager.getInstance().cancelWorkById(periodicWorkRequest.id)
     }
 }

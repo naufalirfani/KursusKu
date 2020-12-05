@@ -126,12 +126,28 @@ class AkunActivity : AppCompatActivity(){
         }
         tv_akun_username.text = userDetail.username
         tv_akun_email.text = userDetail.email
-        if(userDetail.saldo.length > 3){
+        if(userDetail.saldo.length in 4..6){
             var x = userDetail.saldo
             x = x.substring(0, x.length-3) + "." + x.substring(x.length -3, x.length)
             val textHarga = "Rp $x"
             tv_akun_saldo.text = textHarga
         }
+        else if(userDetail.saldo.length in 7..9){
+            var x = userDetail.saldo
+            x = x.substring(0, x.length-3) + "." + x.substring(x.length -3, x.length)
+            x = x.substring(0, x.length-7) + "." + x.substring(x.length -7, x.length)
+            val textHarga = "Rp $x"
+            tv_akun_saldo.text = textHarga
+        }
+        else
+            if(userDetail.saldo.length in 10..12){
+                var x = userDetail.saldo
+                x = x.substring(0, x.length-3) + "." + x.substring(x.length -3, x.length)
+                x = x.substring(0, x.length-7) + "." + x.substring(x.length -7, x.length)
+                x = x.substring(0, x.length-11) + "." + x.substring(x.length -11, x.length)
+                val textHarga = "Rp $x"
+                tv_akun_saldo.text = textHarga
+            }
         else{
             val saldo = "Rp ${userDetail.saldo}"
             tv_akun_saldo.text = saldo

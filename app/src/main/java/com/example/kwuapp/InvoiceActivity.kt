@@ -14,8 +14,10 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
-import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
+import androidx.work.PeriodicWorkRequest
+import androidx.lifecycle.Observer
+import androidx.work.*
 import com.bumptech.glide.Glide
 import com.google.firebase.database.*
 import com.google.firebase.firestore.FirebaseFirestore
@@ -34,6 +36,8 @@ class InvoiceActivity : AppCompatActivity() {
     private var remainWaktu: Long = 0
     private var cdt: CountDownTimer? = null
     private lateinit var dbReference: DatabaseReference
+    private lateinit var periodicWorkRequest: PeriodicWorkRequest
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_invoice)
@@ -111,6 +115,8 @@ class InvoiceActivity : AppCompatActivity() {
             }
         }
         dbReference.addValueEventListener(postListener)
+
+        startPeriodicTask()
     }
 
     override fun onBackPressed() {
@@ -198,6 +204,7 @@ class InvoiceActivity : AppCompatActivity() {
                         timer(remainWaktu)
                     }
                     else if(dataPesanan?.status.toString() == "selesai"){
+                        cancelPeriodicTask()
                         invoice_progressbar.visibility = View.VISIBLE
                         showNotification("Pembayaran Berhasil", "Selamat! Pembayaran Kamu Berhasil. Yuk, telusuri kursus keinginanmu!", 1)
                         Toast.makeText(this@InvoiceActivity, "Pembayaran Berhasil", Toast.LENGTH_SHORT).show()
@@ -344,5 +351,28 @@ class InvoiceActivity : AppCompatActivity() {
 
         notificationManagerCompat.notify(notifId, notification)
 
+    }
+
+    private fun startPeriodicTask() {
+        val data = Data.Builder()
+            .putString(MyWorker.EXTRA_UID, userid)
+            .build()
+        val constraints = Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .build()
+        periodicWorkRequest = PeriodicWorkRequest.Builder(MyWorker::class.java, 5, TimeUnit.MINUTES)
+            .setInputData(data)
+            .setConstraints(constraints)
+            .build()
+        WorkManager.getInstance().enqueue(periodicWorkRequest)
+        WorkManager.getInstance().getWorkInfoByIdLiveData(periodicWorkRequest.id).observe(this,
+            Observer<WorkInfo> { workInfo ->
+                val status = workInfo.state.name
+                Toast.makeText(this, status, Toast.LENGTH_SHORT).show()
+            })
+    }
+
+    private fun cancelPeriodicTask() {
+        WorkManager.getInstance().cancelWorkById(periodicWorkRequest.id)
     }
 }

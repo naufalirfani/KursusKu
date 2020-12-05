@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_detail.*
@@ -34,6 +35,7 @@ class DetailActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
     private lateinit var dbReference: DatabaseReference
     private lateinit var dbReference2: DatabaseReference
+    private var user: FirebaseUser? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,15 +51,11 @@ class DetailActivity : AppCompatActivity() {
         Glide.with(this).load(R.drawable.bouncy_balls).into(datail_progressBar)
 
         auth = FirebaseAuth.getInstance()
-        val user = auth.currentUser
+        user = auth.currentUser
         if (user != null) {
-            userId = user.uid
+            userId = user!!.uid
             dbReference = FirebaseDatabase.getInstance().getReference("keranjang").child(userId).child(kursus.nama)
             tambahKeKeranjang(this)
-        }
-        else{
-            val intent = Intent(this, SignInActivity::class.java)
-            startActivity(intent)
         }
 
         btn_detail_back.setOnClickListener {onBackPressed()}
@@ -86,10 +84,6 @@ class DetailActivity : AppCompatActivity() {
         if (user != null) {
             userId = user.uid
             tambahKeKeranjang(this)
-        }
-        else{
-            val intent = Intent(this, SignInActivity::class.java)
-            startActivity(intent)
         }
     }
 
@@ -152,47 +146,73 @@ class DetailActivity : AppCompatActivity() {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 val hasil = dataSnapshot.getValue(DataKeranjang::class.java)
                 if(hasil == null){
+
                     btn_detail_addtokeranjang.setOnClickListener {
-                        val dataKeranjang = DataKeranjang(kursus.nama,1)
-                        dbReference2.child(userId).child(kursus.nama).setValue(dataKeranjang)
-                        cv_addtochart.visibility = View.VISIBLE
-                        val expandIn: Animation = AnimationUtils.loadAnimation(context, R.anim.expand_in)
-                        cv_addtochart.startAnimation(expandIn)
-                        val handler = Handler()
-                        handler.postDelayed({ // Do something after 5s = 5000ms
-                            cv_addtochart.visibility = View.GONE
-                        }, 2500)
+                        if (user != null) {
+                            val dataKeranjang = DataKeranjang(kursus.nama,1)
+                            dbReference2.child(userId).child(kursus.nama).setValue(dataKeranjang)
+                            cv_addtochart.visibility = View.VISIBLE
+                            val expandIn: Animation = AnimationUtils.loadAnimation(context, R.anim.expand_in)
+                            cv_addtochart.startAnimation(expandIn)
+                            val handler = Handler()
+                            handler.postDelayed({ // Do something after 5s = 5000ms
+                                cv_addtochart.visibility = View.GONE
+                            }, 2500)
+                        }
+                        else{
+                            val intent = Intent(this@DetailActivity, SignInActivity::class.java)
+                            startActivity(intent)
+                        }
+
                     }
 
                     btn_detail_bayar.setOnClickListener {
-                        val dataKeranjang = DataKeranjang(kursus.nama,1)
-                        dbReference2.child(userId).child(kursus.nama).setValue(dataKeranjang)
-                        val intent = Intent(context, KeranjangActivity::class.java)
-                        intent.putExtra("berasalDari", "DetailActivity")
-                        intent.putExtra("kursusDibeli", kursus.nama)
-                        startActivity(intent)
+                        if (user != null) {
+                            val dataKeranjang = DataKeranjang(kursus.nama,1)
+                            dbReference2.child(userId).child(kursus.nama).setValue(dataKeranjang)
+                            val intent = Intent(context, KeranjangActivity::class.java)
+                            intent.putExtra("berasalDari", "DetailActivity")
+                            intent.putExtra("kursusDibeli", kursus.nama)
+                            startActivity(intent)
+                        }
+                        else{
+                            val intent = Intent(this@DetailActivity, SignInActivity::class.java)
+                            startActivity(intent)
+                        }
                     }
                 }
                 else{
                     btn_detail_addtokeranjang.setOnClickListener {
-                        val dataKeranjang = DataKeranjang(kursus.nama, hasil.jumlah?.plus(1))
-                        dbReference2.child(userId).child(kursus.nama).setValue(dataKeranjang)
-                        cv_addtochart.visibility = View.VISIBLE
-                        val expandIn: Animation = AnimationUtils.loadAnimation(context, R.anim.expand_in)
-                        cv_addtochart.startAnimation(expandIn)
-                        val handler = Handler()
-                        handler.postDelayed({ // Do something after 5s = 5000ms
-                            cv_addtochart.visibility = View.GONE
-                        }, 2500)
+                        if (user != null) {
+                            val dataKeranjang = DataKeranjang(kursus.nama, hasil.jumlah?.plus(1))
+                            dbReference2.child(userId).child(kursus.nama).setValue(dataKeranjang)
+                            cv_addtochart.visibility = View.VISIBLE
+                            val expandIn: Animation = AnimationUtils.loadAnimation(context, R.anim.expand_in)
+                            cv_addtochart.startAnimation(expandIn)
+                            val handler = Handler()
+                            handler.postDelayed({ // Do something after 5s = 5000ms
+                                cv_addtochart.visibility = View.GONE
+                            }, 2500)
+                        }
+                        else{
+                            val intent = Intent(this@DetailActivity, SignInActivity::class.java)
+                            startActivity(intent)
+                        }
                     }
 
                     btn_detail_bayar.setOnClickListener {
-                        val dataKeranjang = DataKeranjang(kursus.nama, hasil.jumlah?.plus(1))
-                        dbReference2.child(userId).child(kursus.nama).setValue(dataKeranjang)
-                        val intent = Intent(context, KeranjangActivity::class.java)
-                        intent.putExtra("berasalDari", "DetailActivity")
-                        intent.putExtra("kursusDibeli", kursus.nama)
-                        startActivity(intent)
+                        if (user != null) {
+                            val dataKeranjang = DataKeranjang(kursus.nama, hasil.jumlah?.plus(1))
+                            dbReference2.child(userId).child(kursus.nama).setValue(dataKeranjang)
+                            val intent = Intent(context, KeranjangActivity::class.java)
+                            intent.putExtra("berasalDari", "DetailActivity")
+                            intent.putExtra("kursusDibeli", kursus.nama)
+                            startActivity(intent)
+                        }
+                        else{
+                            val intent = Intent(this@DetailActivity, SignInActivity::class.java)
+                            startActivity(intent)
+                        }
                     }
                 }
             }

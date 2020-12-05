@@ -119,6 +119,9 @@ class SignUpActivity : AppCompatActivity() {
                             et_daftar_hp.text.toString())
                         db.collection("users2").document(user2?.uid!!).set(userDetail)
 
+                        val dataBayar = DataPesanan("kosong", 0,0,"kosong",0)
+                        db.collection("statusBayar").document(user2.uid).set(dataBayar)
+
                         Toast.makeText(this, "Terimakasih telah mendaftar", Toast.LENGTH_SHORT).show()
                         val handler = Handler()
                         handler.postDelayed(Runnable { // Do something after 5s = 5000ms

@@ -29,6 +29,7 @@ class RVAKeranjangList(private val context: Context?,
     private val dataKursus = ArrayList<DataKeranjang>()
     private lateinit var dbReference: DatabaseReference
     private var isChecked: Boolean = false
+
     fun setData(items: ArrayList<DataKursus>, items2: ArrayList<DataKeranjang>) {
         mData.clear()
         mData.addAll(items)
@@ -68,17 +69,8 @@ class RVAKeranjangList(private val context: Context?,
             val hargaSebelum = tv_total.text.split("p")
             val hargaSebelumFix = hargaSebelum[1].replace(".", "").toInt()
             val hargaKursus = 29900
-            val totalHarga = hargaSebelumFix + hargaKursus
-            if(totalHarga.toString().length > 3){
-                var x = totalHarga.toString()
-                x = x.substring(0, x.length-3) + "." + x.substring(x.length -3, x.length)
-                val textHarga = "Rp${x}"
-                tv_total.text = textHarga
-            }
-            else{
-                val textHarga = "Rp${totalHarga}"
-                tv_total.text = textHarga
-            }
+            val totalHarga = hargaSebelumFix + (hargaKursus * keranjang.jumlah!!)
+            TambahTitikdiHarga(totalHarga, keranjang.jumlah!!)
         }
 
         holder.view.iv_item_keranjang_add.setOnClickListener {
@@ -93,16 +85,7 @@ class RVAKeranjangList(private val context: Context?,
                 val hargaSebelumFix = hargaSebelum[1].replace(".", "").toInt()
                 val hargaKursus = 29900
                 val totalHarga = hargaSebelumFix + hargaKursus
-                if(totalHarga.toString().length > 3){
-                    var x = totalHarga.toString()
-                    x = x.substring(0, x.length-3) + "." + x.substring(x.length -3, x.length)
-                    val textHarga = "Rp${x}"
-                    tv_total.text = textHarga
-                }
-                else{
-                    val textHarga = "Rp${totalHarga}"
-                    tv_total.text = textHarga
-                }
+                TambahTitikdiHarga(totalHarga.toLong(), keranjang.jumlah!!)
             }
         }
 
@@ -118,16 +101,7 @@ class RVAKeranjangList(private val context: Context?,
                 val hargaSebelumFix = hargaSebelum[1].replace(".", "").toInt()
                 val hargaKursus = 29900
                 val totalHarga = hargaSebelumFix - hargaKursus
-                if(totalHarga.toString().length > 3){
-                    var x = totalHarga.toString()
-                    x = x.substring(0, x.length-3) + "." + x.substring(x.length -3, x.length)
-                    val textHarga = "Rp${x}"
-                    tv_total.text = textHarga
-                }
-                else{
-                    val textHarga = "Rp${totalHarga}"
-                    tv_total.text = textHarga
-                }
+                TambahTitikdiHarga(totalHarga.toLong(), keranjang.jumlah!!)
             }
         }
 
@@ -167,16 +141,7 @@ class RVAKeranjangList(private val context: Context?,
                 val hargaSebelumFix = hargaSebelum[1].replace(".", "").toInt()
                 val hargaKursus = 29900
                 val totalHarga = hargaSebelumFix - (hargaKursus * keranjang.jumlah!!)
-                if(totalHarga.toString().length > 3){
-                    var x = totalHarga.toString()
-                    x = x.substring(0, x.length-3) + "." + x.substring(x.length -3, x.length)
-                    val textHarga = "Rp${x}"
-                    tv_total.text = textHarga
-                }
-                else{
-                    val textHarga = "Rp${totalHarga}"
-                    tv_total.text = textHarga
-                }
+                TambahTitikdiHarga(totalHarga, keranjang.jumlah!!)
             }
             dbReference.child(userId).child(kursus.nama).removeValue()
         }
@@ -198,31 +163,41 @@ class RVAKeranjangList(private val context: Context?,
             val hargaSebelumFix = hargaSebelum[1].replace(".", "").toInt()
             val hargaKursus = 29900
             val totalHarga = hargaSebelumFix + (hargaKursus * jumlah!!)
-            if(totalHarga.toString().length > 3){
-                var x = totalHarga.toString()
-                x = x.substring(0, x.length-3) + "." + x.substring(x.length -3, x.length)
-                val textHarga = "Rp${x}"
-                tv_total.text = textHarga
-            }
-            else{
-                val textHarga = "Rp${totalHarga}"
-                tv_total.text = textHarga
-            }
+            TambahTitikdiHarga(totalHarga, jumlah)
         }else{
             val hargaSebelum = tv_total.text.split("p")
             val hargaSebelumFix = hargaSebelum[1].replace(".", "").toInt()
             val hargaKursus = 29900
             val totalHarga = hargaSebelumFix - (hargaKursus * jumlah!!)
-            if(totalHarga.toString().length > 3){
-                var x = totalHarga.toString()
-                x = x.substring(0, x.length-3) + "." + x.substring(x.length -3, x.length)
-                val textHarga = "Rp${x}"
-                tv_total.text = textHarga
-            }
-            else{
-                val textHarga = "Rp${totalHarga}"
-                tv_total.text = textHarga
-            }
+            TambahTitikdiHarga(totalHarga, jumlah)
+        }
+    }
+
+    private fun TambahTitikdiHarga(totalHarga: Long, jumlah: Long?){
+        if(totalHarga.toString().length in 3..6){
+            var x = totalHarga.toString()
+            x = x.substring(0, x.length-3) + "." + x.substring(x.length -3, x.length)
+            val textHarga = "Rp${x}"
+            tv_total.text = textHarga
+        }
+        else if(totalHarga.toString().length in 7..9){
+            var x = totalHarga.toString()
+            x = x.substring(0, x.length-3) + "." + x.substring(x.length -3, x.length)
+            x = x.substring(0, x.length-7) + "." + x.substring(x.length -7, x.length)
+            val textHarga = "Rp${x}"
+            tv_total.text = textHarga
+        }
+        else if(totalHarga.toString().length in 10..12){
+            var x = totalHarga.toString()
+            x = x.substring(0, x.length-3) + "." + x.substring(x.length -3, x.length)
+            x = x.substring(0, x.length-7) + "." + x.substring(x.length -7, x.length)
+            x = x.substring(0, x.length-11) + "." + x.substring(x.length -11, x.length)
+            val textHarga = "Rp${x}"
+            tv_total.text = textHarga
+        }
+        else{
+            val textHarga = "Rp${totalHarga}"
+            tv_total.text = textHarga
         }
     }
 

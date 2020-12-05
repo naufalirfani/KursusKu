@@ -27,7 +27,7 @@ class MessageReceiver : FirebaseMessagingService() {
         super.onMessageReceived(remoteMessage)
         title = remoteMessage.data["title"]
         message = remoteMessage.data["body"]
-        showNotifications()
+//        showNotifications()
     }
 
     private fun showNotifications(){

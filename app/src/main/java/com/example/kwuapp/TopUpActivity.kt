@@ -29,6 +29,7 @@ class TopUpActivity : AppCompatActivity() {
     private var userid: String? = null
     private lateinit var dbReference: DatabaseReference
     private var userDetail: UserDetail? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_top_up)
@@ -257,4 +258,5 @@ class TopUpActivity : AppCompatActivity() {
             }
         }
     }
+
 }

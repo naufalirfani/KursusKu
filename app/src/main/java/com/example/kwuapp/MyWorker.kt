@@ -19,27 +19,27 @@ class MyWorker(context: Context, workerParams: WorkerParameters) : Worker(contex
     private lateinit var dbReference: DatabaseReference
 
     companion object {
-        private val TAG = MyWorker::class.java.simpleName
         const val APP_ID = "YOUR_KEY_HERE"
-        const val EXTRA_CITY = "city"
-        const val NOTIFICATION_ID = 1
+        const val EXTRA_UID = "userid"
+        const val NOTIFICATION_ID = 2
         const val CHANNEL_ID = "channel_01"
-        const val CHANNEL_NAME = "dicoding channel"
+        const val CHANNEL_NAME = "kursusku channel"
     }
     private var resultStatus: Result? = null
 
     override fun doWork(): Result {
-        val result = getCurrentWeather()
+        val datauis = inputData.getString(EXTRA_UID)
+        val result = getCurrentWeather(datauis)
         return result
     }
 
-    private fun getCurrentWeather(): Result {
-        dbReference = FirebaseDatabase.getInstance().getReference("coba")
+    private fun getCurrentWeather(userid: String?): Result {
+        dbReference = FirebaseDatabase.getInstance().getReference("statusBayar").child(userid!!)
         val postListener = object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                for( data in dataSnapshot.children){
-                    val hasil = data.getValue(DataKeranjang::class.java)
-                    showNotification(hasil?.namaKursus!!, hasil.jumlah.toString(), 2)
+                val hasil = dataSnapshot.getValue(DataPesanan::class.java)
+                if(hasil?.status == "selesai"){
+                    showNotification("Pembayaran Berhasil", "Selamat! Pembayaran Kamu Berhasil. Yuk, telusuri kursus keinginanmu!", NOTIFICATION_ID)
                 }
             }
 
@@ -52,9 +52,6 @@ class MyWorker(context: Context, workerParams: WorkerParameters) : Worker(contex
     }
 
     private fun showNotification(title: String, message: String, notifId: Int) {
-
-        val CHANNEL_ID = "Channel_01"
-        val CHANNEL_NAME = "KursusKu channel"
 
         val intent = Intent(applicationContext, AkunActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK

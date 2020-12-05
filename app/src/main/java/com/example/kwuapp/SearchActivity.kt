@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.FirebaseFirestore
@@ -39,7 +40,8 @@ class SearchActivity : AppCompatActivity() {
     private var listSearchKategori = ArrayList<DataKursus>()
     private var listKosong: ArrayList<String> = arrayListOf()
     private var kataSearch: String? = null
-    private var iterator: Int = 0
+    private var userId: String = ""
+    private lateinit var auth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,9 +55,21 @@ class SearchActivity : AppCompatActivity() {
         tv_search_history.visibility = View.VISIBLE
         btn_search_clear.visibility = View.VISIBLE
         btn_search_back.setOnClickListener { onBackPressed() }
-        loadKursus()
         loadSearch()
         menuClick()
+
+        auth = FirebaseAuth.getInstance()
+        val user = auth.currentUser
+        if (user != null) {
+            userId = user.uid
+            loadKursus()
+        }
+        else{
+            search_progressBar.visibility = View.GONE
+            tv_nothing2.visibility = View.VISIBLE
+            val searchkosong = "Tidak ada riwayat pencarian"
+            tv_nothing2.text = searchkosong
+        }
 
         Glide.with(this).load(R.drawable.bouncy_balls).into(search_progressBar)
 
@@ -96,8 +110,10 @@ class SearchActivity : AppCompatActivity() {
             val db = FirebaseFirestore.getInstance()
             val kata = "kosong"
             listKosong.add(kata)
-            val city = DataSearch(kata, listKosong)
-            db.collection("search").document("user1").set(city)
+            if(userId != ""){
+                val city = DataSearch(kata, listKosong)
+                db.collection("search").document(userId).set(city)
+            }
             search_rv2.visibility = View.GONE
             tv_nothing2.visibility = View.VISIBLE
             val searchkosong = "Tidak ada riwayat pencarian"
@@ -147,8 +163,10 @@ class SearchActivity : AppCompatActivity() {
         val db = FirebaseFirestore.getInstance()
         val kata = etSearch.text.toString()
         listSearch.add(kata)
-        val city = DataSearch(kata, listSearch)
-        db.collection("search").document("user1").set(city)
+        if(userId != ""){
+            val city = DataSearch(kata, listSearch)
+            db.collection("search").document(userId).set(city)
+        }
     }
 
     private fun closeKeyBoard() {

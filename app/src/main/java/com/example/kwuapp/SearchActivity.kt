@@ -55,7 +55,6 @@ class SearchActivity : AppCompatActivity() {
         tv_search_history.visibility = View.VISIBLE
         btn_search_clear.visibility = View.VISIBLE
         btn_search_back.setOnClickListener { onBackPressed() }
-        loadSearch()
         menuClick()
 
         auth = FirebaseAuth.getInstance()
@@ -63,6 +62,7 @@ class SearchActivity : AppCompatActivity() {
         if (user != null) {
             userId = user.uid
             loadKursus()
+            loadSearch()
         }
         else{
             search_progressBar.visibility = View.GONE
@@ -233,14 +233,12 @@ class SearchActivity : AppCompatActivity() {
 
     fun loadSearch(){
         val db = FirebaseFirestore.getInstance()
-        db.collection("search")
+        db.collection("search").document(userId)
             .get()
             .addOnSuccessListener { result ->
                 listSearch.clear()
-                for (document in result) {
-                    listSearch = document.get("listSearch") as ArrayList<String>
-                    kataSearch = document.getString("kata")
-                }
+                listSearch = result.get("listSearch") as ArrayList<String>
+                kataSearch = result.getString("kata")
 
                 if(listSearch.isNotEmpty()){
                     if(kataSearch != "kosong"){

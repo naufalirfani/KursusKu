@@ -10,9 +10,13 @@ import android.os.Build
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.os.Handler
+import android.view.KeyEvent
 import android.view.View
+import android.view.animation.AnimationUtils
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import androidx.work.PeriodicWorkRequest
@@ -37,6 +41,10 @@ class InvoiceActivity : AppCompatActivity() {
     private var cdt: CountDownTimer? = null
     private lateinit var dbReference: DatabaseReference
     private lateinit var periodicWorkRequest: PeriodicWorkRequest
+    private var isPanduanShow: Boolean = false
+    private lateinit var dialogCaraBayar: TextView
+    private lateinit var dialogCaraBayar2: TextView
+    private var penanda: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -116,15 +124,58 @@ class InvoiceActivity : AppCompatActivity() {
         }
         dbReference.addValueEventListener(postListener)
 
-        startPeriodicTask()
+        dialogCaraBayar = findViewById(R.id.tv_panduanbayar_carabayar)
+        dialogCaraBayar2 = findViewById(R.id.tv_panduanbayar_carabayar2)
+        tv_invoice_panduan.setOnClickListener {
+            isPanduanShow = true
+            dialogCaraBayar.visibility = View.GONE
+            dialogCaraBayar2.visibility = View.GONE
+            val dialogPanduanBayar: ConstraintLayout = findViewById(R.id.cons_panduanbayar)
+            val animation = AnimationUtils.loadAnimation(applicationContext, R.anim.left)
+            animation.duration = 300
+            dialogPanduanBayar.animation = animation
+            dialogPanduanBayar.animate()
+            animation.start()
+            dialogPanduanBayar.visibility = View.VISIBLE
+        }
+
+        iv_panduanbayar_close.setOnClickListener {
+            isPanduanShow = false
+            val dialogPanduanBayar: ConstraintLayout = findViewById(R.id.cons_panduanbayar)
+            val animation = AnimationUtils.loadAnimation(applicationContext, R.anim.right)
+            animation.duration = 300
+            dialogPanduanBayar.animation = animation
+            dialogPanduanBayar.animate()
+            animation.start()
+            dialogPanduanBayar.visibility = View.GONE
+        }
     }
 
     override fun onBackPressed() {
         super.onBackPressed()
-        val intent  = Intent(this, AkunActivity::class.java)
+        val intent = Intent(this, AkunActivity::class.java)
         startActivity(intent)
         finish()
         cdt?.cancel()
+    }
+
+    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
+        return if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if(isPanduanShow){
+                isPanduanShow = false
+                val dialogPanduanBayar: ConstraintLayout = findViewById(R.id.cons_panduanbayar)
+                val animation = AnimationUtils.loadAnimation(applicationContext, R.anim.right)
+                animation.duration = 300
+                dialogPanduanBayar.animation = animation
+                dialogPanduanBayar.animate()
+                animation.start()
+                dialogPanduanBayar.visibility = View.GONE
+            }
+            else{
+                onBackPressed()
+            }
+            true
+        } else super.onKeyDown(keyCode, event)
     }
 
     private fun caraBayar(cara: String){
@@ -132,18 +183,97 @@ class InvoiceActivity : AppCompatActivity() {
             "bri" -> {
                 iv_invoice_bayar.setImageResource(R.drawable.bri)
                 tv_invoice_bayar.text = "2290-01-002180-50-8"
+
+                val atm = "ATM BRI"
+                tv_panduanbayar_metode1.text = atm
+                tv_panduanbayar_carabayar.text = resources.getString(R.string.atm_bri)
+                val mBanking = "Mobile Banking BRI"
+                tv_panduanbayar_metode2.text = mBanking
+                tv_panduanbayar_carabayar2.text = resources.getString(R.string.mbanking_bri)
+
+                iv_panduanbayar_down1.setOnClickListener {
+                    dialogCaraBayar.text = resources.getString(R.string.atm_bri)
+                    dialogCaraBayar2.text = ""
+                    dialogCaraBayar2.visibility = View.GONE
+                    val animationDown = AnimationUtils.loadAnimation(applicationContext, R.anim.down)
+                    animationDown.duration = 300
+                    dialogCaraBayar.animation = animationDown
+                    dialogCaraBayar.animate()
+                    animationDown.start()
+                    dialogCaraBayar.visibility = View.VISIBLE
+                }
+
+                iv_panduanbayar_down2.setOnClickListener {
+                    dialogCaraBayar2.text = resources.getString(R.string.mbanking_bri)
+                    dialogCaraBayar.text = ""
+                    dialogCaraBayar.visibility = View.GONE
+                    val animationDown = AnimationUtils.loadAnimation(applicationContext, R.anim.down)
+                    animationDown.duration = 300
+                    dialogCaraBayar2.animation = animationDown
+                    dialogCaraBayar2.animate()
+                    animationDown.start()
+                    dialogCaraBayar2.visibility = View.VISIBLE
+                }
+
             }
             "mandiri" -> {
                 iv_invoice_bayar.setImageResource(R.drawable.mandiri)
                 tv_invoice_bayar.text = "1370-0166-1237-2"
+
+                val atm = "ATM Mandiri"
+                tv_panduanbayar_metode1.text = atm
+                tv_panduanbayar_carabayar.text = resources.getString(R.string.atm_mandiri)
+                val mBanking = "Mobile Banking Mandiri"
+                tv_panduanbayar_metode2.text = mBanking
+                tv_panduanbayar_carabayar2.text = resources.getString(R.string.mbanking_mandiri)
+
+                iv_panduanbayar_down1.setOnClickListener {
+                    dialogCaraBayar.text = resources.getString(R.string.atm_mandiri)
+                    dialogCaraBayar2.text = ""
+                    dialogCaraBayar2.visibility = View.GONE
+                    val animationDown = AnimationUtils.loadAnimation(applicationContext, R.anim.down)
+                    animationDown.duration = 300
+                    dialogCaraBayar.animation = animationDown
+                    dialogCaraBayar.animate()
+                    animationDown.start()
+                    dialogCaraBayar.visibility = View.VISIBLE
+                }
+
+                iv_panduanbayar_down2.setOnClickListener {
+                    dialogCaraBayar2.text = resources.getString(R.string.mbanking_mandiri)
+                    dialogCaraBayar.text = ""
+                    dialogCaraBayar.visibility = View.GONE
+                    val animationDown = AnimationUtils.loadAnimation(applicationContext, R.anim.down)
+                    animationDown.duration = 300
+                    dialogCaraBayar2.animation = animationDown
+                    dialogCaraBayar2.animate()
+                    animationDown.start()
+                    dialogCaraBayar2.visibility = View.VISIBLE
+                }
             }
             "indosat" -> {
                 iv_invoice_bayar.setImageResource(R.drawable.indosat)
                 tv_invoice_bayar.text = "0857-8578-2582"
+                tv_panduanbayar_metode1.text = "Tidak Ada Panduan Pembayaran"
+                tv_panduanbayar_metode2.visibility = View.GONE
+                dialogCaraBayar.visibility = View.GONE
+                dialogCaraBayar2.visibility = View.GONE
+                iv_panduanbayar_down1.visibility = View.GONE
+                iv_panduanbayar_down2.visibility = View.GONE
+                v_panduanbayar_pemisah.visibility = View.GONE
+                v_panduanbayar_pemisah2.visibility = View.GONE
             }
             "tsel" -> {
                 iv_invoice_bayar.setImageResource(R.drawable.tsel)
                 tv_invoice_bayar.text = "0823-3199-7759"
+                tv_panduanbayar_metode1.text = "Tidak Ada Panduan Pembayaran"
+                tv_panduanbayar_metode2.visibility = View.GONE
+                dialogCaraBayar.visibility = View.GONE
+                dialogCaraBayar2.visibility = View.GONE
+                iv_panduanbayar_down1.visibility = View.GONE
+                iv_panduanbayar_down2.visibility = View.GONE
+                v_panduanbayar_pemisah.visibility = View.GONE
+                v_panduanbayar_pemisah2.visibility = View.GONE
             }
         }
     }
@@ -175,6 +305,8 @@ class InvoiceActivity : AppCompatActivity() {
 
                     caraBayar(dataPesanan?.caraBayar!!.toString())
 
+
+
                     if(dataPesanan?.waktu?.toInt() == 0 && dataPesanan?.status.toString() == "pending"){
                         remainWaktu = System.currentTimeMillis()
                         val date: String = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
@@ -204,11 +336,11 @@ class InvoiceActivity : AppCompatActivity() {
                         timer(remainWaktu)
                     }
                     else if(dataPesanan?.status.toString() == "selesai"){
-                        cancelPeriodicTask()
                         invoice_progressbar.visibility = View.VISIBLE
-                        showNotification("Pembayaran Berhasil", "Selamat! Pembayaran Kamu Berhasil. Yuk, telusuri kursus keinginanmu!", 1)
                         Toast.makeText(this@InvoiceActivity, "Pembayaran Berhasil", Toast.LENGTH_SHORT).show()
-
+                        showNotification("Pembayaran Berhasil", "Selamat! Pembayaran Kamu Berhasil. Yuk, telusuri kursus keinginanmu!",
+                            MyWorker.NOTIFICATION_ID
+                        )
                         val data = DataPesanan("kosong",0,dataPesanan?.jumlah,"selesai",0)
                         dbReference.setValue(data)
 
@@ -312,46 +444,45 @@ class InvoiceActivity : AppCompatActivity() {
     }
 
     private fun showNotification(title: String, message: String, notifId: Int) {
+        val intent = Intent(applicationContext, AkunActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
+        val pendingIntent: PendingIntent = PendingIntent.getActivity(applicationContext, 0, intent, 0)
 
-        val CHANNEL_ID = "Channel_01"
-        val CHANNEL_NAME = "KursusKu channel"
-
-        val intent = Intent(this, AkunActivity::class.java).apply {
-                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            }
-        val pendingIntent: PendingIntent = PendingIntent.getActivity(this, 0, intent, 0)
-
-        val notificationManagerCompat = this.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val notificationManager = applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         val alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
-        val builder = NotificationCompat.Builder(this, CHANNEL_ID)
-            .setSmallIcon(R.drawable.logokursuskusmall)
+        val builder = NotificationCompat.Builder(applicationContext, MyWorker.CHANNEL_ID)
+            .setSmallIcon(R.drawable.logokursuskusmall2)
             .setContentTitle(title)
             .setContentText(message)
-            .setColor(ContextCompat.getColor(this, android.R.color.transparent))
+            .setColor(ContextCompat.getColor(applicationContext, android.R.color.transparent))
             .setVibrate(longArrayOf(1000, 1000, 1000, 1000, 1000))
             .setSound(alarmSound)
             .setContentIntent(pendingIntent)
             .setAutoCancel(true)
 
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 
-            val channel = NotificationChannel(CHANNEL_ID,
-                CHANNEL_NAME,
+            val channel = NotificationChannel(
+                MyWorker.CHANNEL_ID,
+                MyWorker.CHANNEL_NAME,
                 NotificationManager.IMPORTANCE_DEFAULT)
 
             channel.enableVibration(true)
             channel.vibrationPattern = longArrayOf(1000, 1000, 1000, 1000, 1000)
 
-            builder.setChannelId(CHANNEL_ID)
+            builder.setChannelId(MyWorker.CHANNEL_ID)
 
-            notificationManagerCompat.createNotificationChannel(channel)
+            notificationManager.createNotificationChannel(channel)
         }
 
         val notification = builder.build()
 
-        notificationManagerCompat.notify(notifId, notification)
+        notificationManager.notify(notifId, notification)
 
     }
+
 
     private fun startPeriodicTask() {
         val data = Data.Builder()
@@ -360,7 +491,7 @@ class InvoiceActivity : AppCompatActivity() {
         val constraints = Constraints.Builder()
             .setRequiredNetworkType(NetworkType.CONNECTED)
             .build()
-        periodicWorkRequest = PeriodicWorkRequest.Builder(MyWorker::class.java, 5, TimeUnit.MINUTES)
+        periodicWorkRequest = PeriodicWorkRequest.Builder(MyWorker::class.java, 15, TimeUnit.MINUTES)
             .setInputData(data)
             .setConstraints(constraints)
             .build()
@@ -368,7 +499,6 @@ class InvoiceActivity : AppCompatActivity() {
         WorkManager.getInstance().getWorkInfoByIdLiveData(periodicWorkRequest.id).observe(this,
             Observer<WorkInfo> { workInfo ->
                 val status = workInfo.state.name
-                Toast.makeText(this, status, Toast.LENGTH_SHORT).show()
             })
     }
 

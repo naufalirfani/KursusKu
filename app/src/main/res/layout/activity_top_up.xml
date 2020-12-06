@@ -56,6 +56,7 @@
                 android:hint="@string/nominal_isi_saldo"
                 android:inputType="number"
                 android:background="@android:color/transparent"
+                android:cursorVisible="false"
                 android:textSize="16sp"
                 android:paddingLeft="12dp"
                 android:paddingRight="12dp"/>
@@ -82,7 +83,7 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="64dp"
+        android:paddingBottom="64dp"
         android:background="@color/white"
         android:layout_below="@id/tv_metodepembayaran">
         <LinearLayout
@@ -391,13 +392,6 @@
         android:textSize="14sp"
         android:textColor="@color/white"
         android:background="@drawable/button_round"
-        android:layout_alignParentBottom="true"/>
-    <View
-        android:id="@+id/v_bg_btn"
-        android:layout_width="match_parent"
-        android:layout_height="64dp"
-        android:layout_marginTop="16dp"
-        android:background="@color/white"
         android:layout_alignParentBottom="true"/>
     <LinearLayout
         android:layout_width="match_parent"

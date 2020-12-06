@@ -1,10 +1,12 @@
 package com.example.kwuapp
 
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.view.animation.AnimationUtils
+import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
@@ -95,6 +97,18 @@ class TopUpActivity : AppCompatActivity() {
                 startActivity(intent)
             }
         }
+
+        et_nominalsaldo.setOnClickListener { et_nominalsaldo.isCursorVisible = true }
+    }
+
+    private fun closeKeyBoard() {
+
+        val view = this.currentFocus
+        if (view != null) {
+            val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(view.windowToken, 0)
+
+        }
     }
 
     private fun hideShow(){
@@ -113,6 +127,8 @@ class TopUpActivity : AppCompatActivity() {
             isIndosatShow = false
             bayarDipilih = ""
             iv_pulsa_down.setImageResource(R.drawable.ic_keyboard_arrow_down_black_24dp)
+            closeKeyBoard()
+            et_nominalsaldo.isCursorVisible = false
             if(dialogTransfer.visibility == View.VISIBLE){
                 iv_trasnfer_down.setImageResource(R.drawable.ic_keyboard_arrow_down_black_24dp)
                 val animation = AnimationUtils.loadAnimation(applicationContext, R.anim.up)
@@ -147,6 +163,8 @@ class TopUpActivity : AppCompatActivity() {
             isPulsaShow = false
             bayarDipilih = ""
             iv_trasnfer_down.setImageResource(R.drawable.ic_keyboard_arrow_down_black_24dp)
+            closeKeyBoard()
+            et_nominalsaldo.isCursorVisible = false
             if(dialogPulsa.visibility == View.VISIBLE){
                 iv_pulsa_down.setImageResource(R.drawable.ic_keyboard_arrow_down_black_24dp)
                 val animation = AnimationUtils.loadAnimation(applicationContext, R.anim.up)

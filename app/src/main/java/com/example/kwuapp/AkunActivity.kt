@@ -235,6 +235,14 @@ class AkunActivity : AppCompatActivity(){
                                 startActivity(intent)
                             }
                         }
+                        "kosong" -> {
+                            btn_akun_isisaldo.setOnClickListener {
+                                val intent = Intent(applicationContext, TopUpActivity::class.java)
+                                intent.putExtra("akun", user)
+                                intent.putExtra("userid", id)
+                                startActivity(intent)
+                            }
+                        }
                     }
                 }
                 else{

@@ -3,6 +3,7 @@ package com.example.kwuapp
 import android.Manifest
 import android.app.Activity
 import android.app.AlertDialog
+import android.app.Dialog
 import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
@@ -373,8 +374,11 @@ class SettingActivity : AppCompatActivity() {
     private fun uploadImage(){
         firebaseDatabase = FirebaseDatabase.getInstance()
         dbReference3 = firebaseDatabase.getReference("imageProfil")
-        val progressDialog = ProgressDialog(this)
+        val progressDialog = Dialog(this)
+        progressDialog.setContentView(R.layout.dialoguploadphoto)
+        progressDialog.setCancelable(true)
         progressDialog.show()
+        val progressbarUpload:ProgressBar = progressDialog.findViewById(R.id.setting_progress_bar)
         if(filePath != null){
             val ref = storageReference?.child("imageProfile/${userId}/foto")
             ref?.putFile(filePath!!)?.addOnSuccessListener { taskSnapshot ->
@@ -390,7 +394,7 @@ class SettingActivity : AppCompatActivity() {
                     .show()
             }?.addOnProgressListener { taskSnapshot ->
                 val progress = 100.0 * taskSnapshot.bytesTransferred / taskSnapshot.totalByteCount
-                progressDialog.setMessage("Uploaded " + progress.toInt() + "%...")
+                progressbarUpload.progress = progress.toInt()
             }
         }else{
             Toast.makeText(this, "Silahkan pilih foto atau gambar", Toast.LENGTH_LONG).show()

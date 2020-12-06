@@ -338,16 +338,19 @@ class InvoiceActivity : AppCompatActivity() {
                     else if(dataPesanan?.status.toString() == "selesai"){
                         invoice_progressbar.visibility = View.VISIBLE
                         Toast.makeText(this@InvoiceActivity, "Pembayaran Berhasil", Toast.LENGTH_SHORT).show()
-                        showNotification("Pembayaran Berhasil", "Selamat! Pembayaran Kamu Berhasil. Yuk, telusuri kursus keinginanmu!",
-                            MyWorker.NOTIFICATION_ID
-                        )
-                        val data = DataPesanan("kosong",0,dataPesanan?.jumlah,"selesai",0)
+                        val data = DataPesanan("kosong",0,dataPesanan?.jumlah,"kosong",0)
                         dbReference.setValue(data)
 
                         val saldo = userDetail?.saldo!!.toLong() + dataPesanan?.jumlah!!
                         val db2 = FirebaseFirestore.getInstance()
                         db2.collection("users2").document(userid!!)
                             .update("saldo", saldo.toString())
+                            .addOnSuccessListener { result2 ->
+                            }
+                            .addOnFailureListener { exception ->
+                            }
+                        db2.collection("statusBayar").document(userid!!)
+                            .update("status", "kosong")
                             .addOnSuccessListener { result2 ->
                             }
                             .addOnFailureListener { exception ->
@@ -442,47 +445,6 @@ class InvoiceActivity : AppCompatActivity() {
         }
         cdt?.start()
     }
-
-    private fun showNotification(title: String, message: String, notifId: Int) {
-        val intent = Intent(applicationContext, AkunActivity::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-        }
-        val pendingIntent: PendingIntent = PendingIntent.getActivity(applicationContext, 0, intent, 0)
-
-        val notificationManager = applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        val alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
-        val builder = NotificationCompat.Builder(applicationContext, MyWorker.CHANNEL_ID)
-            .setSmallIcon(R.drawable.logokursuskusmall2)
-            .setContentTitle(title)
-            .setContentText(message)
-            .setColor(ContextCompat.getColor(applicationContext, android.R.color.transparent))
-            .setVibrate(longArrayOf(1000, 1000, 1000, 1000, 1000))
-            .setSound(alarmSound)
-            .setContentIntent(pendingIntent)
-            .setAutoCancel(true)
-
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-
-            val channel = NotificationChannel(
-                MyWorker.CHANNEL_ID,
-                MyWorker.CHANNEL_NAME,
-                NotificationManager.IMPORTANCE_DEFAULT)
-
-            channel.enableVibration(true)
-            channel.vibrationPattern = longArrayOf(1000, 1000, 1000, 1000, 1000)
-
-            builder.setChannelId(MyWorker.CHANNEL_ID)
-
-            notificationManager.createNotificationChannel(channel)
-        }
-
-        val notification = builder.build()
-
-        notificationManager.notify(notifId, notification)
-
-    }
-
 
     private fun startPeriodicTask() {
         val data = Data.Builder()

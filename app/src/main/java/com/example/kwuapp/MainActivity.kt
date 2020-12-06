@@ -1,7 +1,13 @@
 package com.example.kwuapp
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
+import android.media.RingtoneManager
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
@@ -10,6 +16,8 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.NotificationCompat
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.viewpager.widget.ViewPager
 import androidx.work.*
@@ -21,9 +29,11 @@ import com.bumptech.glide.request.target.Target
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.material.tabs.TabLayout
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.*
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.messaging.FirebaseMessaging
+import kotlinx.android.synthetic.main.activity_invoice.*
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.concurrent.TimeUnit
 import kotlin.random.Random
@@ -50,9 +60,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var btnKeranjang: Button
     private lateinit var btnSearch: Button
     private var doubleBackToExitPressedOnce = false
-    private val TIME_DELAY = 2000
-    private val back_pressed: Long = 0
-    private lateinit var periodicWorkRequest: PeriodicWorkRequest
+    private lateinit var dbReference: DatabaseReference
+    private var dataPesanan: DataPesanan? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -209,6 +218,7 @@ class MainActivity : AppCompatActivity() {
                         userDetail.isiKeranjang,
                         userDetail.jumlahKeranjang
                     )
+                    loadStatusBayar(userDetail)
                     if(userDetail.gambar != "kosong"){
                         Glide.with(applicationContext)
                             .load(userDetail.gambar)
@@ -302,5 +312,126 @@ class MainActivity : AppCompatActivity() {
         if(angka1 == angka2){
             randomAngka()
         }
+    }
+
+    private fun loadStatusBayar(user: UserDetail){
+        dbReference = FirebaseDatabase.getInstance().getReference("statusBayar").child(userId)
+        val postListener = object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                val hasil = dataSnapshot.getValue(DataPesanan::class.java)
+                when (hasil?.status) {
+                    "selesai" -> {
+                        val db2 = FirebaseFirestore.getInstance()
+                        db2.collection("statusBayar").document(userId)
+                            .update("waktu", 0)
+                            .addOnSuccessListener { result2 ->
+                            }
+                            .addOnFailureListener { exception ->
+                            }
+                        db2.collection("statusBayar").document(userId)
+                            .update("durasi", 0)
+                            .addOnSuccessListener { result2 ->
+                            }
+                            .addOnFailureListener { exception ->
+                            }
+                        db2.collection("statusBayar").document(userId)
+                            .update("status", "selesai")
+                            .addOnSuccessListener { result2 ->
+                            }
+                            .addOnFailureListener { exception ->
+                            }
+                    }
+                }
+                loadPesanan(user)
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+            }
+        }
+        dbReference.addValueEventListener(postListener)
+    }
+
+    private fun loadPesanan(user: UserDetail){
+        val db = FirebaseFirestore.getInstance()
+        db.collection("statusBayar").document(userId)
+            .get()
+            .addOnSuccessListener { result ->
+                dataPesanan = DataPesanan(result.getString("caraBayar"),
+                    result.getLong("durasi"),
+                    result.getLong("jumlah"),
+                    result.getString("status"),
+                    result.getLong("waktu"))
+
+                if(dataPesanan != null){
+                    if(dataPesanan?.status.toString() == "selesai"){
+                        showNotification("Pembayaran Berhasil", "Selamat! Pembayaran Kamu Berhasil. Yuk, telusuri kursus keinginanmu!",
+                            MyWorker.NOTIFICATION_ID
+                        )
+                        val data = DataPesanan("kosong",0,dataPesanan?.jumlah,"kosong",0)
+                        dbReference.setValue(data)
+
+                        val saldo = user.saldo.toLong() + dataPesanan?.jumlah!!
+                        val db2 = FirebaseFirestore.getInstance()
+                        db2.collection("users2").document(userId)
+                            .update("saldo", saldo.toString())
+                            .addOnSuccessListener { result2 ->
+                            }
+                            .addOnFailureListener { exception ->
+                            }
+                        db2.collection("statusBayar").document(userId)
+                            .update("status", "kosong")
+                            .addOnSuccessListener { result2 ->
+                            }
+                            .addOnFailureListener { exception ->
+                            }
+                    }
+                }
+                else{
+                    loadPesanan(user)
+                }
+            }
+            .addOnFailureListener { exception ->
+                Toast.makeText(this, "Connection error", Toast.LENGTH_SHORT).show()
+            }
+    }
+
+    private fun showNotification(title: String, message: String, notifId: Int) {
+        val intent = Intent(applicationContext, AkunActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
+        val pendingIntent: PendingIntent = PendingIntent.getActivity(applicationContext, 0, intent, 0)
+
+        val notificationManager = applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
+        val builder = NotificationCompat.Builder(applicationContext, MyWorker.CHANNEL_ID)
+            .setSmallIcon(R.drawable.logokursuskusmall2)
+            .setContentTitle(title)
+            .setContentText(message)
+            .setColor(ContextCompat.getColor(applicationContext, android.R.color.transparent))
+            .setVibrate(longArrayOf(1000, 1000, 1000, 1000, 1000))
+            .setSound(alarmSound)
+            .setContentIntent(pendingIntent)
+            .setAutoCancel(true)
+
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+
+            val channel = NotificationChannel(
+                MyWorker.CHANNEL_ID,
+                MyWorker.CHANNEL_NAME,
+                NotificationManager.IMPORTANCE_DEFAULT)
+
+            channel.enableVibration(true)
+            channel.vibrationPattern = longArrayOf(1000, 1000, 1000, 1000, 1000)
+
+            builder.setChannelId(MyWorker.CHANNEL_ID)
+
+            notificationManager.createNotificationChannel(channel)
+        }
+
+        val notification = builder.build()
+
+        notificationManager.notify(notifId, notification)
+
     }
 }

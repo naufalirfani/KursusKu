@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:background="@color/white"
+    android:layout_height="wrap_content">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/tv_invoicebayar_list_namakursus"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:maxLines="5"
+            android:text="Detail Pembayaran"
+            android:textColor="@color/black"
+            android:textSize="13sp" />
+        <TextView
+            android:id="@+id/tv_invoicebayar_list_jumlah"
+            android:layout_width="0dp"
+            android:layout_weight="0.15"
+            android:layout_height="wrap_content"
+            android:maxLines="2"
+            android:text="Detail Pembayaran"
+            android:layout_marginRight="4dp"
+            android:layout_marginLeft="4dp"
+            android:textColor="@color/colorAbuGelap"
+            android:textSize="12sp"
+            android:gravity="right"/>
+        <TextView
+            android:id="@+id/tv_invoicebayar_list_harga"
+            android:layout_width="0dp"
+            android:layout_weight="0.45"
+            android:layout_height="wrap_content"
+            android:maxLines="2"
+            android:text="Detail Pembayaran"
+            android:textColor="@color/colorAbuGelap"
+            android:textSize="12sp"
+            android:gravity="right"/>
+    </LinearLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:maxLines="2"
+        android:text="Kode Kursus:"
+        android:textColor="@color/colorAbuGelap"
+        android:textSize="12sp"
+        android:gravity="right"
+        android:layout_marginTop="16dp" />
+    <TextView
+        android:id="@+id/tv_invoicebayar_list_kodekursus"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:maxLines="20"
+        android:text="Detail Pembayaran"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="16dp"/>
+    <View
+        android:id="@+id/v_invoice_pemisah"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/colorAbuabu"
+        android:layout_marginBottom="16dp"/>
+</LinearLayout>

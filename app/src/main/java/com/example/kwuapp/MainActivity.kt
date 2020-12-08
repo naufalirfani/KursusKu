@@ -1,10 +1,12 @@
 package com.example.kwuapp
 
+import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.media.RingtoneManager
 import android.os.Build
@@ -18,10 +20,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.Observer
 import androidx.viewpager.widget.ViewPager
-import androidx.work.*
-import androidx.work.Data.Builder
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DecodeFormat
 import com.bumptech.glide.request.RequestOptions
@@ -33,9 +32,7 @@ import com.google.firebase.database.*
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.messaging.FirebaseMessaging
-import kotlinx.android.synthetic.main.activity_invoice.*
 import kotlinx.android.synthetic.main.activity_main.*
-import java.util.concurrent.TimeUnit
 import kotlin.random.Random
 
 
@@ -404,7 +401,8 @@ class MainActivity : AppCompatActivity() {
         val notificationManager = applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         val alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
         val builder = NotificationCompat.Builder(applicationContext, MyWorker.CHANNEL_ID)
-            .setSmallIcon(R.drawable.logokursuskusmall2)
+            .setSmallIcon(R.drawable.ic_logo_white)
+            .setLargeIcon((BitmapFactory.decodeResource(this.resources, R.drawable.logokursuskusmall2)))
             .setContentTitle(title)
             .setContentText(message)
             .setColor(ContextCompat.getColor(applicationContext, android.R.color.transparent))

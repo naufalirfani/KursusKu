@@ -9,13 +9,16 @@ import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.*
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_invoice_bayar.*
 import kotlinx.android.synthetic.main.activity_keranjang.*
 import kotlinx.android.synthetic.main.activity_keranjang.actionbar
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.ArrayList
 
 class InvoiceBayarActivity : AppCompatActivity() {
 
@@ -24,6 +27,12 @@ class InvoiceBayarActivity : AppCompatActivity() {
     private var userId: String = ""
     private val bulan = arrayOf("Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember")
     private var  totalHarga: String? = null
+    private var kursusDipilih: ArrayList<String>? = arrayListOf()
+    private var hargaDipilih: ArrayList<String>? = arrayListOf()
+    private var jumlahDipilih: ArrayList<String>? = arrayListOf()
+    private var isShow: Boolean = false
+    private lateinit var dbReference: DatabaseReference
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,7 +48,9 @@ class InvoiceBayarActivity : AppCompatActivity() {
         tvTitle.gravity = Gravity.CENTER_HORIZONTAL
 
         totalHarga = intent.getStringExtra("totalHarga")
+        kursusDipilih = intent.getStringArrayListExtra("kursusDipilih")
 
+        dbReference = FirebaseDatabase.getInstance().getReference("keranjang")
 
         auth = FirebaseAuth.getInstance()
         val user = auth.currentUser
@@ -49,6 +60,12 @@ class InvoiceBayarActivity : AppCompatActivity() {
             loadUser()
         }
 
+        rv_invoicebayar.visibility = View.GONE
+        loadKursusDibayar()
+
+        btn_invoicebayar_backhome.setOnClickListener {
+
+        }
     }
 
     private fun loadUser() {
@@ -78,7 +95,6 @@ class InvoiceBayarActivity : AppCompatActivity() {
                     val metodeBayar = "Saldo KursusKu"
                     tv_invoicebayar_isimetodebayar.text = metodeBayar
                     tv_invoicebayar_isitotalharga.text = totalHarga
-
                     invoicebayar_progressbar.visibility = View.GONE
                 }
                 else{
@@ -89,5 +105,47 @@ class InvoiceBayarActivity : AppCompatActivity() {
                 invoicebayar_progressbar.visibility = View.GONE
                 Toast.makeText(this, "Connection error", Toast.LENGTH_SHORT).show()
             }
+    }
+
+    private fun loadKursusDibayar(){
+        invoicebayar_progressbar.visibility = View.VISIBLE
+        val postListener = object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                hargaDipilih?.clear()
+                jumlahDipilih?.clear()
+                for( data in dataSnapshot.children){
+                    val hasil = data.getValue(DataKeranjang::class.java)
+                    for(i in 0 until kursusDipilih!!.size){
+                        if(hasil?.namaKursus == kursusDipilih!![i]){
+                            hargaDipilih?.add(hasil.totalHarga.toString())
+                            jumlahDipilih?.add(hasil.jumlah.toString())
+                        }
+                    }
+                }
+                iv_invoicebayar_down.setOnClickListener {
+                    if(isShow){
+                        isShow = false
+                        rv_invoicebayar.visibility = View.GONE
+                        iv_invoicebayar_down.setImageResource(R.drawable.ic_keyboard_arrow_down_black_24dp)
+                    }
+                    else{
+                        invoicebayar_progressbar.visibility = View.GONE
+                        isShow = true
+                        iv_invoicebayar_down.setImageResource(R.drawable.ic_keyboard_arrow_up_black_24dp)
+                        rv_invoicebayar.visibility = View.VISIBLE
+                        rv_invoicebayar.setHasFixedSize(true)
+                        rv_invoicebayar.layoutManager = LinearLayoutManager(applicationContext)
+                        val adapter = RVAInvoiceBayar(applicationContext, kursusDipilih!!, hargaDipilih!!, jumlahDipilih!!)
+                        adapter.notifyDataSetChanged()
+                        rv_invoicebayar.adapter = adapter
+                    }
+                }
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                invoicebayar_progressbar.visibility = View.GONE
+            }
+        }
+        dbReference.child(userId).addValueEventListener(postListener)
     }
 }

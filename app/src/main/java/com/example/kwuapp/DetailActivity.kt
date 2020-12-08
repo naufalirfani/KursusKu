@@ -149,7 +149,8 @@ class DetailActivity : AppCompatActivity() {
 
                     btn_detail_addtokeranjang.setOnClickListener {
                         if (user != null) {
-                            val dataKeranjang = DataKeranjang(kursus.nama,1)
+                            val harga = kursus.harga.replace(".", "").toLong()
+                            val dataKeranjang = DataKeranjang(kursus.nama,1, harga)
                             dbReference2.child(userId).child(kursus.nama).setValue(dataKeranjang)
                             cv_addtochart.visibility = View.VISIBLE
                             val expandIn: Animation = AnimationUtils.loadAnimation(context, R.anim.expand_in)
@@ -168,7 +169,8 @@ class DetailActivity : AppCompatActivity() {
 
                     btn_detail_bayar.setOnClickListener {
                         if (user != null) {
-                            val dataKeranjang = DataKeranjang(kursus.nama,1)
+                            val harga = kursus.harga.replace(".", "").toLong()
+                            val dataKeranjang = DataKeranjang(kursus.nama,1, harga)
                             dbReference2.child(userId).child(kursus.nama).setValue(dataKeranjang)
                             val intent = Intent(context, KeranjangActivity::class.java)
                             intent.putExtra("berasalDari", "DetailActivity")
@@ -184,7 +186,8 @@ class DetailActivity : AppCompatActivity() {
                 else{
                     btn_detail_addtokeranjang.setOnClickListener {
                         if (user != null) {
-                            val dataKeranjang = DataKeranjang(kursus.nama, hasil.jumlah?.plus(1))
+                            val harga = kursus.harga.replace(".", "").toLong() * hasil.jumlah!!.plus(1)
+                            val dataKeranjang = DataKeranjang(kursus.nama, hasil.jumlah?.plus(1), harga)
                             dbReference2.child(userId).child(kursus.nama).setValue(dataKeranjang)
                             cv_addtochart.visibility = View.VISIBLE
                             val expandIn: Animation = AnimationUtils.loadAnimation(context, R.anim.expand_in)
@@ -202,7 +205,8 @@ class DetailActivity : AppCompatActivity() {
 
                     btn_detail_bayar.setOnClickListener {
                         if (user != null) {
-                            val dataKeranjang = DataKeranjang(kursus.nama, hasil.jumlah?.plus(1))
+                            val harga = kursus.harga.replace(".", "").toLong() * hasil.jumlah!!.plus(1)
+                            val dataKeranjang = DataKeranjang(kursus.nama, hasil.jumlah?.plus(1), harga)
                             dbReference2.child(userId).child(kursus.nama).setValue(dataKeranjang)
                             val intent = Intent(context, KeranjangActivity::class.java)
                             intent.putExtra("berasalDari", "DetailActivity")

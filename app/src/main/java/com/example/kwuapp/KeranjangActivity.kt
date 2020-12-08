@@ -1,12 +1,13 @@
 package com.example.kwuapp
 
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.util.DisplayMetrics
-import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
@@ -24,7 +25,6 @@ import kotlinx.android.synthetic.main.activity_keranjang.actionbar
 class KeranjangActivity : AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth
-    private var userId: String = ""
     private var arrayList = ArrayList<DataKursus>()
     private  var namaKursus: ArrayList<DataKeranjang> = arrayListOf()
     private var widthfix: Int = 0
@@ -32,6 +32,7 @@ class KeranjangActivity : AppCompatActivity() {
     private var kursusDibeli: String? = null
     private lateinit var dbReference: DatabaseReference
     private lateinit var adapter: RVAKeranjangList
+    private var userId: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,11 +61,8 @@ class KeranjangActivity : AppCompatActivity() {
             keranjang_progressbar.visibility = View.VISIBLE
         }
         else{
-            keranjang_progressbar.visibility = View.GONE
-            keranjang_cons_utama.setBackgroundColor(resources.getColor((R.color.white)))
-            iv_keranjang_kosong.visibility = View.VISIBLE
-            tv_keranjang_kosong.visibility = View.VISIBLE
-            tv_keranjang_kosong2.visibility = View.VISIBLE
+            val intent = Intent(this@KeranjangActivity, SignInActivity::class.java)
+            startActivity(intent)
         }
 
         val btnBack: Button = actionbar.findViewById(R.id.btn_actionbar_back)
@@ -86,18 +84,12 @@ class KeranjangActivity : AppCompatActivity() {
             kursusDibeli,
             iv_keranjang_kosong,
             tv_keranjang_kosong,
-            tv_keranjang_kosong2)
+            tv_keranjang_kosong2,
+            btn_keranajng_bayar)
         adapter.notifyDataSetChanged()
         rv_keranjang.setHasFixedSize(true)
         rv_keranjang.layoutManager = LinearLayoutManager(this)
         rv_keranjang.adapter = adapter
-
-        btn_keranajng_bayar.setOnClickListener {
-            val intent = Intent(this, InvoiceBayarActivity::class.java)
-            intent.putExtra("totalHarga", tv_keranjang_totalharga.text)
-            startActivity(intent)
-            finish()
-        }
 
     }
 

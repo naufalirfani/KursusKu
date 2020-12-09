@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.kwuapp">
+    package="com.WarnetIT.kursusku">
 
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET"/>
@@ -15,54 +15,54 @@
         android:usesCleartextTraffic="true"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".InvoiceBayarActivity"></activity>
-        <activity android:name=".InvoiceActivity" />
+        <activity android:name="com.WarnetIT.kursusku.InvoiceBayarActivity"></activity>
+        <activity android:name="com.WarnetIT.kursusku.InvoiceActivity" />
         <activity
-            android:name=".TopUpActivity"
+            android:name="com.WarnetIT.kursusku.TopUpActivity"
             android:windowSoftInputMode="adjustNothing" />
-        <activity android:name=".ScreenActivity">
+        <activity android:name="com.WarnetIT.kursusku.ScreenActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".SettingActivity" />
+        <activity android:name="com.WarnetIT.kursusku.SettingActivity" />
         <activity
-            android:name=".AkunActivity"
-            android:parentActivityName=".MainActivity">
+            android:name="com.WarnetIT.kursusku.AkunActivity"
+            android:parentActivityName="com.WarnetIT.kursusku.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
+                android:value="com.WarnetIT.kursusku.MainActivity" />
         </activity>
-        <activity android:name=".KeranjangActivity" />
-        <activity android:name=".SearchActivity" />
+        <activity android:name="com.WarnetIT.kursusku.KeranjangActivity" />
+        <activity android:name="com.WarnetIT.kursusku.SearchActivity" />
         <activity
-            android:name=".SignInActivity"
-            android:parentActivityName=".MainActivity">
+            android:name="com.WarnetIT.kursusku.SignInActivity"
+            android:parentActivityName="com.WarnetIT.kursusku.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
+                android:value="com.WarnetIT.kursusku.MainActivity" />
         </activity>
         <activity
-            android:name=".SignUpActivity"
-            android:parentActivityName=".SignInActivity">
+            android:name="com.WarnetIT.kursusku.SignUpActivity"
+            android:parentActivityName="com.WarnetIT.kursusku.SignInActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".SignInActivity" />
+                android:value="com.WarnetIT.kursusku.SignInActivity" />
         </activity>
-        <activity android:name=".DetailActivity" />
+        <activity android:name="com.WarnetIT.kursusku.DetailActivity" />
         <activity
-            android:name=".KategoriActivity"
-            android:parentActivityName=".MainActivity">
+            android:name="com.WarnetIT.kursusku.KategoriActivity"
+            android:parentActivityName="com.WarnetIT.kursusku.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
+                android:value="com.WarnetIT.kursusku.MainActivity" />
         </activity>
         <activity
-            android:name=".MainActivity"
+            android:name="com.WarnetIT.kursusku.MainActivity"
             android:launchMode="singleTop" />
-        <service android:name=".MessageReceiver">
+        <service android:name="com.WarnetIT.kursusku.MessageReceiver">
             <intent-filter>
                 <action android:name="om.google.firebase.MESSAGING_EVENT"/>
             </intent-filter>

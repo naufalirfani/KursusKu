@@ -202,7 +202,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/white"
-                android:background="#EB5757"
+                android:background="@color/colorMerah"
                 android:alpha="0.7"
                 android:textSize="12sp"
                 android:paddingLeft="8dp"

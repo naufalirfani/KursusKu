@@ -55,11 +55,12 @@ class SearchActivity : AppCompatActivity() {
         btn_search_back.setOnClickListener { onBackPressed() }
         menuClick()
 
+        loadKursus()
+        
         auth = FirebaseAuth.getInstance()
         val user = auth.currentUser
         if (user != null) {
             userId = user.uid
-            loadKursus()
             loadSearch()
         }
         else{

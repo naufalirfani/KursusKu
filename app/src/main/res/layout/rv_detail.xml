@@ -6,7 +6,8 @@
     android:background="@color/white"
     android:orientation="vertical">
 
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/detail_cons"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

@@ -6,13 +6,16 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
+import android.util.DisplayMetrics
 import android.util.Log
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.marginBottom
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -65,7 +68,7 @@ class DetailActivity : AppCompatActivity() {
                 val intent = Intent(this@DetailActivity, SignInActivity::class.java)
                 startActivity(intent)
             }
-            btn_detail_addtokeranjang.setOnClickListener {
+            btn_detail_bayar.setOnClickListener {
                 val intent = Intent(this@DetailActivity, SignInActivity::class.java)
                 startActivity(intent)
             }
@@ -88,12 +91,14 @@ class DetailActivity : AppCompatActivity() {
         cv_addtochart.visibility = View.GONE
         tv_detail_jumlahkeranjang.visibility = View.GONE
 
-        val params = RecyclerView.LayoutParams(
-            RecyclerView.LayoutParams.MATCH_PARENT,
-            RecyclerView.LayoutParams.MATCH_PARENT
-        )
-        params.setMargins(left, top, right, linear_detail_button.height)
-        rv_detail.layoutParams = params
+        val displayMetrics = DisplayMetrics()
+        windowManager.defaultDisplay.getMetrics(displayMetrics)
+        val dpheight = displayMetrics.heightPixels
+        val dpwidth = displayMetrics.widthPixels
+        val params = rv_detail.layoutParams
+        val params2 = btn_detail_addtokeranjang.layoutParams
+        params.height = dpheight - params2.height
+
     }
 
     override fun onResume() {

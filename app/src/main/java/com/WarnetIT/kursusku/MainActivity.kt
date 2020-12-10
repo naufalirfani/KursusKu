@@ -71,6 +71,7 @@ class MainActivity : AppCompatActivity() {
         arrayList2?.clear()
         arrayList3?.clear()
 
+
         Glide.with(this).load(R.drawable.bouncy_balls).into(main_progressBar)
 
         dbReference2 = FirebaseDatabase.getInstance().getReference("keranjang")
@@ -96,6 +97,8 @@ class MainActivity : AppCompatActivity() {
         btnAkun = main_constraint.findViewById(R.id.btn_akun)
         jumlahKeranjang = main_constraint.findViewById(R.id.tv_main_jumlahkeranjang)
         btnKeranjang = main_constraint.findViewById(R.id.btn_keranjang)
+
+        jumlahKeranjang.visibility = View.GONE
 
         btnSearch.setOnClickListener {
             val intent = Intent(this, SearchActivity::class.java)

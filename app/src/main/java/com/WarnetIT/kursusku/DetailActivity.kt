@@ -1,5 +1,6 @@
 package com.WarnetIT.kursusku
 
+import android.R.attr.*
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
@@ -12,7 +13,9 @@ import android.view.animation.AnimationUtils
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.marginBottom
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
@@ -57,6 +60,16 @@ class DetailActivity : AppCompatActivity() {
             tambahKeKeranjang(this)
             jumlahKeranjang(this)
         }
+        else{
+            btn_detail_addtokeranjang.setOnClickListener {
+                val intent = Intent(this@DetailActivity, SignInActivity::class.java)
+                startActivity(intent)
+            }
+            btn_detail_addtokeranjang.setOnClickListener {
+                val intent = Intent(this@DetailActivity, SignInActivity::class.java)
+                startActivity(intent)
+            }
+        }
 
         btn_detail_back.setOnClickListener {onBackPressed()}
 
@@ -74,6 +87,13 @@ class DetailActivity : AppCompatActivity() {
 
         cv_addtochart.visibility = View.GONE
         tv_detail_jumlahkeranjang.visibility = View.GONE
+
+        val params = RecyclerView.LayoutParams(
+            RecyclerView.LayoutParams.MATCH_PARENT,
+            RecyclerView.LayoutParams.MATCH_PARENT
+        )
+        params.setMargins(left, top, right, linear_detail_button.height)
+        rv_detail.layoutParams = params
     }
 
     override fun onResume() {

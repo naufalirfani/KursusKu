@@ -142,7 +142,6 @@ class DetailActivity : AppCompatActivity() {
             }
             .addOnFailureListener { exception ->
                 datail_progressBar.visibility = View.INVISIBLE
-                Log.d("Error", "Error getting documents: ", exception)
                 val snackBar = Snackbar.make(
                     currentFocus!!, "    Connection Failure",
                     Snackbar.LENGTH_INDEFINITE

@@ -11,7 +11,6 @@ import android.media.RingtoneManager
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
-import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.ImageView
@@ -308,7 +307,6 @@ class MainActivity : AppCompatActivity() {
                 }
             }
             .addOnFailureListener { exception ->
-                Log.d("Error", "Error getting documents: ", exception)
                 Toast.makeText(this, "Koneksi error", Toast.LENGTH_SHORT).show()
             }
     }

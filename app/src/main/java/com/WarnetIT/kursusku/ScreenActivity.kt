@@ -80,7 +80,6 @@ class ScreenActivity : AppCompatActivity() {
                 }
             }
             .addOnFailureListener { exception ->
-                Log.d("Error", "Error getting documents: ", exception)
                 Toast.makeText(this, "Koneksi error", Toast.LENGTH_SHORT).show()
             }
     }

@@ -8,7 +8,6 @@ import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.InputType
-import android.util.Log
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView.OnEditorActionListener
@@ -182,7 +181,6 @@ class SignInActivity : AppCompatActivity() {
                 }
             }
             .addOnFailureListener { exception ->
-                Log.d("Error", "Error getting documents: ", exception)
                 val snackBar = Snackbar.make(
                     currentFocus!!, "    Connection Failure",
                     Snackbar.LENGTH_INDEFINITE
@@ -246,7 +244,6 @@ class SignInActivity : AppCompatActivity() {
                 }
             }
             .addOnFailureListener { exception ->
-                Log.d("Error", "Error getting documents: ", exception)
                 Toast.makeText(this, "Koneksi error", Toast.LENGTH_SHORT).show()
             }
     }

@@ -60,6 +60,7 @@ class KeranjangActivity : AppCompatActivity() {
         else{
             val intent = Intent(this@KeranjangActivity, SignInActivity::class.java)
             startActivity(intent)
+            finish()
         }
 
         val btnBack: Button = actionbar.findViewById(R.id.btn_actionbar_back)

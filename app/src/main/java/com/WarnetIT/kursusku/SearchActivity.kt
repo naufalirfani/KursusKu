@@ -56,7 +56,7 @@ class SearchActivity : AppCompatActivity() {
         menuClick()
 
         loadKursus()
-        
+
         auth = FirebaseAuth.getInstance()
         val user = auth.currentUser
         if (user != null) {
@@ -207,7 +207,6 @@ class SearchActivity : AppCompatActivity() {
             }
             .addOnFailureListener { exception ->
                 search_progressBar.visibility = View.GONE
-                Log.d("Error", "Error getting documents: ", exception)
                 val snackBar = Snackbar.make(
                     currentFocus!!, "    Connection Failure",
                     Snackbar.LENGTH_INDEFINITE
@@ -262,7 +261,6 @@ class SearchActivity : AppCompatActivity() {
             }
             .addOnFailureListener { exception ->
                 search_progressBar.visibility = View.GONE
-                Log.d("Error", "Error getting documents: ", exception)
                 val snackBar = Snackbar.make(
                     currentFocus!!, "    Connection Failure",
                     Snackbar.LENGTH_INDEFINITE

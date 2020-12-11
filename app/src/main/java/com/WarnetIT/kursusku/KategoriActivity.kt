@@ -3,7 +3,6 @@ package com.WarnetIT.kursusku
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
@@ -79,7 +78,6 @@ class KategoriActivity : AppCompatActivity() {
             }
             .addOnFailureListener { exception ->
                 kategori_progressBar.visibility = View.GONE
-                Log.d("Error", "Error getting documents: ", exception)
                 val snackBar = Snackbar.make(
                     currentFocus!!, "    Connection Failure",
                     Snackbar.LENGTH_INDEFINITE

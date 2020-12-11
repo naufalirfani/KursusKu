@@ -52,6 +52,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "448378882389-c84t08gnkh212i1u6ednkh4991mg4bfk.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.kwuapp",
+            "certificate_hash": "30f1aa68a567475ebe1edbf3db54d20d385b77a5"
+          }
+        },
+        {
           "client_id": "448378882389-jbg9nq7c2svjpljv0fjvgsaiq068riet.apps.googleusercontent.com",
           "client_type": 3
         }

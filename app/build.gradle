@@ -54,4 +54,5 @@ dependencies {
     implementation 'com.facebook.android:facebook-android-sdk:4.42.0'
     implementation group: 'io.grpc', name: 'protoc-gen-grpc-kotlin', version: '0.2.1', ext: 'pom'
     implementation "android.arch.work:work-runtime:1.0.1"
+    implementation 'com.google.android.gms:play-services-auth:19.0.0'
 }

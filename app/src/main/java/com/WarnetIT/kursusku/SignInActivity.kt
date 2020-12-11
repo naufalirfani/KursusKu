@@ -5,22 +5,32 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.InputType
+import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
-import android.widget.TextView.OnEditorActionListener
 import android.widget.Button
 import android.widget.TextView
+import android.widget.TextView.OnEditorActionListener
 import android.widget.Toast
+import androidx.annotation.NonNull
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentActivity
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.SignInButton
+import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.OnCompleteListener
+import com.google.android.gms.tasks.Task
 import com.google.android.material.snackbar.Snackbar
-import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.*
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_sign_in.*
-import java.lang.Exception
 import kotlin.random.Random
+
 
 @Suppress("DEPRECATION")
 class SignInActivity : AppCompatActivity() {
@@ -41,6 +51,10 @@ class SignInActivity : AppCompatActivity() {
     private val kategori = arrayOf("Desain", "Bisnis", "Finansial", "Kantor", "Pendidikan", "Pengembangan")
     private var angka1: Int = 0
     private var angka2: Int = 0
+
+    private val RC_SIGN_IN = 234
+    var mGoogleSignInClient: GoogleSignInClient? = null
+    var mAuth: FirebaseAuth? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -80,6 +94,37 @@ class SignInActivity : AppCompatActivity() {
             }
             false
         })
+
+        setGooglePlusButtonText(sign_in_button_google, "Google")
+        mAuth = FirebaseAuth.getInstance()
+
+        //Then we need a GoogleSignInOptions object
+        //And we need to build it as below
+
+        //Then we need a GoogleSignInOptions object
+        //And we need to build it as below
+        val gso: GoogleSignInOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(getString(R.string.default_web_client_id))
+            .requestEmail()
+            .build()
+
+        //Then we will get the GoogleSignInClient object from GoogleSignIn class
+
+        //Then we will get the GoogleSignInClient object from GoogleSignIn class
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso)
+        sign_in_button_google.setOnClickListener { signIn() }
+    }
+
+    override fun onStart() {
+        super.onStart()
+
+        //if the user is already signed in
+        //we will close this activity
+        //and take the user to profile activity
+        if (mAuth!!.currentUser != null) {
+            finish()
+            loadKursus2()
+        }
     }
 
     override fun onBackPressed() {
@@ -87,7 +132,7 @@ class SignInActivity : AppCompatActivity() {
         finish()
     }
 
-    fun masuk(){
+    private fun masuk(){
         closeKeyBoard()
         auth = FirebaseAuth.getInstance()
         password = et_masuk_password.text.toString()
@@ -109,7 +154,7 @@ class SignInActivity : AppCompatActivity() {
         }
     }
 
-    fun getEmail(array: ArrayList<DataKursus>, array2: ArrayList<DataKursus>, array3: ArrayList<DataKursus>, kat: String, kat2: String){
+    private fun getEmail(array: ArrayList<DataKursus>, array2: ArrayList<DataKursus>, array3: ArrayList<DataKursus>, kat: String, kat2: String){
         if(et_masuk_username.text.toString().contains("@")){
             email = et_masuk_username.text.toString()
             email?.let { it1 ->
@@ -248,11 +293,132 @@ class SignInActivity : AppCompatActivity() {
             }
     }
 
+    private fun loadKursus2(){
+        randomAngka()
+        val kategori1 = kategori[angka1]
+        val kategori2 = kategori[angka2]
+        val db = FirebaseFirestore.getInstance()
+        db.collection("kursus")
+            .get()
+            .addOnSuccessListener { result ->
+                arrayList.clear()
+                arrayList2.clear()
+                arrayList3.clear()
+                for (document in result) {
+                    arrayList.add(DataKursus(document.getString("deskripsi")!!,
+                        document.getLong("dilihat")!!,
+                        document.getString("gambar")!!,
+                        document.getString("harga")!!,
+                        document.getString("kategori")!!,
+                        document.getString("nama")!!,
+                        document.getString("pembuat")!!,
+                        document.getLong("pengguna")!!,
+                        document.getString("rating")!!,
+                        document.getString("remaining")!!))
+                }
+
+                if(arrayList.isNotEmpty()){
+                    for(i in 0 until arrayList.size){
+                        if(arrayList[i].kategori == kategori1){
+                            arrayList2.add(arrayList[i])
+                        }
+                        if(arrayList[i].kategori == kategori2){
+                            arrayList3.add(arrayList[i])
+                        }
+                    }
+
+                    val username2 = et_masuk_username.text.toString()
+                    val intent = Intent(this, MainActivity::class.java)
+                    intent.putExtra("username",username2)
+                    intent.putExtra("arrayList", arrayList)
+                    intent.putExtra("arrayList2", arrayList2)
+                    intent.putExtra("arrayList3", arrayList3)
+                    intent.putExtra("kategori1", kategori1)
+                    intent.putExtra("kategori2", kategori2)
+                    startActivity(intent)
+                    finish()
+                }
+                else{
+                    loadKursus2()
+                }
+            }
+            .addOnFailureListener { exception ->
+                Toast.makeText(this, "Koneksi error", Toast.LENGTH_SHORT).show()
+            }
+    }
+
     fun randomAngka(){
         angka1 = Random.nextInt(0,5)
         angka2 = Random.nextInt(0,5)
         if(angka1 == angka2){
             randomAngka()
         }
+    }
+
+    private fun setGooglePlusButtonText(
+        signInButton: SignInButton,
+        buttonText: String?
+    ) {
+        // Find the TextView that is inside of the SignInButton and set its text
+        for (i in 0 until signInButton.childCount) {
+            val v: View = signInButton.getChildAt(i)
+            if (v is TextView) {
+                v.text = buttonText
+                v.setPadding(48,0,0,0)
+                return
+            }
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        //if the requestCode is the Google Sign In code that we defined at starting
+        if (requestCode == RC_SIGN_IN) {
+
+            //Getting the GoogleSignIn Task
+            val task: Task<GoogleSignInAccount> = GoogleSignIn.getSignedInAccountFromIntent(data)
+            try {
+                //Google Sign In was successful, authenticate with Firebase
+                val account: GoogleSignInAccount? = task.getResult(ApiException::class.java)
+
+                //authenticating with firebase
+                if (account != null) {
+                    firebaseAuthWithGoogle(account)
+                }
+            } catch (e: ApiException) {
+                Toast.makeText(this, "Login Failed ${e.localizedMessage}", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun firebaseAuthWithGoogle(acct: GoogleSignInAccount) {
+
+        //getting the auth credential
+        val credential: AuthCredential = GoogleAuthProvider.getCredential(acct.idToken, null)
+
+        //Now using firebase we are signing in the user here
+        mAuth!!.signInWithCredential(credential)
+            .addOnCompleteListener(
+                this
+            ) { task ->
+                if (task.isSuccessful()) {
+                    val user: FirebaseUser? = mAuth!!.currentUser
+                    et_masuk_username.setText(user?.email)
+                    Toast.makeText(this@SignInActivity, "User Signed In ${user?.email}", Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(this@SignInActivity, "Authentication failed.", Toast.LENGTH_SHORT).show()
+                }
+            }
+    }
+
+
+    //this method is called on click
+    private fun signIn() {
+        //getting the google signin intent
+        val signInIntent = mGoogleSignInClient!!.signInIntent
+
+        //starting the activity for result
+        startActivityForResult(signInIntent, RC_SIGN_IN)
     }
 }

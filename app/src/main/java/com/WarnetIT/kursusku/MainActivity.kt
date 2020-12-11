@@ -97,8 +97,6 @@ class MainActivity : AppCompatActivity() {
         jumlahKeranjang = main_constraint.findViewById(R.id.tv_main_jumlahkeranjang)
         btnKeranjang = main_constraint.findViewById(R.id.btn_keranjang)
 
-        jumlahKeranjang.visibility = View.GONE
-
         btnSearch.setOnClickListener {
             val intent = Intent(this, SearchActivity::class.java)
             startActivity(intent)
@@ -117,10 +115,12 @@ class MainActivity : AppCompatActivity() {
             main_progressBar.visibility = View.VISIBLE
             loadUser()
             getTokenFCM()
+            jumlahKeranjang.visibility = View.GONE
             jumlahKeranjang()
         }
         else{
             main_progressBar.visibility = View.GONE
+            jumlahKeranjang.visibility = View.GONE
             Glide.with(applicationContext)
                 .load(resources.getDrawable(R.drawable.login))
                 .apply(
@@ -167,10 +167,12 @@ class MainActivity : AppCompatActivity() {
             userId = id
             main_progressBar.visibility = View.VISIBLE
             loadUser()
+            jumlahKeranjang.visibility = View.GONE
             jumlahKeranjang()
         }
         else{
             main_progressBar.visibility = View.GONE
+            jumlahKeranjang.visibility = View.GONE
             Glide.with(applicationContext)
                 .load(resources.getDrawable(R.drawable.login))
                 .apply(

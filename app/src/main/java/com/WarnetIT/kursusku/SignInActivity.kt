@@ -14,26 +14,30 @@ import android.widget.Button
 import android.widget.TextView
 import android.widget.TextView.OnEditorActionListener
 import android.widget.Toast
-import androidx.annotation.NonNull
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.FragmentActivity
+import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.SignInButton
 import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
 import com.google.android.material.snackbar.Snackbar
-import com.google.firebase.auth.*
+import com.google.firebase.auth.AuthCredential
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_sign_in.*
 import kotlin.random.Random
 
 
 @Suppress("DEPRECATION")
-class SignInActivity : AppCompatActivity() {
+class SignInActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedListener {
 
     private var isShow: Boolean = false
 
@@ -51,9 +55,11 @@ class SignInActivity : AppCompatActivity() {
     private val kategori = arrayOf("Desain", "Bisnis", "Finansial", "Kantor", "Pendidikan", "Pengembangan")
     private var angka1: Int = 0
     private var angka2: Int = 0
+    private var arrayUser: ArrayList<String> = arrayListOf()
 
     private val RC_SIGN_IN = 234
     var mGoogleSignInClient: GoogleSignInClient? = null
+    var mGoogleApiClient: GoogleApiClient? = null
     var mAuth: FirebaseAuth? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -100,19 +106,22 @@ class SignInActivity : AppCompatActivity() {
 
         //Then we need a GoogleSignInOptions object
         //And we need to build it as below
-
-        //Then we need a GoogleSignInOptions object
-        //And we need to build it as below
         val gso: GoogleSignInOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.default_web_client_id))
             .requestEmail()
             .build()
 
         //Then we will get the GoogleSignInClient object from GoogleSignIn class
-
-        //Then we will get the GoogleSignInClient object from GoogleSignIn class
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso)
-        sign_in_button_google.setOnClickListener { signIn() }
+        sign_in_button_google.setOnClickListener { signInGoogle() }
+
+        mGoogleApiClient = GoogleApiClient.Builder(this)
+            .enableAutoManage(this, this)
+            .addApi(
+                Auth.GOOGLE_SIGN_IN_API,
+                gso
+            )
+            .build()
     }
 
     override fun onStart() {
@@ -136,14 +145,17 @@ class SignInActivity : AppCompatActivity() {
         closeKeyBoard()
         auth = FirebaseAuth.getInstance()
         password = et_masuk_password.text.toString()
+        loadingShow()
+        loadKursus()
+    }
 
+    private fun loadingShow(){
         progressDialog = ProgressDialog(this)
         progressDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         progressDialog.isIndeterminate = true
         progressDialog.setCancelable(true)
         progressDialog.show()
         progressDialog.setContentView(R.layout.progressdialog)
-        loadKursus()
     }
 
     private fun closeKeyBoard() {
@@ -331,7 +343,7 @@ class SignInActivity : AppCompatActivity() {
                             arrayList3.add(arrayList[i])
                         }
                     }
-
+                    progressDialog.dismiss()
                     val username2 = et_masuk_username.text.toString()
                     val intent = Intent(this, MainActivity::class.java)
                     intent.putExtra("username",username2)
@@ -392,7 +404,7 @@ class SignInActivity : AppCompatActivity() {
                     firebaseAuthWithGoogle(account)
                 }
             } catch (e: ApiException) {
-                Toast.makeText(this, "Login Failed ${e.localizedMessage}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Login Failed", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -409,8 +421,8 @@ class SignInActivity : AppCompatActivity() {
             ) { task ->
                 if (task.isSuccessful()) {
                     val user: FirebaseUser? = mAuth!!.currentUser
-                    et_masuk_username.setText(user?.email)
-                    Toast.makeText(this@SignInActivity, "User Signed In ${user?.email}", Toast.LENGTH_SHORT).show()
+                    loadingShow()
+                    checkUser(user)
                 } else {
                     Toast.makeText(this@SignInActivity, "Authentication failed.", Toast.LENGTH_SHORT).show()
                 }
@@ -419,11 +431,60 @@ class SignInActivity : AppCompatActivity() {
 
 
     //this method is called on click
-    private fun signIn() {
+    private fun signInGoogle() {
         //getting the google signin intent
         val signInIntent = mGoogleSignInClient!!.signInIntent
-
+        mGoogleApiClient?.clearDefaultAccountAndReconnect()
         //starting the activity for result
         startActivityForResult(signInIntent, RC_SIGN_IN)
+    }
+
+    private fun checkUser(user: FirebaseUser?){
+        val db = FirebaseFirestore.getInstance()
+        db.collection("users").document("daftarUser")
+            .get()
+            .addOnSuccessListener { result ->
+                arrayUser.clear()
+                arrayUser = result.get("listSearch") as ArrayList<String>
+
+
+                if(arrayUser.isNotEmpty()){
+                    if(arrayUser.contains(user?.email)){
+                        loadKursus2()
+                    }
+                    else{
+                        val userDetail = UserDetail(user?.displayName!!,
+                            user.email!!,
+                            user.photoUrl!!.toString(),
+                            "0",
+                            "kosong",
+                            "0",
+                            "kosong")
+                        db.collection("users2").document(user.uid).set(userDetail)
+
+                        val dataBayar = DataPesanan("kosong", 0,0,"kosong",0)
+                        db.collection("statusBayar").document(user.uid).set(dataBayar)
+
+                        val listSearch: ArrayList<String> = arrayListOf("kosong")
+                        val dataSearch = DataSearch("kosong", listSearch)
+                        db.collection("search").document(user.uid).set(dataSearch)
+
+                        arrayUser.add(user.email!!)
+                        val data = DataSearch("kosong", arrayUser)
+                        db.collection("users").document("daftarUser").set(data)
+                        loadKursus2()
+                    }
+                }
+                else{
+                    checkUser(user)
+                }
+            }
+            .addOnFailureListener { exception ->
+                progressDialog.dismiss()
+            }
+    }
+
+    override fun onConnectionFailed(p0: ConnectionResult) {
+        TODO("Not yet implemented")
     }
 }

@@ -78,8 +78,9 @@ class SignUpActivity : AppCompatActivity() {
         val username: String = et_daftar_username.text.toString()
         val email: String = et_daftar_email.text.toString()
         val password: String = et_daftar_password.text.toString()
+        val noHp: String = et_daftar_hp.text.toString()
 
-        if(TextUtils.isEmpty(email) || TextUtils.isEmpty(password) || TextUtils.isEmpty(username)) {
+        if(TextUtils.isEmpty(email) || TextUtils.isEmpty(password) || TextUtils.isEmpty(username) || TextUtils.isEmpty(noHp)) {
             Toast.makeText(this, "Harap isi semua", Toast.LENGTH_LONG).show()
         }
         else{

@@ -93,15 +93,6 @@ class DetailActivity : AppCompatActivity() {
 
         cv_addtochart.visibility = View.GONE
         tv_detail_jumlahkeranjang.visibility = View.GONE
-
-        val displayMetrics = DisplayMetrics()
-        windowManager.defaultDisplay.getMetrics(displayMetrics)
-        val dpheight = displayMetrics.heightPixels
-        val dpwidth = displayMetrics.widthPixels
-        val params = rv_detail.layoutParams
-        val params2 = btn_detail_addtokeranjang.layoutParams
-        params.height = dpheight - params2.height
-
     }
 
     override fun onResume() {

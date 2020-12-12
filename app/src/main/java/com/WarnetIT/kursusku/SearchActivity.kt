@@ -33,7 +33,7 @@ class SearchActivity : AppCompatActivity() {
     private val search = Search()
     private lateinit var dbReference: DatabaseReference
     private lateinit var etSearch: EditText
-    private var listSearch: ArrayList<String> = arrayListOf()
+    private var listSearch: ArrayList<String>? = arrayListOf()
     private var listSearch2: ArrayList<String> = arrayListOf()
     private var listSearchKategori = ArrayList<DataKursus>()
     private var listKosong: ArrayList<String> = arrayListOf()
@@ -103,7 +103,7 @@ class SearchActivity : AppCompatActivity() {
             })
 
         btn_search_clear.setOnClickListener {
-            listSearch.clear()
+            listSearch?.clear()
             dbReference = FirebaseDatabase.getInstance().getReference("search")
             val key: String? = dbReference.push().key
             val db = FirebaseFirestore.getInstance()
@@ -161,9 +161,9 @@ class SearchActivity : AppCompatActivity() {
         val key: String? = dbReference.push().key
         val db = FirebaseFirestore.getInstance()
         val kata = etSearch.text.toString()
-        listSearch.add(kata)
+        listSearch?.add(kata)
         if(userId != ""){
-            val city = DataSearch(kata, listSearch)
+            val city = DataSearch(kata, listSearch!!)
             db.collection("search").document(userId).set(city)
         }
     }
@@ -234,13 +234,13 @@ class SearchActivity : AppCompatActivity() {
         db.collection("search").document(userId)
             .get()
             .addOnSuccessListener { result ->
-                listSearch.clear()
+                listSearch?.clear()
                 listSearch = result.get("listSearch") as ArrayList<String>
                 kataSearch = result.getString("kata")
 
-                if(listSearch.isNotEmpty()){
+                if(listSearch!!.isNotEmpty()){
                     if(kataSearch != "kosong"){
-                        listSearch2 = listSearch
+                        listSearch2 = listSearch!!
                         listSearch2.remove("kosong")
                         search_progressBar.visibility = View.GONE
                         tv_nothing2.visibility = View.GONE

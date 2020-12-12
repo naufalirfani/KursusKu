@@ -87,6 +87,9 @@ class DetailActivity : AppCompatActivity() {
             val intent = Intent(this, KeranjangActivity::class.java)
             startActivity(intent)
         }
+        btn_detail_chat.setOnClickListener {
+            Toast.makeText(this, "Masih dalam Tahap Pengembangan", Toast.LENGTH_SHORT).show()
+        }
 
         cv_addtochart.visibility = View.GONE
         tv_detail_jumlahkeranjang.visibility = View.GONE

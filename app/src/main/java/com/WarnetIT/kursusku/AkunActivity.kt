@@ -96,6 +96,10 @@ class AkunActivity : AppCompatActivity(){
             alert.show()
         }
         loadUser2()
+
+        btn_akun_chat.setOnClickListener {
+            Toast.makeText(this, "Masih dalam Tahap Pengembangan", Toast.LENGTH_SHORT).show()
+        }
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
@@ -108,6 +112,7 @@ class AkunActivity : AppCompatActivity(){
     override fun onResume() {
         super.onResume()
         akun_progressbar.visibility = View.GONE
+        tv_akun_jumlahkeranjang.visibility = View.GONE
         loadUser2()
         jumlahKeranjang()
     }

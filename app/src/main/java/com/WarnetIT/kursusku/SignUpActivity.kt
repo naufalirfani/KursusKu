@@ -119,6 +119,10 @@ class SignUpActivity : AppCompatActivity() {
                         val dataBayar = DataPesanan("kosong", 0,0,"kosong",0)
                         db.collection("statusBayar").document(user2.uid).set(dataBayar)
 
+                        val listSearch: ArrayList<String> = arrayListOf("kosong")
+                        val dataSearch = DataSearch("kosong", listSearch)
+                        db.collection("search").document(user2.uid).set(dataSearch)
+
                         Toast.makeText(this, "Terimakasih telah mendaftar", Toast.LENGTH_SHORT).show()
                         val handler = Handler()
                         handler.postDelayed(Runnable { // Do something after 5s = 5000ms

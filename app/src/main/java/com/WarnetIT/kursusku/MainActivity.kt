@@ -56,6 +56,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var btnKeranjang: ImageView
     private lateinit var jumlahKeranjang: TextView
     private lateinit var btnSearch: Button
+    private lateinit var btnChat: Button
     private var doubleBackToExitPressedOnce = false
     private lateinit var dbReference: DatabaseReference
     private var dataPesanan: DataPesanan? = null
@@ -96,6 +97,7 @@ class MainActivity : AppCompatActivity() {
         btnAkun = main_constraint.findViewById(R.id.btn_akun)
         jumlahKeranjang = main_constraint.findViewById(R.id.tv_main_jumlahkeranjang)
         btnKeranjang = main_constraint.findViewById(R.id.btn_keranjang)
+        btnChat = main_constraint.findViewById(R.id.btn_chat)
 
         btnSearch.setOnClickListener {
             val intent = Intent(this, SearchActivity::class.java)
@@ -134,6 +136,11 @@ class MainActivity : AppCompatActivity() {
 
             userDetail = UserDetail("kosong", "kosong", "kosong", "kosong", "kosong", "kosong")
         }
+
+        btnChat.setOnClickListener {
+            Toast.makeText(this, "Masih dalam Tahap Pengembangan", Toast.LENGTH_SHORT).show()
+        }
+
     }
 
     fun getTokenFCM() {

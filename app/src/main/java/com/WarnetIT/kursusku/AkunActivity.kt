@@ -14,11 +14,16 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DecodeFormat
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target
+import com.facebook.AccessToken
+import com.facebook.GraphRequest
+import com.facebook.HttpMethod
+import com.facebook.login.LoginManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import kotlinx.android.synthetic.main.activity_akun.*
+import java.lang.Exception
 import kotlin.random.Random
 
 
@@ -75,6 +80,8 @@ class AkunActivity : AppCompatActivity(){
             ) { dialog, which -> // Do nothing but close the dialog
                 akun_progressbar_utama.visibility = View.VISIBLE
                 FirebaseAuth.getInstance().signOut()
+
+                try{ disconnectFromFacebook() }catch (e: Exception){ }
                 val handler = Handler()
                 handler.postDelayed({
                     onBackPressed()
@@ -115,6 +122,18 @@ class AkunActivity : AppCompatActivity(){
         tv_akun_jumlahkeranjang.visibility = View.GONE
         loadUser2()
         jumlahKeranjang()
+    }
+
+    fun disconnectFromFacebook() {
+        if (AccessToken.getCurrentAccessToken() == null) {
+            return  // already logged out
+        }
+        GraphRequest(
+            AccessToken.getCurrentAccessToken(),
+            "/me/permissions/",
+            null,
+            HttpMethod.DELETE,
+            GraphRequest.Callback { LoginManager.getInstance().logOut() }).executeAsync()
     }
 
     private fun loadUser(){

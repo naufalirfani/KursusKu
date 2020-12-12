@@ -15,6 +15,10 @@ import android.widget.TextView
 import android.widget.TextView.OnEditorActionListener
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.facebook.*
+import com.facebook.login.LoginManager
+import com.facebook.login.LoginResult
+import com.facebook.login.widget.LoginButton
 import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -27,10 +31,7 @@ import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
 import com.google.android.material.snackbar.Snackbar
-import com.google.firebase.auth.AuthCredential
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.auth.*
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_sign_in.*
 import kotlin.random.Random
@@ -61,6 +62,8 @@ class SignInActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedLi
     var mGoogleSignInClient: GoogleSignInClient? = null
     var mGoogleApiClient: GoogleApiClient? = null
     var mAuth: FirebaseAuth? = null
+
+    private var mCallbackManager: CallbackManager? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -122,6 +125,24 @@ class SignInActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedLi
                 gso
             )
             .build()
+
+        mCallbackManager = CallbackManager.Factory.create()
+        auth = FirebaseAuth.getInstance()
+
+        val loginButton: LoginButton = findViewById(R.id.btn_login_fb)
+        loginButton.setReadPermissions("email", "public_profile")
+        loginButton.registerCallback(mCallbackManager, object : FacebookCallback<LoginResult?> {
+            override fun onCancel() {
+            }
+
+            override fun onError(error: FacebookException?) {
+                Toast.makeText(applicationContext, error.toString(), Toast.LENGTH_LONG).show()
+            }
+
+            override fun onSuccess(loginResult: LoginResult?) {
+                handleFacebookAccessToken(loginResult!!.accessToken)
+            }
+        })
     }
 
     override fun onStart() {
@@ -372,10 +393,7 @@ class SignInActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedLi
         }
     }
 
-    private fun setGooglePlusButtonText(
-        signInButton: SignInButton,
-        buttonText: String?
-    ) {
+    private fun setGooglePlusButtonText(signInButton: SignInButton, buttonText: String?) {
         // Find the TextView that is inside of the SignInButton and set its text
         for (i in 0 until signInButton.childCount) {
             val v: View = signInButton.getChildAt(i)
@@ -407,6 +425,9 @@ class SignInActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedLi
                 Toast.makeText(this, "Login Failed", Toast.LENGTH_SHORT).show()
             }
         }
+        else{
+            mCallbackManager!!.onActivityResult(requestCode, resultCode, data)
+        }
     }
 
     private fun firebaseAuthWithGoogle(acct: GoogleSignInAccount) {
@@ -424,7 +445,7 @@ class SignInActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedLi
                     loadingShow()
                     checkUser(user)
                 } else {
-                    Toast.makeText(this@SignInActivity, "Authentication failed.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@SignInActivity, "Email telah digunakan", Toast.LENGTH_SHORT).show()
                 }
             }
     }
@@ -486,5 +507,31 @@ class SignInActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedLi
 
     override fun onConnectionFailed(p0: ConnectionResult) {
         TODO("Not yet implemented")
+    }
+
+    private fun handleFacebookAccessToken(token: AccessToken) {
+        val credential = FacebookAuthProvider.getCredential(token.token)
+        mAuth?.signInWithCredential(credential)?.addOnCompleteListener(this) { task ->
+                if (task.isSuccessful) {
+                    val user: FirebaseUser? = mAuth!!.currentUser
+                    loadingShow()
+                    checkUser(user)
+                } else {
+                    disconnectFromFacebook()
+                    Toast.makeText(applicationContext, "Email telah digunakan", Toast.LENGTH_SHORT).show()
+                }
+            }
+    }
+
+    fun disconnectFromFacebook() {
+        if (AccessToken.getCurrentAccessToken() == null) {
+            return  // already logged out
+        }
+        GraphRequest(
+            AccessToken.getCurrentAccessToken(),
+            "/me/permissions/",
+            null,
+            HttpMethod.DELETE,
+            GraphRequest.Callback { LoginManager.getInstance().logOut() }).executeAsync()
     }
 }

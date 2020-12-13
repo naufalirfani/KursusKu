@@ -4,8 +4,10 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.os.Handler
 import android.view.View
 import android.view.animation.AnimationUtils
+import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.TextView
@@ -57,14 +59,25 @@ class TopUpActivity : AppCompatActivity() {
         hideShow()
 
         btn_detail_bayar.setOnClickListener {
-            if(bayarDipilih == ""){
-                Toast.makeText(this, "Silahkan Pilih Metode Pembayaran", Toast.LENGTH_SHORT).show()
+            if( bayarDipilih == "" && et_nominalsaldo.text.toString().isEmpty()){
+                Toast.makeText(this, "Silahkan Masukkan Nominal Isi Saldo dan Pilih Metode Pembayaran", Toast.LENGTH_SHORT).show()
             }
             else if(et_nominalsaldo.text.toString() == ""){
                 Toast.makeText(this, "Silahkan Masukkan Nominal Isi Saldo", Toast.LENGTH_SHORT).show()
             }
-            else if( bayarDipilih == "" && et_nominalsaldo.text.toString() == ""){
-                Toast.makeText(this, "Silahkan Masukkan Nominal Isi Saldo dan Pilih Metode Pembayaran", Toast.LENGTH_SHORT).show()
+            else if(bayarDipilih == ""){
+                Toast.makeText(this, "Silahkan Pilih Metode Pembayaran", Toast.LENGTH_SHORT).show()
+            }
+            else if(userDetail?.wa == "kosong"){
+                Toast.makeText(this, "Harap Masukkan No. HP/WA", Toast.LENGTH_SHORT).show()
+                topup_progressBar.visibility = View.VISIBLE
+                val handler = Handler()
+                handler.postDelayed({
+                    val intent = Intent(this, SettingActivity::class.java)
+                    intent.putExtra("userDetail", userDetail)
+                    startActivity(intent)
+                    topup_progressBar.visibility = View.GONE
+                }, 3000)
             }
             else{
                 val db2 = FirebaseFirestore.getInstance()
@@ -99,6 +112,16 @@ class TopUpActivity : AppCompatActivity() {
         }
 
         et_nominalsaldo.setOnClickListener { et_nominalsaldo.isCursorVisible = true }
+        et_nominalsaldo.setOnEditorActionListener { v, actionId, event ->
+            return@setOnEditorActionListener when (actionId) {
+                EditorInfo.IME_ACTION_DONE -> {
+                    et_nominalsaldo.isCursorVisible = false
+                    closeKeyBoard()
+                    true
+                }
+                else -> false
+            }
+        }
     }
 
     private fun closeKeyBoard() {

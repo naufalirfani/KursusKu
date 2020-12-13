@@ -17,6 +17,7 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.provider.Settings
 import android.view.ContextThemeWrapper
+import android.view.KeyEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
@@ -35,11 +36,12 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import kotlinx.android.synthetic.main.activity_keranjang.actionbar
 import kotlinx.android.synthetic.main.activity_setting.*
+import java.io.ByteArrayOutputStream
 
 @Suppress("DEPRECATION")
 class SettingActivity : AppCompatActivity() {
 
-    lateinit var userDetail: UserDetail
+    private lateinit var userDetail: UserDetail
     private var filePath: Uri? = null
     private lateinit var currentPhotoPath: String
     private lateinit var auth: FirebaseAuth
@@ -47,11 +49,13 @@ class SettingActivity : AppCompatActivity() {
     private lateinit var dbReference3: DatabaseReference
     private lateinit var firebaseDatabase: FirebaseDatabase
     private var storageReference: StorageReference? = null
-    val MY_PERMISSIONS_REQUEST_CAMERA = 100
+    private val MY_PERMISSIONS_REQUEST_CAMERA = 100
     private val CAMERA_REQUEST = 1888
-    val ALLOW_KEY = "ALLOWED"
-    val CAMERA_PREF = "camera_pref"
+    private val ALLOW_KEY = "ALLOWED"
+    private val CAMERA_PREF = "camera_pref"
     private var mImageUri: Uri? = null
+    private var isSave: Boolean = true
+    private var photo: Bitmap? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -71,7 +75,7 @@ class SettingActivity : AppCompatActivity() {
 
         val btnBack: Button = actionbar.findViewById(R.id.btn_actionbar_back)
         val tvTitle: TextView = actionbar.findViewById(R.id.tv_actionbar)
-        btnBack.setOnClickListener { onBackPressed() }
+        btnBack.setOnClickListener { isDisimpan() }
         tvTitle.text = resources.getString(R.string.pengaturan_akun)
         actionbar.setBackgroundColor(resources.getColor(R.color.colorPrimary))
         tvTitle.setTextColor(Color.parseColor("#FFFFFF"))
@@ -98,12 +102,80 @@ class SettingActivity : AppCompatActivity() {
             dispatchTakePictureIntent()
         }
 
-        btn_setting_batal.setOnClickListener { onBackPressed() }
+        btn_setting_batal.setOnClickListener { isDisimpan() }
+
+        if (ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.CAMERA
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            if (getFromPref(this, ALLOW_KEY)!!) {
+                showSettingsAlert()
+            } else if (ContextCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.CAMERA
+                )
+                != PackageManager.PERMISSION_GRANTED
+            ) {
+
+                // Should we show an explanation?
+                if (ActivityCompat.shouldShowRequestPermissionRationale(
+                        this,
+                        Manifest.permission.CAMERA
+                    )
+                ) {
+                    showAlert()
+                } else {
+                    // No explanation needed, we can request the permission.
+                    ActivityCompat.requestPermissions(
+                        this, arrayOf(Manifest.permission.CAMERA),
+                        MY_PERMISSIONS_REQUEST_CAMERA
+                    )
+                }
+            }
+        }
     }
 
     override fun onBackPressed() {
         super.onBackPressed()
         finish()
+    }
+
+    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
+        return if (keyCode == KeyEvent.KEYCODE_BACK) {
+            isDisimpan()
+            true
+        } else super.onKeyDown(keyCode, event)
+    }
+
+    private fun isDisimpan(){
+        if(isSave){
+            onBackPressed()
+        }
+        else{
+            val builder: AlertDialog.Builder = AlertDialog.Builder(this)
+            builder.setCancelable(true)
+            builder.setMessage("Perubahan belum disimpan. Apakah Anda ingin kembali?")
+
+            builder.setPositiveButton("Ya"
+            ) { dialog, which -> // Do nothing but close the dialo
+
+                onBackPressed()
+                dialog.dismiss()
+            }
+
+            builder.setNegativeButton("Tidak"
+            ) { dialog, which -> // Do nothing
+                dialog.dismiss()
+            }
+
+            val alert: AlertDialog = builder.create()
+            alert.setOnShowListener {
+                alert.getButton(AlertDialog.BUTTON_NEGATIVE)
+                    .setTextColor(resources.getColor(R.color.colorAbuGelap))
+            }
+            alert.show()
+        }
     }
 
     fun saveToPreferences(
@@ -348,7 +420,18 @@ class SettingActivity : AppCompatActivity() {
 //                val imgFile = File(currentPhotoPath)
 //                filePath = Uri.fromFile(imgFile)
                 val imageBitmap: Bitmap? = data!!.extras!!["data"] as Bitmap?
+                photo = imageBitmap
                 img_my_photo.setImageBitmap(imageBitmap)
+
+                isSave = false
+                btn_setting_simpan.setOnClickListener {
+                    submit()
+                    isSave = true
+
+                    btn_setting_simpan.setOnClickListener {
+                        Toast.makeText(this, "Tidak ada perubahan", Toast.LENGTH_LONG).show()
+                    }
+                }
             }
             101 -> if (resultCode == Activity.RESULT_OK) {
                 filePath = data!!.data
@@ -359,8 +442,10 @@ class SettingActivity : AppCompatActivity() {
                             Target.SIZE_ORIGINAL))
                     .into(img_my_photo)
 
+                isSave = false
                 btn_setting_simpan.setOnClickListener {
                     uploadImage()
+                    isSave = true
 
                     btn_setting_simpan.setOnClickListener {
                         Toast.makeText(this, "Tidak ada perubahan", Toast.LENGTH_LONG).show()
@@ -378,6 +463,7 @@ class SettingActivity : AppCompatActivity() {
         progressDialog.setCancelable(true)
         progressDialog.show()
         val progressbarUpload:ProgressBar = progressDialog.findViewById(R.id.setting_progress_bar)
+
         if(filePath != null){
             val ref = storageReference?.child("imageProfile/${userId}/foto")
             ref?.putFile(filePath!!)?.addOnSuccessListener { taskSnapshot ->
@@ -398,6 +484,36 @@ class SettingActivity : AppCompatActivity() {
         }else{
             Toast.makeText(this, "Silahkan pilih foto atau gambar", Toast.LENGTH_LONG).show()
         }
+    }
+
+    fun submit() {
+        val progressDialog = Dialog(this)
+        progressDialog.setContentView(R.layout.dialoguploadphoto)
+        progressDialog.setCancelable(true)
+        progressDialog.show()
+        val progressbarUpload:ProgressBar = progressDialog.findViewById(R.id.setting_progress_bar)
+
+        val stream = ByteArrayOutputStream()
+        photo?.compress(Bitmap.CompressFormat.JPEG, 100, stream)
+        val b: ByteArray = stream.toByteArray()
+        val storageReference = FirebaseStorage.getInstance().reference.child("imageProfile/${userId}/foto")
+        //StorageReference filePath = FirebaseStorage.getInstance().getReference().child("profile_images").child(userID);
+        storageReference.putBytes(b)
+            .addOnSuccessListener { p0 ->
+                storageReference.downloadUrl.addOnSuccessListener {
+                    val url = it.toString()
+                    writeNewImageInfoToDB(url)
+                }.addOnFailureListener {}
+                progressDialog.dismiss()
+                Toast.makeText(this, "Perubahan disimpan", Toast.LENGTH_LONG).show()
+            }.addOnFailureListener { e ->
+                progressDialog.dismiss()
+                Toast.makeText(this, "Image Uploading Failed " + e.message, Toast.LENGTH_LONG)
+                    .show()
+            }.addOnProgressListener { taskSnapshot ->
+                val progress = 100.0 * taskSnapshot.bytesTransferred / taskSnapshot.totalByteCount
+                progressbarUpload.progress = progress.toInt()
+            }
     }
 
     private fun writeNewImageInfoToDB(url: String) {

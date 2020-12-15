@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Gravity
+import android.view.KeyEvent
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
@@ -57,6 +58,8 @@ class InvoiceBayarActivity : AppCompatActivity() {
 
         totalHarga = intent.getStringExtra("totalHarga")
         kursusDipilih = intent.getStringArrayListExtra("kursusDipilih")
+        hargaDipilih = intent.getStringArrayListExtra("hargaDipilih")
+        jumlahDipilih = intent.getStringArrayListExtra("jumlahDipilih")
 
         dbReference = FirebaseDatabase.getInstance().getReference("keranjang")
 
@@ -66,11 +69,19 @@ class InvoiceBayarActivity : AppCompatActivity() {
             userId = user.uid
             invoicebayar_progressbar.visibility = View.VISIBLE
             loadUser()
-            loadKursus()
+            loadKursus("onCreate")
         }
 
         rv_invoicebayar.visibility = View.GONE
         loadKursusDibayar()
+    }
+
+    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
+        return if (keyCode == KeyEvent.KEYCODE_BACK) {
+            invoicebayar_progressbar.visibility = View.VISIBLE
+            loadKursus("keyDown")
+            true
+        } else super.onKeyDown(keyCode, event)
     }
 
     private fun loadUser() {
@@ -113,48 +124,27 @@ class InvoiceBayarActivity : AppCompatActivity() {
     }
 
     private fun loadKursusDibayar(){
-        invoicebayar_progressbar.visibility = View.VISIBLE
-        val postListener = object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                hargaDipilih?.clear()
-                jumlahDipilih?.clear()
-                for( data in dataSnapshot.children){
-                    val hasil = data.getValue(DataKeranjang::class.java)
-                    for(i in 0 until kursusDipilih!!.size){
-                        if(hasil?.namaKursus == kursusDipilih!![i]){
-                            hargaDipilih?.add(hasil.totalHarga.toString())
-                            jumlahDipilih?.add(hasil.jumlah.toString())
-                        }
-                    }
-                }
-                iv_invoicebayar_down.setOnClickListener {
-                    if(isShow){
-                        isShow = false
-                        rv_invoicebayar.visibility = View.GONE
-                        iv_invoicebayar_down.setImageResource(R.drawable.ic_keyboard_arrow_down_black_24dp)
-                    }
-                    else{
-                        invoicebayar_progressbar.visibility = View.GONE
-                        isShow = true
-                        iv_invoicebayar_down.setImageResource(R.drawable.ic_keyboard_arrow_up_black_24dp)
-                        rv_invoicebayar.visibility = View.VISIBLE
-                        rv_invoicebayar.setHasFixedSize(true)
-                        rv_invoicebayar.layoutManager = LinearLayoutManager(applicationContext)
-                        val adapter = RVAInvoiceBayar(applicationContext, kursusDipilih!!, hargaDipilih!!, jumlahDipilih!!)
-                        adapter.notifyDataSetChanged()
-                        rv_invoicebayar.adapter = adapter
-                    }
-                }
+        iv_invoicebayar_down.setOnClickListener {
+            if(isShow){
+                isShow = false
+                rv_invoicebayar.visibility = View.GONE
+                iv_invoicebayar_down.setImageResource(R.drawable.ic_keyboard_arrow_down_black_24dp)
             }
-
-            override fun onCancelled(databaseError: DatabaseError) {
+            else{
                 invoicebayar_progressbar.visibility = View.GONE
+                isShow = true
+                iv_invoicebayar_down.setImageResource(R.drawable.ic_keyboard_arrow_up_black_24dp)
+                rv_invoicebayar.visibility = View.VISIBLE
+                rv_invoicebayar.setHasFixedSize(true)
+                rv_invoicebayar.layoutManager = LinearLayoutManager(applicationContext)
+                val adapter = RVAInvoiceBayar(applicationContext, kursusDipilih!!, hargaDipilih!!, jumlahDipilih!!)
+                adapter.notifyDataSetChanged()
+                rv_invoicebayar.adapter = adapter
             }
         }
-        dbReference.child(userId).addValueEventListener(postListener)
     }
 
-    private fun loadKursus(){
+    private fun loadKursus(penanda: String){
         randomAngka()
         val kategori1 = kategori[angka1]
         val kategori2 = kategori[angka2]
@@ -199,9 +189,20 @@ class InvoiceBayarActivity : AppCompatActivity() {
                         startActivity(intent)
                         finish()
                     }
+                    if(penanda == "keyDown"){
+                        val intent = Intent(this, MainActivity::class.java)
+                        intent.putExtra("arrayList", arrayList)
+                        intent.putExtra("arrayList2", arrayList2)
+                        intent.putExtra("arrayList3", arrayList3)
+                        intent.putExtra("kategori1", kategori1)
+                        intent.putExtra("kategori2", kategori2)
+                        startActivity(intent)
+                        finish()
+                        invoicebayar_progressbar.visibility = View.GONE
+                    }
                 }
                 else{
-                    loadKursus()
+                    loadKursus(penanda)
                 }
             }
             .addOnFailureListener { exception ->

@@ -70,8 +70,8 @@
             android:background="@android:color/transparent"
             android:cursorVisible="false"
             android:textSize="16sp"
-            android:paddingLeft="12dp"
-            android:paddingRight="12dp"/>
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"/>
     </LinearLayout>
     <TextView
         android:id="@+id/tv_setting_contohwa"

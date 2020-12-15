@@ -32,6 +32,8 @@ class RVAKeranjangList(private val context: Context?,
     private lateinit var dbReference: DatabaseReference
     private var isChecked: Boolean = false
     var kursusDipilih: ArrayList<String> = arrayListOf()
+    var hargaDipilih: ArrayList<String> = arrayListOf()
+    var jumlahDipilih: ArrayList<String> = arrayListOf()
     private var textHarga: String = ""
 
     fun setData(items: ArrayList<DataKursus>, items2: ArrayList<DataKeranjang>) {
@@ -78,9 +80,12 @@ class RVAKeranjangList(private val context: Context?,
             val totalHarga = hargaSebelumFix + (hargaKursus * keranjang.jumlah!!)
             TambahTitikdiHarga(totalHarga, keranjang.jumlah!!)
             kursusDipilih.add(kursus.nama)
+            hargaDipilih.add(keranjang.totalHarga.toString())
+            jumlahDipilih.add(keranjang.jumlah.toString())
         }
 
         holder.view.iv_item_keranjang_add.setOnClickListener {
+            kursusDibeli = ""
             val jumlah = holder.view.tv_item_keranjang_jumlah.text.toString()
             if(jumlah.toInt() > 0){
                 val hargaSebelum = tv_total.text.split("p")
@@ -101,6 +106,7 @@ class RVAKeranjangList(private val context: Context?,
         }
 
         holder.view.iv_item_keranjang_remove.setOnClickListener {
+            kursusDibeli = ""
             val jumlah = holder.view.tv_item_keranjang_jumlah.text.toString()
             if(jumlah.toInt() > 1){
                 val hargaSebelum = tv_total.text.split("p")
@@ -121,7 +127,7 @@ class RVAKeranjangList(private val context: Context?,
         }
 
         holder.view.cb_item_keranjang.setOnCheckedChangeListener { buttonView, isChecked ->
-            inisiasiTotalharga(isChecked, keranjang.jumlah, kursus.nama, kursus.harga, keranjang.jumlah.toString(), kursus.harga)
+            inisiasiTotalharga(isChecked, keranjang.jumlah, kursus.nama, keranjang.totalHarga.toString(), keranjang.jumlah.toString(), kursus.harga)
             this.isChecked = isChecked
         }
 
@@ -157,9 +163,11 @@ class RVAKeranjangList(private val context: Context?,
                 val hargaSebelumFix = hargaSebelum[1].replace(".", "").toInt()
                 val hargaKursus = kursus.harga.replace(".","").toLong()
                 val totalHarga = hargaSebelumFix - (hargaKursus * keranjang.jumlah!!)
-                TambahTitikdiHarga(totalHarga, keranjang.jumlah!!)
+                TambahTitikdiHarga(hargaSebelumFix.toLong(), keranjang.jumlah!!)
             }
             dbReference.child(userId).child(kursus.nama).removeValue()
+
+            holder.view.cb_item_keranjang.isChecked = false
         }
 
         if(mData.size == 0){
@@ -173,16 +181,21 @@ class RVAKeranjangList(private val context: Context?,
         return mData.size
     }
 
-    private fun inisiasiTotalharga(isChecked: Boolean, jumlah: Long?, namaKursus: String, hargaKursu: String, jumlahKursus:String, harga: String){
+    private fun inisiasiTotalharga(isChecked: Boolean, jumlah: Long?, namaKursus: String, totalHargaKursus: String, jumlahKursus:String, harga: String){
         if (isChecked){
             kursusDipilih.add(namaKursus)
+            hargaDipilih.add(totalHargaKursus)
+            jumlahDipilih.add(jumlahKursus)
             val hargaSebelum = tv_total.text.split("p")
             val hargaSebelumFix = hargaSebelum[1].replace(".", "").toInt()
             val hargaKursus = harga.replace(".","").toLong()
             val totalHarga = hargaSebelumFix + (hargaKursus * jumlah!!)
             TambahTitikdiHarga(totalHarga, jumlah)
         }else{
+            kursusDibeli = ""
             kursusDipilih.remove(namaKursus)
+            hargaDipilih.remove(totalHargaKursus)
+            jumlahDipilih.remove(jumlahKursus)
             val hargaSebelum = tv_total.text.split("p")
             val hargaSebelumFix = hargaSebelum[1].replace(".", "").toInt()
             val hargaKursus = harga.replace(".","").toLong()
@@ -230,7 +243,13 @@ class RVAKeranjangList(private val context: Context?,
                 val intent = Intent(context, InvoiceBayarActivity::class.java)
                 intent.putExtra("totalHarga", textHarga)
                 intent.putExtra("kursusDipilih", kursusDipilih)
+                intent.putExtra("hargaDipilih", hargaDipilih)
+                intent.putExtra("jumlahDipilih", jumlahDipilih)
                 context?.startActivity(intent)
+
+                kursusDipilih.forEach {
+                    dbReference.child(userId).child(it).removeValue()
+                }
             }
 
             builder.setNegativeButton("Tidak"

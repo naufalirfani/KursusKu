@@ -16,10 +16,14 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.provider.Settings
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.ContextThemeWrapper
 import android.view.KeyEvent
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -55,6 +59,7 @@ class SettingActivity : AppCompatActivity() {
     private val CAMERA_PREF = "camera_pref"
     private var mImageUri: Uri? = null
     private var isSave: Boolean = true
+    private var isWaSave: Boolean = true
     private var photo: Bitmap? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -134,6 +139,8 @@ class SettingActivity : AppCompatActivity() {
                 }
             }
         }
+
+        settingnowa()
     }
 
     override fun onBackPressed() {
@@ -146,6 +153,70 @@ class SettingActivity : AppCompatActivity() {
             isDisimpan()
             true
         } else super.onKeyDown(keyCode, event)
+    }
+
+    private fun settingnowa(){
+        et_setting_wa.setOnClickListener { et_setting_wa.isCursorVisible = true }
+        et_setting_wa.setOnEditorActionListener { v, actionId, event ->
+            return@setOnEditorActionListener when (actionId) {
+                EditorInfo.IME_ACTION_DONE -> {
+                    et_setting_wa.isCursorVisible = false
+                    closeKeyBoard()
+                    true
+                }
+                else -> false
+            }
+        }
+        et_setting_wa.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                if(s.toString().contains("+")){
+                    isWaSave = false
+                    tv_setting_wasalah.visibility = View.INVISIBLE
+                    cv_nominal.background = resources.getDrawable(R.drawable.border_grey_1dp)
+                    btn_setting_simpan.setOnClickListener {
+                        if(!isSave && !isWaSave){
+                            saveWa()
+                            isWaSave = true
+                            uploadImage()
+                            isSave = true
+                        }
+                        else if(!isSave){
+                            uploadImage()
+                            isSave = true
+                        }
+                        else if(!isWaSave){
+                            saveWa()
+                            isWaSave = true
+                            Toast.makeText(applicationContext, "Perubahan disimpan", Toast.LENGTH_LONG).show()
+                        }
+
+                        btn_setting_simpan.setOnClickListener {
+                            Toast.makeText(applicationContext, "Tidak ada perubahan", Toast.LENGTH_LONG).show()
+                        }
+                    }
+                }
+                else{
+                    tv_setting_wasalah.visibility = View.VISIBLE
+                    cv_nominal.background = resources.getDrawable(R.drawable.border_red_1dp)
+                }
+            }
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
+        })
+
+        if(userDetail.wa != "kosong"){
+            et_setting_wa.setText(userDetail.wa)
+        }
+    }
+
+    private fun closeKeyBoard() {
+
+        val view = this.currentFocus
+        if (view != null) {
+            val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(view.windowToken, 0)
+
+        }
     }
 
     private fun isDisimpan(){
@@ -175,6 +246,18 @@ class SettingActivity : AppCompatActivity() {
                     .setTextColor(resources.getColor(R.color.colorAbuGelap))
             }
             alert.show()
+        }
+    }
+
+    private fun saveWa(){
+        if(tv_setting_wasalah.visibility == View.INVISIBLE){
+            val db2 = FirebaseFirestore.getInstance()
+            db2.collection("users2").document(userId)
+                .update("wa", et_setting_wa.text.toString())
+                .addOnSuccessListener { result2 ->
+                }
+                .addOnFailureListener { exception ->
+                }
         }
     }
 
@@ -386,15 +469,37 @@ class SettingActivity : AppCompatActivity() {
                                     Target.SIZE_ORIGINAL))
                             .into(img_my_photo)
 
+                        isSave = false
                         btn_setting_simpan.setOnClickListener {
-                            val db = FirebaseFirestore.getInstance()
-                            db.collection("users2").document(userId)
-                                .update("gambar", "kosong")
-                                .addOnSuccessListener { result ->
-                                }
-                                .addOnFailureListener { exception ->
-                                }
-                            Toast.makeText(this, "Perubahan disimpan", Toast.LENGTH_LONG).show()
+                            if(!isSave && !isWaSave){
+                                saveWa()
+                                isWaSave = true
+                                val db = FirebaseFirestore.getInstance()
+                                db.collection("users2").document(userId)
+                                    .update("gambar", "kosong")
+                                    .addOnSuccessListener { result ->
+                                    }
+                                    .addOnFailureListener { exception ->
+                                    }
+                                Toast.makeText(this, "Perubahan disimpan", Toast.LENGTH_LONG).show()
+                                isSave = true
+                            }
+                            else if(!isSave){
+                                val db = FirebaseFirestore.getInstance()
+                                db.collection("users2").document(userId)
+                                    .update("gambar", "kosong")
+                                    .addOnSuccessListener { result ->
+                                    }
+                                    .addOnFailureListener { exception ->
+                                    }
+                                Toast.makeText(this, "Perubahan disimpan", Toast.LENGTH_LONG).show()
+                                isSave = true
+                            }
+                            else if(!isWaSave){
+                                saveWa()
+                                isWaSave = true
+                                Toast.makeText(this, "Perubahan disimpan", Toast.LENGTH_LONG).show()
+                            }
 
                             btn_setting_simpan.setOnClickListener {
                                 Toast.makeText(this, "Tidak ada perubahan", Toast.LENGTH_LONG).show()
@@ -444,8 +549,21 @@ class SettingActivity : AppCompatActivity() {
 
                 isSave = false
                 btn_setting_simpan.setOnClickListener {
-                    uploadImage()
-                    isSave = true
+                    if(!isSave && !isWaSave){
+                        saveWa()
+                        isWaSave = true
+                        uploadImage()
+                        isSave = true
+                    }
+                    else if(!isSave){
+                        uploadImage()
+                        isSave = true
+                    }
+                    else if(!isWaSave){
+                        saveWa()
+                        isWaSave = true
+                        Toast.makeText(this, "Perubahan disimpan", Toast.LENGTH_LONG).show()
+                    }
 
                     btn_setting_simpan.setOnClickListener {
                         Toast.makeText(this, "Tidak ada perubahan", Toast.LENGTH_LONG).show()

@@ -27,6 +27,64 @@
             android:layout_height="200dp"
             tools:src="@android:color/darker_gray" />
     </LinearLayout>
+    <TextView
+        android:id="@+id/tv_setting_wasalah"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/linear_photo"
+        android:gravity="right"
+        android:padding="6dp"
+        android:text="Format salah"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        android:visibility="invisible"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="32dp"
+        android:layout_marginRight="32dp"
+        android:textColor="@color/colorMerah" />
+    <LinearLayout
+        android:id="@+id/cv_nominal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@drawable/border_grey_1dp"
+        android:layout_marginLeft="32dp"
+        android:layout_marginRight="32dp"
+        android:layout_below="@id/tv_setting_wasalah">
+        <TextView
+            android:id="@+id/tv_setting_wa"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="12dp"
+            android:text="@string/nomor_hp_wa"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:background="@color/colorAbuMuda"
+            android:textColor="@color/colorAbuabu" />
+        <EditText
+            android:id="@+id/et_setting_wa"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="@string/nomor_hp_wa"
+            android:inputType="phone"
+            android:background="@android:color/transparent"
+            android:cursorVisible="false"
+            android:textSize="16sp"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp"/>
+    </LinearLayout>
+    <TextView
+        android:id="@+id/tv_setting_contohwa"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/cv_nominal"
+        android:padding="6dp"
+        android:text="Contoh: +6285865027669"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        android:layout_marginLeft="32dp"
+        android:layout_marginRight="32dp"
+        android:textColor="@color/colorAbuabu" />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -52,7 +110,7 @@
     android:layout_height="wrap_content"
     android:gravity="center"
     android:orientation="horizontal"
-    android:layout_below="@id/linear_photo">
+    android:layout_below="@id/tv_setting_contohwa">
     <Button
         android:id="@+id/btn_setting_batal"
         android:layout_width="wrap_content"

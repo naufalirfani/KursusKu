@@ -140,7 +140,7 @@
         7. Validasi pembaayaran dan Masukkan \"MPIN\"\n
         8. Pembayaran selesai\n
         9. Kirim bukti pembayaran ke \"085865027669 (WA)\"</string>
-    <string name="nomor_hp_wa">Nomor HP (WA)</string>
+    <string name="nomor_hp_wa">No. HP (WA)</string>
     <string name="lihat_panduan_pembayaran"><u>Lihat Panduan Pembayaran</u></string>
     <string name="jumlah_pembayaran">Jumlah Pembayaran</string>
     <string name="facebook_app_id">997755534317016</string>

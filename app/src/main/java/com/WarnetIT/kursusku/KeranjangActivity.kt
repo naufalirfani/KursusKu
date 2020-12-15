@@ -30,6 +30,7 @@ class KeranjangActivity : AppCompatActivity() {
     private lateinit var dbReference: DatabaseReference
     private lateinit var adapter: RVAKeranjangList
     private var userId: String = ""
+    private lateinit var userDetail: UserDetail
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,6 +56,7 @@ class KeranjangActivity : AppCompatActivity() {
             userId = user.uid
             dbReference = FirebaseDatabase.getInstance().getReference("keranjang").child(userId)
             loadKeranjang()
+            loadUser()
             keranjang_progressbar.visibility = View.VISIBLE
         }
         else{
@@ -83,7 +85,8 @@ class KeranjangActivity : AppCompatActivity() {
             iv_keranjang_kosong,
             tv_keranjang_kosong,
             tv_keranjang_kosong2,
-            btn_keranajng_bayar)
+            btn_keranajng_bayar,
+            keranjang_progressbar)
         adapter.notifyDataSetChanged()
         rv_keranjang.setHasFixedSize(true)
         rv_keranjang.layoutManager = LinearLayoutManager(this)
@@ -184,6 +187,32 @@ class KeranjangActivity : AppCompatActivity() {
                 }
                 else{
                     loadKursus(namaKursus)
+                }
+            }
+            .addOnFailureListener { exception ->
+                keranjang_progressbar.visibility = View.GONE
+                Toast.makeText(this, "Connection error", Toast.LENGTH_SHORT).show()
+            }
+    }
+
+    private fun loadUser() {
+        val db = FirebaseFirestore.getInstance()
+        db.collection("users2").document(userId)
+            .get()
+            .addOnSuccessListener { result ->
+                userDetail = UserDetail(result.getString("username").toString(),
+                    result.getString("email").toString(),
+                    result.getString("gambar").toString(),
+                    result.getString("saldo").toString(),
+                    result.getString("isiKeranjang").toString(),
+                    result.getString("jumlahKeranjang").toString(),
+                    result.getString("wa").toString())
+
+                if(userDetail.isiKeranjang.isNotEmpty()){
+                    adapter.setDataSaldo(userDetail.saldo, userDetail)
+                }
+                else{
+                    loadUser()
                 }
             }
             .addOnFailureListener { exception ->

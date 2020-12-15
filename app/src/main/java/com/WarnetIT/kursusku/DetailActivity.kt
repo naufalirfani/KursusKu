@@ -177,7 +177,7 @@ class DetailActivity : AppCompatActivity() {
                             val handler = Handler()
                             handler.postDelayed({ // Do something after 5s = 5000ms
                                 cv_addtochart.visibility = View.GONE
-                            }, 2500)
+                            }, 2000)
                         }
                         else{
                             val intent = Intent(this@DetailActivity, SignInActivity::class.java)

@@ -228,8 +228,7 @@ class SignInActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedLi
             .get()
             .addOnSuccessListener { result ->
                 try{
-                    dataAkun =  UserAkun(result.getString("username")!!,
-                        result.getString("email")!!)
+                    dataAkun =  UserAkun(result.getString("username")!!, result.getString("email")!!, result.getString("userId"))
                 }
                 catch (e: Exception){
                     Toast.makeText(this,"Login gagal", Toast.LENGTH_SHORT).show()
@@ -494,6 +493,8 @@ class SignInActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedLi
                         val data = DataSearch("kosong", arrayUser)
                         db.collection("users").document("daftarUser").set(data)
                         loadKursus2()
+
+                        addUser(user.displayName!!, user.email!!, user.uid)
                     }
                 }
                 else{
@@ -533,5 +534,12 @@ class SignInActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedLi
             null,
             HttpMethod.DELETE,
             GraphRequest.Callback { LoginManager.getInstance().logOut() }).executeAsync()
+    }
+
+    private fun addUser(name: String, email: String, userId: String){
+        val username: String = name
+        val db = FirebaseFirestore.getInstance()
+        val user = UserAkun(name, email, userId)
+        db.collection("users").document(username).set(user)
     }
 }

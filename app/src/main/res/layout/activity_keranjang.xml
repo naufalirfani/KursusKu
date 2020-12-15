@@ -82,7 +82,6 @@
         android:layout_width="match_parent"
         android:layout_height="250dp"
         android:src="@drawable/emptycartungu"
-        android:background="@color/white"
         app:layout_constraintTop_toBottomOf="@id/actionbar"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"/>

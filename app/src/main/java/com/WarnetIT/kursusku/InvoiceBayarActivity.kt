@@ -177,7 +177,20 @@ class InvoiceBayarActivity : AppCompatActivity() {
                         if(arrayList[i].kategori == kategori2){
                             arrayList3.add(arrayList[i])
                         }
+
+                        for(j in 0 until kursusDipilih?.size!!){
+                            if(arrayList[i].nama == kursusDipilih!![j]){
+                                val pengguna = arrayList[i].pengguna + jumlahDipilih!![j].toLong()
+                                db.collection("kursus").document(kursusDipilih!![j])
+                                    .update("pengguna", pengguna)
+                                    .addOnSuccessListener { result2 ->
+                                    }
+                                    .addOnFailureListener { exception ->
+                                    }
+                            }
+                        }
                     }
+
 
                     btn_invoicebayar_backhome.setOnClickListener {
                         val intent = Intent(this, MainActivity::class.java)

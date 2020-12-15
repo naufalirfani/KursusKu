@@ -145,6 +145,7 @@
     <string name="jumlah_pembayaran">Jumlah Pembayaran</string>
     <string name="facebook_app_id">997755534317016</string>
     <string name="fb_login_protocol_scheme">fb997755534317016</string>
+    <string name="riwayat_transaksi">Riwayat Transaksi</string>
 
 
 </resources>

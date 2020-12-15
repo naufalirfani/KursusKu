@@ -224,6 +224,23 @@
         app:layout_constraintTop_toBottomOf="@id/btn_akun_isisaldo"
         app:layout_constraintLeft_toLeftOf="parent"/>
     <Button
+        android:id="@+id/btn_akun_history"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/riwayat_transaksi"
+        android:textSize="14sp"
+        android:layout_marginTop="1dp"
+        android:background="@color/white"
+        android:textAllCaps="false"
+        android:textAlignment="textStart"
+        android:textColor="@color/colorAbuGelap"
+        android:drawableLeft="@drawable/button_history"
+        android:drawablePadding="12dp"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
+        app:layout_constraintTop_toBottomOf="@id/btn_akun_setting2"
+        app:layout_constraintLeft_toLeftOf="parent"/>
+    <Button
         android:id="@+id/btn_akun_keluar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -238,7 +255,7 @@
         android:drawablePadding="12dp"
         android:paddingLeft="12dp"
         android:paddingRight="12dp"
-        app:layout_constraintTop_toBottomOf="@id/btn_akun_setting2"
+        app:layout_constraintTop_toBottomOf="@id/btn_akun_history"
         app:layout_constraintLeft_toLeftOf="parent"/>
     <ImageView
         android:id="@+id/akun_progressbar_utama"

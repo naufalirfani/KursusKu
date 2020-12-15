@@ -107,6 +107,10 @@ class AkunActivity : AppCompatActivity(){
         btn_akun_chat.setOnClickListener {
             Toast.makeText(this, "Masih dalam Tahap Pengembangan", Toast.LENGTH_SHORT).show()
         }
+
+        btn_akun_history.setOnClickListener {
+            Toast.makeText(this, "Masih dalam Tahap Pengembangan", Toast.LENGTH_SHORT).show()
+        }
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {

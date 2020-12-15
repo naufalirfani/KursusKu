@@ -102,11 +102,13 @@ class SignUpActivity : AppCompatActivity() {
                 progressDialog?.show()
                 progressDialog?.setContentView(R.layout.progressdialog)
 
-                createUser(username, email)
-                addUser(username, email)
                 auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, OnCompleteListener{ task ->
                     if(task.isSuccessful){
                         val user2 = auth.currentUser
+
+                        createUser(username, email, user2?.uid!!)
+                        addUser(username, email, user2.uid)
+
                         val db = FirebaseFirestore.getInstance()
                         val userDetail = UserDetail(et_daftar_username.text.toString(),
                             et_daftar_email.text.toString(),
@@ -115,7 +117,7 @@ class SignUpActivity : AppCompatActivity() {
                             "kosong",
                             "0",
                             et_daftar_hp.text.toString())
-                        db.collection("users2").document(user2?.uid!!).set(userDetail)
+                        db.collection("users2").document(user2.uid).set(userDetail)
 
                         val dataBayar = DataPesanan("kosong", 0,0,"kosong",0)
                         db.collection("statusBayar").document(user2.uid).set(dataBayar)
@@ -145,16 +147,16 @@ class SignUpActivity : AppCompatActivity() {
         }
     }
 
-    private fun createUser(name: String, email: String) {
+    private fun createUser(name: String, email: String, userId: String) {
         val username: String = et_daftar_username.text.toString()
-        val user = UserAkun(name, email)
+        val user = UserAkun(name, email, userId)
         dbReference.child(username).setValue(user)
     }
 
-    private fun addUser(name: String, email: String){
+    private fun addUser(name: String, email: String, userId: String){
         val username: String = et_daftar_username.text.toString()
         val db = FirebaseFirestore.getInstance()
-        val user = UserAkun(name, email)
+        val user = UserAkun(name, email, userId)
         db.collection("users").document(username).set(user)
     }
 }

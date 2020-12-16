@@ -253,38 +253,45 @@ class RVAKeranjangList(private val context: Context?,
             builder.setPositiveButton("Ya"
             ) { dialog, which -> // Do nothing but close the dialog
                 val hargafix = textHarga.replace("Rp", "").replace(".", "")
-                if(saldo.toInt() < hargafix.toInt()){
-                    Toast.makeText(context, "Saldo Anda tidak cukup. Silakan lakukan pengisian.", Toast.LENGTH_LONG).show()
-                    loading.visibility = View.VISIBLE
-                    val handler = Handler()
-                    handler.postDelayed({
-                        val intent = Intent(context, TopUpActivity::class.java)
-                        intent.putExtra("akun", user)
-                        intent.putExtra("userid", userId)
-                        context?.startActivity(intent)
-                        loading.visibility = View.GONE
-                    }, 3000)
+                if(kursusDipilih.isNotEmpty()){
+                    if(hargafix != ""){
+                        if(saldo.toInt() < hargafix.toInt()){
+                            Toast.makeText(context, "Saldo Anda tidak cukup. Silakan lakukan pengisian.", Toast.LENGTH_LONG).show()
+                            loading.visibility = View.VISIBLE
+                            val handler = Handler()
+                            handler.postDelayed({
+                                val intent = Intent(context, TopUpActivity::class.java)
+                                intent.putExtra("akun", user)
+                                intent.putExtra("userid", userId)
+                                context?.startActivity(intent)
+                                loading.visibility = View.GONE
+                            }, 3000)
+                        }
+                        else{
+                            val saldoFix = saldo.toInt() - hargafix.toInt()
+                            val db = FirebaseFirestore.getInstance()
+                            db.collection("users2").document(userId)
+                                .update("saldo", saldoFix.toString())
+                                .addOnSuccessListener { result ->
+                                }
+                                .addOnFailureListener { exception ->
+                                }
+
+                            val intent = Intent(context, InvoiceBayarActivity::class.java)
+                            intent.putExtra("totalHarga", textHarga)
+                            intent.putExtra("kursusDipilih", kursusDipilih)
+                            intent.putExtra("hargaDipilih", hargaDipilih)
+                            intent.putExtra("jumlahDipilih", jumlahDipilih)
+                            context?.startActivity(intent)
+
+                            kursusDipilih.forEach {
+                                dbReference.child(userId).child(it).removeValue()
+                            }
+                        }
+                    }
                 }
                 else{
-                    val saldoFix = saldo.toInt() - hargafix.toInt()
-                    val db = FirebaseFirestore.getInstance()
-                    db.collection("users2").document(userId)
-                        .update("saldo", saldoFix.toString())
-                        .addOnSuccessListener { result ->
-                        }
-                        .addOnFailureListener { exception ->
-                        }
-
-                    val intent = Intent(context, InvoiceBayarActivity::class.java)
-                    intent.putExtra("totalHarga", textHarga)
-                    intent.putExtra("kursusDipilih", kursusDipilih)
-                    intent.putExtra("hargaDipilih", hargaDipilih)
-                    intent.putExtra("jumlahDipilih", jumlahDipilih)
-                    context?.startActivity(intent)
-
-                    kursusDipilih.forEach {
-                        dbReference.child(userId).child(it).removeValue()
-                    }
+                    Toast.makeText(context, "Silakan pilih kursus yang ingin Anda beli.", Toast.LENGTH_LONG).show()
                 }
             }
 

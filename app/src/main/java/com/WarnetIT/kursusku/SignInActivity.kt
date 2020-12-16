@@ -126,6 +126,7 @@ class SignInActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedLi
             )
             .build()
 
+        FacebookSdk.sdkInitialize(applicationContext)
         mCallbackManager = CallbackManager.Factory.create()
         auth = FirebaseAuth.getInstance()
 
@@ -206,7 +207,7 @@ class SignInActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedLi
                         progressDialog.dismiss()
                     }else {
                         progressDialog.dismiss()
-                        Toast.makeText(this, "Invalid login, please try again", Toast.LENGTH_LONG).show()
+                        Toast.makeText(this, "Username $email tidak ditemukan atau password salah.", Toast.LENGTH_SHORT).show()
                     }
                 })
             }
@@ -231,40 +232,45 @@ class SignInActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedLi
                     dataAkun =  UserAkun(result.getString("username")!!, result.getString("email")!!, result.getString("userId"))
                 }
                 catch (e: Exception){
-                    Toast.makeText(this,"Login gagal", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Username $username tidak ditemukan atau password salah.", Toast.LENGTH_SHORT).show()
                 }
 
-
-                if(dataAkun?.email?.isNotEmpty()!!){
-                    email = dataAkun?.email
-                    email?.let { it1 ->
-                        auth.signInWithEmailAndPassword(it1, password).addOnCompleteListener(this, OnCompleteListener { task ->
-                            if(task.isSuccessful) {
-                                progressDialog.dismiss()
-                                val username2 = et_masuk_username.text.toString()
-                                val intent = Intent(this, MainActivity::class.java)
-                                intent.putExtra("username",username2)
-                                intent.putExtra("arrayList", array)
-                                intent.putExtra("arrayList2", array2)
-                                intent.putExtra("arrayList3", array3)
-                                intent.putExtra("kategori1", kat)
-                                intent.putExtra("kategori2", kat2)
-                                startActivity(intent)
-                                finish()
-                            }else {
-                                progressDialog.dismiss()
-                                Toast.makeText(this, "Invalid login, please try again", Toast.LENGTH_LONG).show()
-                            }
-                        })
+                try{
+                    if(dataAkun?.email?.isNotEmpty()!!){
+                        email = dataAkun?.email
+                        email?.let { it1 ->
+                            auth.signInWithEmailAndPassword(it1, password).addOnCompleteListener(this, OnCompleteListener { task ->
+                                if(task.isSuccessful) {
+                                    progressDialog.dismiss()
+                                    val username2 = et_masuk_username.text.toString()
+                                    val intent = Intent(this, MainActivity::class.java)
+                                    intent.putExtra("username",username2)
+                                    intent.putExtra("arrayList", array)
+                                    intent.putExtra("arrayList2", array2)
+                                    intent.putExtra("arrayList3", array3)
+                                    intent.putExtra("kategori1", kat)
+                                    intent.putExtra("kategori2", kat2)
+                                    startActivity(intent)
+                                    finish()
+                                }else {
+                                    progressDialog.dismiss()
+                                    Toast.makeText(this, "Username $username tidak ditemukan atau password salah.", Toast.LENGTH_SHORT).show()
+                                }
+                            })
+                        }
+                    }
+                    else{
+                        loadUser(username, array, array2, array3, kat, kat2)
                     }
                 }
-                else{
-                    loadUser(username, array, array2, array3, kat, kat2)
+                catch (e: java.lang.Exception){
+                    progressDialog.dismiss()
+                    Toast.makeText(this, "Username $username tidak ditemukan atau password salah.", Toast.LENGTH_SHORT).show()
                 }
             }
             .addOnFailureListener { exception ->
                 val snackBar = Snackbar.make(
-                    currentFocus!!, "    Connection Failure",
+                    currentFocus!!, "    Connection Failure.",
                     Snackbar.LENGTH_INDEFINITE
                 )
                 val snackBarView = snackBar.view
@@ -326,7 +332,7 @@ class SignInActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedLi
                 }
             }
             .addOnFailureListener { exception ->
-                Toast.makeText(this, "Koneksi error", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Koneksi error.", Toast.LENGTH_SHORT).show()
             }
     }
 
@@ -380,7 +386,7 @@ class SignInActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedLi
                 }
             }
             .addOnFailureListener { exception ->
-                Toast.makeText(this, "Koneksi error", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Koneksi error.", Toast.LENGTH_SHORT).show()
             }
     }
 
@@ -421,7 +427,7 @@ class SignInActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedLi
                     firebaseAuthWithGoogle(account)
                 }
             } catch (e: ApiException) {
-                Toast.makeText(this, "Login Failed", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Login gagal.", Toast.LENGTH_SHORT).show()
             }
         }
         else{
@@ -444,7 +450,7 @@ class SignInActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedLi
                     loadingShow()
                     checkUser(user)
                 } else {
-                    Toast.makeText(this@SignInActivity, "Email telah digunakan", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@SignInActivity, "Email telah digunakan.", Toast.LENGTH_SHORT).show()
                 }
             }
     }
@@ -519,7 +525,7 @@ class SignInActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedLi
                     checkUser(user)
                 } else {
                     disconnectFromFacebook()
-                    Toast.makeText(applicationContext, "Email telah digunakan", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(applicationContext, "Email telah digunakan.", Toast.LENGTH_SHORT).show()
                 }
             }
     }

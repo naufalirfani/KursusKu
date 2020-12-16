@@ -138,7 +138,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         btnChat.setOnClickListener {
-            Toast.makeText(this, "Masih dalam Tahap Pengembangan", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Masih dalam Tahap Pengembangan.", Toast.LENGTH_SHORT).show()
         }
 
     }
@@ -165,14 +165,12 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        loadKursus()
         auth = FirebaseAuth.getInstance()
         val user = auth.currentUser
         if (user != null) {
             val name = intent.getStringExtra("username")
             val id = user.uid
             userId = id
-            main_progressBar.visibility = View.VISIBLE
             loadUser()
             jumlahKeranjang.visibility = View.GONE
             jumlahKeranjang()

@@ -88,7 +88,7 @@ class DetailActivity : AppCompatActivity() {
             startActivity(intent)
         }
         btn_detail_chat.setOnClickListener {
-            Toast.makeText(this, "Masih dalam Tahap Pengembangan", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Masih dalam Tahap Pengembangan.", Toast.LENGTH_SHORT).show()
         }
 
         cv_addtochart.visibility = View.GONE

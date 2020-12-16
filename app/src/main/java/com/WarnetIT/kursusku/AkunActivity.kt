@@ -105,11 +105,11 @@ class AkunActivity : AppCompatActivity(){
         loadUser2()
 
         btn_akun_chat.setOnClickListener {
-            Toast.makeText(this, "Masih dalam Tahap Pengembangan", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Masih dalam Tahap Pengembangan.", Toast.LENGTH_SHORT).show()
         }
 
         btn_akun_history.setOnClickListener {
-            Toast.makeText(this, "Masih dalam Tahap Pengembangan", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Masih dalam Tahap Pengembangan.", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -226,7 +226,7 @@ class AkunActivity : AppCompatActivity(){
                 }
             }
             .addOnFailureListener { exception ->
-                Toast.makeText(this, "Connection error", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Connection error.", Toast.LENGTH_SHORT).show()
             }
     }
 
@@ -283,12 +283,11 @@ class AkunActivity : AppCompatActivity(){
                 }
             }
             .addOnFailureListener { exception ->
-                Toast.makeText(this, "Connection error", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Connection error.", Toast.LENGTH_SHORT).show()
             }
     }
 
     private fun loadKursus(){
-        akun_progressbar_utama.visibility = View.VISIBLE
         randomAngka()
         val kategori1 = kategori[angka1]
         val kategori2 = kategori[angka2]
@@ -323,7 +322,6 @@ class AkunActivity : AppCompatActivity(){
                         }
                     }
 
-                    akun_progressbar_utama.visibility = View.GONE
                     val intent = Intent(this, MainActivity::class.java)
                     intent.putExtra("arrayList", arrayList)
                     intent.putExtra("arrayList2", arrayList2)
@@ -338,8 +336,7 @@ class AkunActivity : AppCompatActivity(){
                 }
             }
             .addOnFailureListener { exception ->
-                Log.d("Error", "Error getting documents: ", exception)
-                Toast.makeText(this, "Koneksi error", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Koneksi error.", Toast.LENGTH_SHORT).show()
             }
     }
 

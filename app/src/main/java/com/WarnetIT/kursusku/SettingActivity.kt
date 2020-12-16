@@ -187,11 +187,11 @@ class SettingActivity : AppCompatActivity() {
                         else if(!isWaSave){
                             saveWa()
                             isWaSave = true
-                            Toast.makeText(applicationContext, "Perubahan disimpan", Toast.LENGTH_LONG).show()
+                            Toast.makeText(applicationContext, "Perubahan disimpan.", Toast.LENGTH_LONG).show()
                         }
 
                         btn_setting_simpan.setOnClickListener {
-                            Toast.makeText(applicationContext, "Tidak ada perubahan", Toast.LENGTH_LONG).show()
+                            Toast.makeText(applicationContext, "Tidak ada perubahan.", Toast.LENGTH_LONG).show()
                         }
                     }
                 }
@@ -481,7 +481,7 @@ class SettingActivity : AppCompatActivity() {
                                     }
                                     .addOnFailureListener { exception ->
                                     }
-                                Toast.makeText(this, "Perubahan disimpan", Toast.LENGTH_LONG).show()
+                                Toast.makeText(this, "Perubahan disimpan.", Toast.LENGTH_LONG).show()
                                 isSave = true
                             }
                             else if(!isSave){
@@ -492,17 +492,17 @@ class SettingActivity : AppCompatActivity() {
                                     }
                                     .addOnFailureListener { exception ->
                                     }
-                                Toast.makeText(this, "Perubahan disimpan", Toast.LENGTH_LONG).show()
+                                Toast.makeText(this, "Perubahan disimpan.", Toast.LENGTH_LONG).show()
                                 isSave = true
                             }
                             else if(!isWaSave){
                                 saveWa()
                                 isWaSave = true
-                                Toast.makeText(this, "Perubahan disimpan", Toast.LENGTH_LONG).show()
+                                Toast.makeText(this, "Perubahan disimpan.", Toast.LENGTH_LONG).show()
                             }
 
                             btn_setting_simpan.setOnClickListener {
-                                Toast.makeText(this, "Tidak ada perubahan", Toast.LENGTH_LONG).show()
+                                Toast.makeText(this, "Tidak ada perubahan.", Toast.LENGTH_LONG).show()
                             }
                         }
                         dialog.dismiss()
@@ -534,7 +534,7 @@ class SettingActivity : AppCompatActivity() {
                     isSave = true
 
                     btn_setting_simpan.setOnClickListener {
-                        Toast.makeText(this, "Tidak ada perubahan", Toast.LENGTH_LONG).show()
+                        Toast.makeText(this, "Tidak ada perubahan.", Toast.LENGTH_LONG).show()
                     }
                 }
             }
@@ -562,11 +562,11 @@ class SettingActivity : AppCompatActivity() {
                     else if(!isWaSave){
                         saveWa()
                         isWaSave = true
-                        Toast.makeText(this, "Perubahan disimpan", Toast.LENGTH_LONG).show()
+                        Toast.makeText(this, "Perubahan disimpan.", Toast.LENGTH_LONG).show()
                     }
 
                     btn_setting_simpan.setOnClickListener {
-                        Toast.makeText(this, "Tidak ada perubahan", Toast.LENGTH_LONG).show()
+                        Toast.makeText(this, "Tidak ada perubahan.", Toast.LENGTH_LONG).show()
                     }
                 }
             }
@@ -590,17 +590,17 @@ class SettingActivity : AppCompatActivity() {
                     writeNewImageInfoToDB(url)
                 }.addOnFailureListener {}
                 progressDialog.dismiss()
-                Toast.makeText(this, "Perubahan disimpan", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, "Perubahan disimpan.", Toast.LENGTH_LONG).show()
             }?.addOnFailureListener { e ->
                 progressDialog.dismiss()
-                Toast.makeText(this, "Image Uploading Failed " + e.message, Toast.LENGTH_LONG)
+                Toast.makeText(this, "Image Uploading Failed." + e.message, Toast.LENGTH_LONG)
                     .show()
             }?.addOnProgressListener { taskSnapshot ->
                 val progress = 100.0 * taskSnapshot.bytesTransferred / taskSnapshot.totalByteCount
                 progressbarUpload.progress = progress.toInt()
             }
         }else{
-            Toast.makeText(this, "Silahkan pilih foto atau gambar", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, "Silahkan pilih foto atau gambar.", Toast.LENGTH_LONG).show()
         }
     }
 
@@ -623,10 +623,10 @@ class SettingActivity : AppCompatActivity() {
                     writeNewImageInfoToDB(url)
                 }.addOnFailureListener {}
                 progressDialog.dismiss()
-                Toast.makeText(this, "Perubahan disimpan", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, "Perubahan disimpan.", Toast.LENGTH_LONG).show()
             }.addOnFailureListener { e ->
                 progressDialog.dismiss()
-                Toast.makeText(this, "Image Uploading Failed " + e.message, Toast.LENGTH_LONG)
+                Toast.makeText(this, "Image Uploading Failed." + e.message, Toast.LENGTH_LONG)
                     .show()
             }.addOnProgressListener { taskSnapshot ->
                 val progress = 100.0 * taskSnapshot.bytesTransferred / taskSnapshot.totalByteCount

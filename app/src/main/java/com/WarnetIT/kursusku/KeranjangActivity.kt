@@ -130,7 +130,7 @@ class KeranjangActivity : AppCompatActivity() {
             override fun onCancelled(databaseError: DatabaseError) {
                 keranjang_progressbar.visibility = View.GONE
                 val snackBar = Snackbar.make(
-                    currentFocus!!, "    Connection Failure",
+                    currentFocus!!, "    Connection Failure.",
                     Snackbar.LENGTH_INDEFINITE
                 )
                 val snackBarView = snackBar.view
@@ -191,7 +191,7 @@ class KeranjangActivity : AppCompatActivity() {
             }
             .addOnFailureListener { exception ->
                 keranjang_progressbar.visibility = View.GONE
-                Toast.makeText(this, "Connection error", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Connection error.", Toast.LENGTH_SHORT).show()
             }
     }
 
@@ -217,7 +217,7 @@ class KeranjangActivity : AppCompatActivity() {
             }
             .addOnFailureListener { exception ->
                 keranjang_progressbar.visibility = View.GONE
-                Toast.makeText(this, "Connection error", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Connection error.", Toast.LENGTH_SHORT).show()
             }
     }
 }

@@ -119,7 +119,7 @@ class InvoiceBayarActivity : AppCompatActivity() {
             }
             .addOnFailureListener { exception ->
                 invoicebayar_progressbar.visibility = View.GONE
-                Toast.makeText(this, "Connection error", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Connection error.", Toast.LENGTH_SHORT).show()
             }
     }
 
@@ -219,7 +219,7 @@ class InvoiceBayarActivity : AppCompatActivity() {
                 }
             }
             .addOnFailureListener { exception ->
-                Toast.makeText(this, "Koneksi error", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Koneksi error.", Toast.LENGTH_SHORT).show()
             }
     }
 

@@ -75,7 +75,23 @@
             android:hint="No. HP (WA)"/>
     </com.google.android.material.textfield.TextInputLayout>
     <TextView
-        android:id="@+id/tv_signin_contohwa"
+        android:id="@+id/tv_daftar_wasalah"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:padding="6dp"
+        android:text="Format salah"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        android:visibility="invisible"
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="32dp"
+        android:layout_marginRight="32dp"
+        android:textColor="@color/colorMerah"
+        app:layout_constraintTop_toTopOf="@id/til_daftar_hp"
+        app:layout_constraintBottom_toBottomOf="@id/til_daftar_hp" />
+    <TextView
+        android:id="@+id/tv_daftar_contohwa"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Contoh: +6285865027669"
@@ -90,7 +106,7 @@
         android:id="@+id/til_daftar_password"
         android:layout_width="match_parent"
         android:layout_height="56dp"
-        app:layout_constraintTop_toBottomOf="@id/tv_signin_contohwa">
+        app:layout_constraintTop_toBottomOf="@id/tv_daftar_contohwa">
         <EditText
             android:id="@+id/et_daftar_password"
             android:layout_width="match_parent"

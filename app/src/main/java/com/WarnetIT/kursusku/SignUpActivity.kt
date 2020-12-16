@@ -1,22 +1,28 @@
 package com.WarnetIT.kursusku
 
 
+import android.R.color
 import android.app.ProgressDialog
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.os.Handler
+import android.text.Editable
 import android.text.InputType
 import android.text.TextUtils
+import android.text.TextWatcher
+import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.android.gms.tasks.OnCompleteListener
 import kotlinx.android.synthetic.main.activity_sign_up.*
 
 
@@ -61,16 +67,44 @@ class SignUpActivity : AppCompatActivity() {
             finish()
         }
 
-        btn_daftar.setOnClickListener { signUp() }
+        btn_daftar.setOnClickListener {
+            if(tv_daftar_wasalah.visibility == View.VISIBLE){
+                Toast.makeText(this, "Harap masukkan No. HP dengan format yang benar.", Toast.LENGTH_LONG).show()
+            }
+            else{
+                signUp()
+            }
+        }
 
         auth = FirebaseAuth.getInstance()
         firebaseDatabase = FirebaseDatabase.getInstance()
         dbReference = firebaseDatabase.getReference("users")
+
+        checkIsWATrue()
     }
 
     override fun onBackPressed() {
         super.onBackPressed()
         finish()
+    }
+
+    private fun checkIsWATrue(){
+        et_daftar_hp.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                if(s.toString().contains("+")){
+                    tv_daftar_wasalah.visibility = View.INVISIBLE
+                    val colorStateList = ColorStateList.valueOf(resources.getColor(R.color.colorPrimary))
+                    ViewCompat.setBackgroundTintList(et_daftar_hp, colorStateList)
+                }
+                else{
+                    tv_daftar_wasalah.visibility = View.VISIBLE
+                    val colorStateList = ColorStateList.valueOf(resources.getColor(R.color.colorMerah))
+                    ViewCompat.setBackgroundTintList(et_daftar_hp, colorStateList)
+                }
+            }
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
+        })
     }
 
     fun signUp(){
@@ -81,7 +115,7 @@ class SignUpActivity : AppCompatActivity() {
         val noHp: String = et_daftar_hp.text.toString()
 
         if(TextUtils.isEmpty(email) || TextUtils.isEmpty(password) || TextUtils.isEmpty(username) || TextUtils.isEmpty(noHp)) {
-            Toast.makeText(this, "Harap isi semua", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, "Harap isi semua.", Toast.LENGTH_LONG).show()
         }
         else{
             var user: UserAkun? = null
@@ -126,7 +160,7 @@ class SignUpActivity : AppCompatActivity() {
                         val dataSearch = DataSearch("kosong", listSearch)
                         db.collection("search").document(user2.uid).set(dataSearch)
 
-                        Toast.makeText(this, "Terimakasih telah mendaftar", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, "Terimakasih telah mendaftar.", Toast.LENGTH_SHORT).show()
                         val handler = Handler()
                         handler.postDelayed(Runnable { // Do something after 5s = 5000ms
                             val intent = Intent(this, SignInActivity::class.java)
@@ -136,13 +170,13 @@ class SignUpActivity : AppCompatActivity() {
                         progressDialog?.hide()
                     }else {
                         progressDialog?.hide()
-                        Toast.makeText(this, "Username atau email telah digunakan", Toast.LENGTH_LONG).show()
+                        Toast.makeText(this, "Username atau email telah digunakan.", Toast.LENGTH_LONG).show()
                     }
                 })
             }
             else{
                 progressDialog?.hide()
-                Toast.makeText(this, "Username or rmail telah digunakan", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, "Username atau rmail telah digunakan.", Toast.LENGTH_LONG).show()
             }
         }
     }

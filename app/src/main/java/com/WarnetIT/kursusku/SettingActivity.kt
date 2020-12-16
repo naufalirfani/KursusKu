@@ -171,7 +171,7 @@ class SettingActivity : AppCompatActivity() {
             override fun afterTextChanged(s: Editable?) {
                 if(s.toString().contains("+")){
                     isWaSave = false
-                    tv_setting_wasalah.visibility = View.INVISIBLE
+                    tv_daftar_wasalah.visibility = View.INVISIBLE
                     cv_nominal.background = resources.getDrawable(R.drawable.border_grey_1dp)
                     btn_setting_simpan.setOnClickListener {
                         if(!isSave && !isWaSave){
@@ -196,7 +196,7 @@ class SettingActivity : AppCompatActivity() {
                     }
                 }
                 else{
-                    tv_setting_wasalah.visibility = View.VISIBLE
+                    tv_daftar_wasalah.visibility = View.VISIBLE
                     cv_nominal.background = resources.getDrawable(R.drawable.border_red_1dp)
                 }
             }
@@ -250,7 +250,7 @@ class SettingActivity : AppCompatActivity() {
     }
 
     private fun saveWa(){
-        if(tv_setting_wasalah.visibility == View.INVISIBLE){
+        if(tv_daftar_wasalah.visibility == View.INVISIBLE){
             val db2 = FirebaseFirestore.getInstance()
             db2.collection("users2").document(userId)
                 .update("wa", et_setting_wa.text.toString())

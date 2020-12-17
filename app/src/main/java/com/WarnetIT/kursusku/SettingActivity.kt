@@ -156,7 +156,10 @@ class SettingActivity : AppCompatActivity() {
     }
 
     private fun settingnowa(){
-        et_setting_wa.setOnClickListener { et_setting_wa.isCursorVisible = true }
+        et_setting_wa.setOnClickListener {
+            et_setting_wa.isCursorVisible = true
+            et_setting_wa.setSelectAllOnFocus(true)
+        }
         et_setting_wa.setOnEditorActionListener { v, actionId, event ->
             return@setOnEditorActionListener when (actionId) {
                 EditorInfo.IME_ACTION_DONE -> {

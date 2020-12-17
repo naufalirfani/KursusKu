@@ -116,7 +116,9 @@ class SignInActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedLi
 
         //Then we will get the GoogleSignInClient object from GoogleSignIn class
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso)
-        sign_in_button_google.setOnClickListener { signInGoogle() }
+        sign_in_button_google.setOnClickListener {
+            signInGoogle()
+        }
 
         mGoogleApiClient = GoogleApiClient.Builder(this)
             .enableAutoManage(this, this)

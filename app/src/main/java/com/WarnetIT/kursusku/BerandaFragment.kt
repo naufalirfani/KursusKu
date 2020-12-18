@@ -98,7 +98,7 @@ class BerandaFragment : Fragment() {
                 if (dy > 0){
 
                     val id = resources.getIdentifier(
-                        "com.example.kwuapp:drawable/ic_arrow_downward_white_24dp",
+                        "com.WarnetIT.kursusku:drawable/ic_arrow_downward_white_24dp",
                         null,
                         null
                     )

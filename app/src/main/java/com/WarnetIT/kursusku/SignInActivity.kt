@@ -429,7 +429,7 @@ class SignInActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedLi
                     firebaseAuthWithGoogle(account)
                 }
             } catch (e: ApiException) {
-                Toast.makeText(this, "Login gagal.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Error: $e", Toast.LENGTH_LONG).show()
             }
         }
         else{

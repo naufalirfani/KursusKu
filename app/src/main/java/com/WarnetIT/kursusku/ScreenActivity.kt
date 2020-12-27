@@ -25,7 +25,7 @@ class ScreenActivity : AppCompatActivity() {
 
         supportActionBar?.hide()
 
-        val versi = "Versi " + resources.getString(R.string.versi)
+        val versi = "Versi " + BuildConfig.VERSION_NAME
         tv_screen_versi.text = versi
 
         loadKursus()

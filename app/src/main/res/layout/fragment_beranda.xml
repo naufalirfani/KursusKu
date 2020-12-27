@@ -1,32 +1,45 @@
-<androidx.constraintlayout.widget.ConstraintLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:id="@+id/cl_beranda">
+    <com.denzcoskun.imageslider.ImageSlider
+        android:id="@+id/image_slider"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        app:iss_auto_cycle="true"
+        app:iss_period="2000"
+        app:iss_delay="0"
+        app:iss_title_background="@drawable/bg_overlay" />
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/mRecyclerView1"
         android:layout_marginLeft="6dp"
         android:layout_marginRight="6dp"
-        android:layout_marginTop="6dp"
         android:paddingBottom="6dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="@id/cl_beranda"/>
-    <Button
-        android:id="@+id/btn_back_to_top"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:background="@drawable/button_circle"
-        android:drawableStart="@drawable/ic_arrow_upward_white_24dp"
-        android:textColor="#FFFFFF"
-        android:padding="8dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginLeft="8dp"
-        android:alpha="0.5"
-        android:textSize="15sp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        android:layout_below="@id/image_slider"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center|end">
+        <Button
+            android:id="@+id/btn_back_to_top"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/button_circle"
+            android:drawableStart="@drawable/ic_arrow_upward_white_24dp"
+            android:textColor="#FFFFFF"
+            android:padding="8dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginLeft="8dp"
+            android:alpha="0.5"
+            android:textSize="15sp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent" />
+    </LinearLayout>
+</RelativeLayout>

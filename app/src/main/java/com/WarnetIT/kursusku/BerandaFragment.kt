@@ -1,6 +1,7 @@
 package com.WarnetIT.kursusku
 
 
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.view.LayoutInflater
@@ -12,13 +13,23 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
+import com.denzcoskun.imageslider.ImageSlider
+import com.denzcoskun.imageslider.constants.ScaleTypes
+import com.denzcoskun.imageslider.interfaces.ItemClickListener
+import com.denzcoskun.imageslider.models.SlideModel
+import com.google.firebase.firestore.FirebaseFirestore
+import com.smarteist.autoimageslider.IndicatorView.animation.type.IndicatorAnimationType
+import com.smarteist.autoimageslider.SliderAnimations
+import com.smarteist.autoimageslider.SliderView
 import kotlinx.android.synthetic.main.fragment_beranda.*
 import java.lang.Exception
+import kotlin.random.Random
 
 @Suppress("DEPRECATION")
 class BerandaFragment : Fragment() {
 
-    var dataKursus: ArrayList<DataKursus> = arrayListOf()
+    private var dataKursus: ArrayList<DataKursus> = arrayListOf()
+    private var listRandom: MutableList<Int> = mutableListOf()
 
     fun newInstance(dataKursus: ArrayList<DataKursus>): BerandaFragment?{
         val fragmentBeranda = BerandaFragment()
@@ -62,6 +73,8 @@ class BerandaFragment : Fragment() {
         @Nullable savedInstanceState: Bundle?
     ) {
         super.onViewCreated(view, savedInstanceState)
+
+        callSlider()
 
         mRecyclerView1.setHasFixedSize(true)
         mRecyclerView1.layoutManager = GridLayoutManager(context, 2)
@@ -118,7 +131,7 @@ class BerandaFragment : Fragment() {
                 }
                 else if(dy < 0){
                     val id = resources.getIdentifier(
-                        "com.example.kwuapp:drawable/ic_arrow_upward_white_24dp",
+                        "com.WarnetIT.kursusku:drawable/ic_arrow_upward_white_24dp",
                         null,
                         null)
                     btn_back_to_top.setCompoundDrawablesWithIntrinsicBounds(id,0,0,0)
@@ -137,5 +150,50 @@ class BerandaFragment : Fragment() {
                 }
             }
         })
+    }
+
+    private fun callSlider(){
+//        val sliderView: SliderView? = view?.findViewById(R.id.imageSlider)
+//        sliderView?.setSliderAdapter(SliderAdapter(context, dataSlider))
+//        sliderView?.setIndicatorAnimation(IndicatorAnimationType.FILL)
+//        sliderView?.setSliderTransformAnimation(SliderAnimations.SIMPLETRANSFORMATION)
+//        sliderView?.isAutoCycle = true
+//        sliderView?.startAutoCycle()
+
+        val imageList = ArrayList<SlideModel>()
+
+        for (i in dataKursus.indices){
+            val angka = Random.nextInt(0, dataKursus.size)
+            if(listRandom.contains(angka))
+                continue
+            listRandom.add(angka)
+            if (listRandom.size == 7)
+                break
+        }
+
+        listRandom.forEach{
+            imageList.add(SlideModel(dataKursus.get(it).gambar, dataKursus.get(it).nama))
+        }
+
+        val imageSlider = view?.findViewById<ImageSlider>(R.id.image_slider)
+        imageSlider?.setImageList(imageList, ScaleTypes.CENTER_CROP)
+        imageSlider?.setItemClickListener(
+            object: ItemClickListener {
+                override fun onItemSelected(position: Int) {
+                    val dilihat = dataKursus.get(position).dilihat.plus(1)
+                    val db2 = FirebaseFirestore.getInstance()
+                    db2.collection("kursus").document(dataKursus.get(position).nama)
+                        .update("dilihat", dilihat)
+                        .addOnSuccessListener { result2 ->
+                        }
+                        .addOnFailureListener { exception ->
+                        }
+                    val intent = Intent(context, DetailActivity::class.java)
+                    intent.putExtra("kursus", dataKursus.get(position))
+                    context?.startActivity(intent)
+                }
+
+            }
+        )
     }
 }

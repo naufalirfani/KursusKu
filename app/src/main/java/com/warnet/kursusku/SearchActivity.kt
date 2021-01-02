@@ -43,7 +43,7 @@ class SearchActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
-        
+
         supportActionBar?.hide()
         tv_nothing.visibility = View.GONE
         tv_nothing2.visibility = View.GONE
@@ -61,8 +61,7 @@ class SearchActivity : AppCompatActivity() {
         if (user != null) {
             userId = user.uid
             loadSearch()
-        }
-        else{
+        } else {
             search_progressBar.visibility = View.GONE
             tv_nothing2.visibility = View.VISIBLE
             val searchkosong = "Tidak ada riwayat pencarian"
@@ -92,10 +91,18 @@ class SearchActivity : AppCompatActivity() {
                 override fun onGlobalLayout() {
                     val heightDiff =
                         activityRootView.rootView.height - activityRootView.height
-                    if (heightDiff > dpToPx(searchcontext, 0F)) { // if more than 200 dp, it's probably a keyboard...
+                    if (heightDiff > dpToPx(
+                            searchcontext,
+                            0F
+                        )
+                    ) { // if more than 200 dp, it's probably a keyboard...
                         etSearch.isCursorVisible = false
                     }
-                    if (heightDiff > dpToPx(searchcontext, 200F)) { // if more than 200 dp, it's probably a keyboard...
+                    if (heightDiff > dpToPx(
+                            searchcontext,
+                            200F
+                        )
+                    ) { // if more than 200 dp, it's probably a keyboard...
                         etSearch.isCursorVisible = true
                     }
                 }
@@ -108,7 +115,7 @@ class SearchActivity : AppCompatActivity() {
             val db = FirebaseFirestore.getInstance()
             val kata = "kosong"
             listKosong.add(kata)
-            if(userId != ""){
+            if (userId != "") {
                 val city = DataSearch(kata, listKosong)
                 db.collection("search").document(userId).set(city)
             }
@@ -129,7 +136,7 @@ class SearchActivity : AppCompatActivity() {
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, valueInDp, metrics)
     }
 
-    fun perfomSearch(){
+    fun perfomSearch() {
         startermenu()
         tv_search_history.visibility = View.GONE
         btn_search_clear.visibility = View.GONE
@@ -140,11 +147,10 @@ class SearchActivity : AppCompatActivity() {
         search.listSearch.clear()
         search.searchJudul(etSearch.text.toString(), dataKursus)
         search_progressBar.visibility = View.GONE
-        if(search.listSearch.size == 0){
+        if (search.listSearch.size == 0) {
             tv_nothing.visibility = View.VISIBLE
             tv_nothing.text = getString(R.string.nothing_found)
-        }
-        else{
+        } else {
             tv_nothing.visibility = View.GONE
         }
         search_rv.setHasFixedSize(true)
@@ -161,7 +167,7 @@ class SearchActivity : AppCompatActivity() {
         val db = FirebaseFirestore.getInstance()
         val kata = etSearch.text.toString()
         listSearch?.add(kata)
-        if(userId != ""){
+        if (userId != "") {
             val city = DataSearch(kata, listSearch!!)
             db.collection("search").document(userId).set(city)
         }
@@ -177,7 +183,7 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
-    private fun loadKursus(){
+    private fun loadKursus() {
         search_progressBar.visibility = View.VISIBLE
         val db = FirebaseFirestore.getInstance()
         db.collection("kursus")
@@ -185,22 +191,26 @@ class SearchActivity : AppCompatActivity() {
             .addOnSuccessListener { result ->
                 dataKursus.clear()
                 for (document in result) {
-                    dataKursus.add(DataKursus(document.getString("deskripsi")!!,
-                        document.getLong("dilihat")!!,
-                        document.getString("gambar")!!,
-                        document.getString("harga")!!,
-                        document.getString("kategori")!!,
-                        document.getString("nama")!!,
-                        document.getString("pembuat")!!,
-                        document.getLong("pengguna")!!,
-                        document.getString("rating")!!,
-                        document.getString("remaining")!!))
+                    dataKursus.add(
+                        DataKursus(
+                            document.getString("deskripsi")!!,
+                            document.getLong("dilihat")!!,
+                            document.getString("gambar")!!,
+                            document.getString("harga")!!,
+                            document.getString("kategori")!!,
+                            document.getString("nama")!!,
+                            document.getString("pembuat")!!,
+                            document.getLong("pengguna")!!,
+                            document.getString("rating")!!,
+                            document.getString("remaining")!!,
+                            document.getString("video")!!
+                        )
+                    )
                 }
 
-                if(dataKursus.isNotEmpty()){
+                if (dataKursus.isNotEmpty()) {
                     search_progressBar.visibility = View.GONE
-                }
-                else{
+                } else {
                     loadKursus()
                 }
             }
@@ -228,7 +238,7 @@ class SearchActivity : AppCompatActivity() {
             }
     }
 
-    fun loadSearch(){
+    fun loadSearch() {
         val db = FirebaseFirestore.getInstance()
         db.collection("search").document(userId)
             .get()
@@ -237,24 +247,23 @@ class SearchActivity : AppCompatActivity() {
                 listSearch = result.get("listSearch") as ArrayList<String>
                 kataSearch = result.getString("kata")
 
-                if(listSearch!!.isNotEmpty()){
-                    if(kataSearch != "kosong"){
+                if (listSearch!!.isNotEmpty()) {
+                    if (kataSearch != "kosong") {
                         listSearch2 = listSearch!!
                         listSearch2.remove("kosong")
                         search_progressBar.visibility = View.GONE
                         tv_nothing2.visibility = View.GONE
-                        search_rv2.layoutManager = LinearLayoutManager(this,LinearLayoutManager.VERTICAL,true)
+                        search_rv2.layoutManager =
+                            LinearLayoutManager(this, LinearLayoutManager.VERTICAL, true)
                         val adapter = RVASearchHistory(this, listSearch2)
                         search_rv2.adapter = adapter
-                    }
-                    else{
+                    } else {
                         search_progressBar.visibility = View.GONE
                         tv_nothing2.visibility = View.VISIBLE
                         val searchkosong = "Tidak ada riwayat pencarian"
                         tv_nothing2.text = searchkosong
                     }
-                }
-                else{
+                } else {
                     loadSearch()
                 }
             }
@@ -281,7 +290,8 @@ class SearchActivity : AppCompatActivity() {
                 snackBar.show()
             }
     }
-    fun startermenu(){
+
+    fun startermenu() {
         cv_search_1.setCardBackgroundColor(resources.getColor(R.color.colorAbuGelap))
         tv_search_semua.setTextColor(resources.getColor(R.color.white))
         cv_search_2.setCardBackgroundColor(resources.getColor(R.color.white))
@@ -300,7 +310,7 @@ class SearchActivity : AppCompatActivity() {
         tv_search_pengembangan.setTextColor(resources.getColor(R.color.black))
     }
 
-    fun menuClick(){
+    fun menuClick() {
         cv_search_1.setOnClickListener {
             cv_search_1.setCardBackgroundColor(resources.getColor(R.color.colorAbuGelap))
             tv_search_semua.setTextColor(resources.getColor(R.color.white))
@@ -319,11 +329,10 @@ class SearchActivity : AppCompatActivity() {
             cv_search_8.setCardBackgroundColor(resources.getColor(R.color.white))
             tv_search_pengembangan.setTextColor(resources.getColor(R.color.black))
 
-            if(search.listSearch.size == 0){
+            if (search.listSearch.size == 0) {
                 tv_nothing.visibility = View.VISIBLE
                 tv_nothing.text = getString(R.string.nothing_found)
-            }
-            else{
+            } else {
                 tv_nothing.visibility = View.GONE
             }
             search_rv.setHasFixedSize(true)
@@ -351,16 +360,15 @@ class SearchActivity : AppCompatActivity() {
             tv_search_pengembangan.setTextColor(resources.getColor(R.color.black))
 
             listSearchKategori.clear()
-            for(i in 0 until search.listSearch.size){
-                if(search.listSearch[i].kategori == getString(R.string.bisnis)){
+            for (i in 0 until search.listSearch.size) {
+                if (search.listSearch[i].kategori == getString(R.string.bisnis)) {
                     listSearchKategori.add(search.listSearch[i])
                 }
             }
-            if(listSearchKategori.size == 0){
+            if (listSearchKategori.size == 0) {
                 tv_nothing.visibility = View.VISIBLE
                 tv_nothing.text = getString(R.string.nothing_found)
-            }
-            else{
+            } else {
                 tv_nothing.visibility = View.GONE
             }
             search_rv.setHasFixedSize(true)
@@ -388,16 +396,15 @@ class SearchActivity : AppCompatActivity() {
             tv_search_pengembangan.setTextColor(resources.getColor(R.color.black))
 
             listSearchKategori.clear()
-            for(i in 0 until search.listSearch.size){
-                if(search.listSearch[i].kategori == getString(R.string.desain)){
+            for (i in 0 until search.listSearch.size) {
+                if (search.listSearch[i].kategori == getString(R.string.desain)) {
                     listSearchKategori.add(search.listSearch[i])
                 }
             }
-            if(listSearchKategori.size == 0){
+            if (listSearchKategori.size == 0) {
                 tv_nothing.visibility = View.VISIBLE
                 tv_nothing.text = getString(R.string.nothing_found)
-            }
-            else{
+            } else {
                 tv_nothing.visibility = View.GONE
             }
             search_rv.setHasFixedSize(true)
@@ -425,16 +432,15 @@ class SearchActivity : AppCompatActivity() {
             tv_search_pengembangan.setTextColor(resources.getColor(R.color.black))
 
             listSearchKategori.clear()
-            for(i in 0 until search.listSearch.size){
-                if(search.listSearch[i].kategori == getString(R.string.finasial)){
+            for (i in 0 until search.listSearch.size) {
+                if (search.listSearch[i].kategori == getString(R.string.finasial)) {
                     listSearchKategori.add(search.listSearch[i])
                 }
             }
-            if(listSearchKategori.size == 0){
+            if (listSearchKategori.size == 0) {
                 tv_nothing.visibility = View.VISIBLE
                 tv_nothing.text = getString(R.string.nothing_found)
-            }
-            else{
+            } else {
                 tv_nothing.visibility = View.GONE
             }
             search_rv.setHasFixedSize(true)
@@ -462,16 +468,15 @@ class SearchActivity : AppCompatActivity() {
             tv_search_pengembangan.setTextColor(resources.getColor(R.color.black))
 
             listSearchKategori.clear()
-            for(i in 0 until search.listSearch.size){
-                if(search.listSearch[i].kategori == getString(R.string.fotografi)){
+            for (i in 0 until search.listSearch.size) {
+                if (search.listSearch[i].kategori == getString(R.string.fotografi)) {
                     listSearchKategori.add(search.listSearch[i])
                 }
             }
-            if(listSearchKategori.size == 0){
+            if (listSearchKategori.size == 0) {
                 tv_nothing.visibility = View.VISIBLE
                 tv_nothing.text = getString(R.string.nothing_found)
-            }
-            else{
+            } else {
                 tv_nothing.visibility = View.GONE
             }
             search_rv.setHasFixedSize(true)
@@ -499,16 +504,15 @@ class SearchActivity : AppCompatActivity() {
             tv_search_pengembangan.setTextColor(resources.getColor(R.color.black))
 
             listSearchKategori.clear()
-            for(i in 0 until search.listSearch.size){
-                if(search.listSearch[i].kategori == getString(R.string.kantor)){
+            for (i in 0 until search.listSearch.size) {
+                if (search.listSearch[i].kategori == getString(R.string.kantor)) {
                     listSearchKategori.add(search.listSearch[i])
                 }
             }
-            if(listSearchKategori.size == 0){
+            if (listSearchKategori.size == 0) {
                 tv_nothing.visibility = View.VISIBLE
                 tv_nothing.text = getString(R.string.nothing_found)
-            }
-            else{
+            } else {
                 tv_nothing.visibility = View.GONE
             }
             search_rv.setHasFixedSize(true)
@@ -536,16 +540,15 @@ class SearchActivity : AppCompatActivity() {
             tv_search_pengembangan.setTextColor(resources.getColor(R.color.black))
 
             listSearchKategori.clear()
-            for(i in 0 until search.listSearch.size){
-                if(search.listSearch[i].kategori == getString(R.string.pendidikan)){
+            for (i in 0 until search.listSearch.size) {
+                if (search.listSearch[i].kategori == getString(R.string.pendidikan)) {
                     listSearchKategori.add(search.listSearch[i])
                 }
             }
-            if(listSearchKategori.size == 0){
+            if (listSearchKategori.size == 0) {
                 tv_nothing.visibility = View.VISIBLE
                 tv_nothing.text = getString(R.string.nothing_found)
-            }
-            else{
+            } else {
                 tv_nothing.visibility = View.GONE
             }
             search_rv.setHasFixedSize(true)
@@ -573,16 +576,15 @@ class SearchActivity : AppCompatActivity() {
             tv_search_pengembangan.setTextColor(resources.getColor(R.color.white))
 
             listSearchKategori.clear()
-            for(i in 0 until search.listSearch.size){
-                if(search.listSearch[i].kategori == getString(R.string.pengembangan)){
+            for (i in 0 until search.listSearch.size) {
+                if (search.listSearch[i].kategori == getString(R.string.pengembangan)) {
                     listSearchKategori.add(search.listSearch[i])
                 }
             }
-            if(listSearchKategori.size == 0){
+            if (listSearchKategori.size == 0) {
                 tv_nothing.visibility = View.VISIBLE
                 tv_nothing.text = getString(R.string.nothing_found)
-            }
-            else{
+            } else {
                 tv_nothing.visibility = View.GONE
             }
             search_rv.setHasFixedSize(true)

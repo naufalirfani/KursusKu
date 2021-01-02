@@ -26,8 +26,21 @@ class InvoiceBayarActivity : AppCompatActivity() {
     private lateinit var userDetail: UserDetail
     private lateinit var auth: FirebaseAuth
     private var userId: String = ""
-    private val bulan = arrayOf("Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember")
-    private var  totalHarga: String? = null
+    private val bulan = arrayOf(
+        "Januari",
+        "Februari",
+        "Maret",
+        "April",
+        "Mei",
+        "Juni",
+        "Juli",
+        "Agustus",
+        "September",
+        "Oktober",
+        "November",
+        "Desember"
+    )
+    private var totalHarga: String? = null
     private var kursusDipilih: ArrayList<String>? = arrayListOf()
     private var hargaDipilih: ArrayList<String>? = arrayListOf()
     private var jumlahDipilih: ArrayList<String>? = arrayListOf()
@@ -37,10 +50,10 @@ class InvoiceBayarActivity : AppCompatActivity() {
     private var arrayList = ArrayList<DataKursus>()
     private var arrayList2 = ArrayList<DataKursus>()
     private var arrayList3 = ArrayList<DataKursus>()
-    private val kategori = arrayOf("Desain", "Bisnis", "Finansial", "Kantor", "Pendidikan", "Pengembangan")
+    private val kategori =
+        arrayOf("Desain", "Bisnis", "Finansial", "Kantor", "Pendidikan", "Pengembangan")
     private var angka1: Int = 0
     private var angka2: Int = 0
-
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -89,19 +102,22 @@ class InvoiceBayarActivity : AppCompatActivity() {
         db.collection("users2").document(userId)
             .get()
             .addOnSuccessListener { result ->
-                userDetail = UserDetail(result.getString("username").toString(),
+                userDetail = UserDetail(
+                    result.getString("username").toString(),
                     result.getString("email").toString(),
                     result.getString("gambar").toString(),
                     result.getString("saldo").toString(),
                     result.getString("isiKeranjang").toString(),
                     result.getString("jumlahKeranjang").toString(),
-                    result.getString("wa").toString())
+                    result.getString("wa").toString()
+                )
 
-                if(userDetail.isiKeranjang.isNotEmpty()){
+                if (userDetail.isiKeranjang.isNotEmpty()) {
                     val pesan = "Pembayaran Berhasil"
                     tv_invoicebayar_selamat.text = pesan
                     tv_invoicebayar_isihpwa.text = userDetail.wa
-                    val date: String = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
+                    val date: String =
+                        SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
                     val dateArray = date.split("-")
                     val tahun = dateArray[0].toInt()
                     val bulan = dateArray[1].toInt() - 1
@@ -112,8 +128,7 @@ class InvoiceBayarActivity : AppCompatActivity() {
                     tv_invoicebayar_isimetodebayar.text = metodeBayar
                     tv_invoicebayar_isitotalharga.text = totalHarga
                     invoicebayar_progressbar.visibility = View.GONE
-                }
-                else{
+                } else {
                     loadUser()
                 }
             }
@@ -123,28 +138,32 @@ class InvoiceBayarActivity : AppCompatActivity() {
             }
     }
 
-    private fun loadKursusDibayar(){
+    private fun loadKursusDibayar() {
         iv_invoicebayar_down.setOnClickListener {
-            if(isShow){
+            if (isShow) {
                 isShow = false
                 rv_invoicebayar.visibility = View.GONE
                 iv_invoicebayar_down.setImageResource(R.drawable.ic_keyboard_arrow_down_black_24dp)
-            }
-            else{
+            } else {
                 invoicebayar_progressbar.visibility = View.GONE
                 isShow = true
                 iv_invoicebayar_down.setImageResource(R.drawable.ic_keyboard_arrow_up_black_24dp)
                 rv_invoicebayar.visibility = View.VISIBLE
                 rv_invoicebayar.setHasFixedSize(true)
                 rv_invoicebayar.layoutManager = LinearLayoutManager(applicationContext)
-                val adapter = RVAInvoiceBayar(applicationContext, kursusDipilih!!, hargaDipilih!!, jumlahDipilih!!)
+                val adapter = RVAInvoiceBayar(
+                    applicationContext,
+                    kursusDipilih!!,
+                    hargaDipilih!!,
+                    jumlahDipilih!!
+                )
                 adapter.notifyDataSetChanged()
                 rv_invoicebayar.adapter = adapter
             }
         }
     }
 
-    private fun loadKursus(penanda: String){
+    private fun loadKursus(penanda: String) {
         randomAngka()
         val kategori1 = kategori[angka1]
         val kategori2 = kategori[angka2]
@@ -157,29 +176,34 @@ class InvoiceBayarActivity : AppCompatActivity() {
                 arrayList2.clear()
                 arrayList3.clear()
                 for (document in result) {
-                    arrayList.add(DataKursus(document.getString("deskripsi")!!,
-                        document.getLong("dilihat")!!,
-                        document.getString("gambar")!!,
-                        document.getString("harga")!!,
-                        document.getString("kategori")!!,
-                        document.getString("nama")!!,
-                        document.getString("pembuat")!!,
-                        document.getLong("pengguna")!!,
-                        document.getString("rating")!!,
-                        document.getString("remaining")!!))
+                    arrayList.add(
+                        DataKursus(
+                            document.getString("deskripsi")!!,
+                            document.getLong("dilihat")!!,
+                            document.getString("gambar")!!,
+                            document.getString("harga")!!,
+                            document.getString("kategori")!!,
+                            document.getString("nama")!!,
+                            document.getString("pembuat")!!,
+                            document.getLong("pengguna")!!,
+                            document.getString("rating")!!,
+                            document.getString("remaining")!!,
+                            document.getString("video")!!
+                        )
+                    )
                 }
 
-                if(arrayList.isNotEmpty()){
-                    for(i in 0 until arrayList.size){
-                        if(arrayList[i].kategori == kategori1){
+                if (arrayList.isNotEmpty()) {
+                    for (i in 0 until arrayList.size) {
+                        if (arrayList[i].kategori == kategori1) {
                             arrayList2.add(arrayList[i])
                         }
-                        if(arrayList[i].kategori == kategori2){
+                        if (arrayList[i].kategori == kategori2) {
                             arrayList3.add(arrayList[i])
                         }
 
-                        for(j in 0 until kursusDipilih?.size!!){
-                            if(arrayList[i].nama == kursusDipilih!![j]){
+                        for (j in 0 until kursusDipilih?.size!!) {
+                            if (arrayList[i].nama == kursusDipilih!![j]) {
                                 val pengguna = arrayList[i].pengguna + jumlahDipilih!![j].toLong()
                                 db.collection("kursus").document(kursusDipilih!![j])
                                     .update("pengguna", pengguna)
@@ -202,7 +226,7 @@ class InvoiceBayarActivity : AppCompatActivity() {
                         startActivity(intent)
                         finish()
                     }
-                    if(penanda == "keyDown"){
+                    if (penanda == "keyDown") {
                         val intent = Intent(this, MainActivity::class.java)
                         intent.putExtra("arrayList", arrayList)
                         intent.putExtra("arrayList2", arrayList2)
@@ -213,8 +237,7 @@ class InvoiceBayarActivity : AppCompatActivity() {
                         finish()
                         invoicebayar_progressbar.visibility = View.GONE
                     }
-                }
-                else{
+                } else {
                     loadKursus(penanda)
                 }
             }
@@ -223,10 +246,10 @@ class InvoiceBayarActivity : AppCompatActivity() {
             }
     }
 
-    fun randomAngka(){
-        angka1 = Random.nextInt(0,5)
-        angka2 = Random.nextInt(0,5)
-        if(angka1 == angka2){
+    fun randomAngka() {
+        angka1 = Random.nextInt(0, 5)
+        angka2 = Random.nextInt(0, 5)
+        if (angka1 == angka2) {
             randomAngka()
         }
     }

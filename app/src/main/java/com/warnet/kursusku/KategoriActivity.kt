@@ -39,7 +39,7 @@ class KategoriActivity : AppCompatActivity() {
         finish()
     }
 
-    private fun loadKursus(){
+    private fun loadKursus() {
         kategori_progressBar.visibility = View.VISIBLE
         val db = FirebaseFirestore.getInstance()
         db.collection("kursus")
@@ -47,21 +47,26 @@ class KategoriActivity : AppCompatActivity() {
             .addOnSuccessListener { result ->
                 arrayList.clear()
                 for (document in result) {
-                    arrayList.add(DataKursus(document.getString("deskripsi")!!,
-                        document.getLong("dilihat")!!,
-                        document.getString("gambar")!!,
-                        document.getString("harga")!!,
-                        document.getString("kategori")!!,
-                        document.getString("nama")!!,
-                        document.getString("pembuat")!!,
-                        document.getLong("pengguna")!!,
-                        document.getString("rating")!!,
-                        document.getString("remaining")!!))
+                    arrayList.add(
+                        DataKursus(
+                            document.getString("deskripsi")!!,
+                            document.getLong("dilihat")!!,
+                            document.getString("gambar")!!,
+                            document.getString("harga")!!,
+                            document.getString("kategori")!!,
+                            document.getString("nama")!!,
+                            document.getString("pembuat")!!,
+                            document.getLong("pengguna")!!,
+                            document.getString("rating")!!,
+                            document.getString("remaining")!!,
+                            document.getString("video")!!
+                        )
+                    )
                 }
 
-                if(arrayList.isNotEmpty()){
-                    for(i in 0 until arrayList.size){
-                        if(arrayList[i].kategori == kategori){
+                if (arrayList.isNotEmpty()) {
+                    for (i in 0 until arrayList.size) {
+                        if (arrayList[i].kategori == kategori) {
                             dataKursus.add(arrayList[i])
                         }
                     }
@@ -71,8 +76,7 @@ class KategoriActivity : AppCompatActivity() {
                     val adapter = RVAdapterKursus(this, dataKursus)
                     adapter.notifyDataSetChanged()
                     rv_katergori.adapter = adapter
-                }
-                else{
+                } else {
                     loadKursus()
                 }
             }

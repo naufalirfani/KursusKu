@@ -42,11 +42,8 @@ class MainActivity : AppCompatActivity() {
     private var arrayList: ArrayList<DataKursus>? = arrayListOf()
     private var arrayList2: ArrayList<DataKursus>? = arrayListOf()
     private var arrayList3: ArrayList<DataKursus>? = arrayListOf()
-    private var angka1: Int = 0
-    private var angka2: Int = 0
     private var kategori1: String? = null
     private var kategori2: String? = null
-    private val kategori = arrayOf("Desain", "Bisnis", "Finansial", "Kantor", "Pendidikan", "Pengembangan")
 
     private lateinit var userDetail: UserDetail
     private lateinit var dataUser: UserDetail
@@ -262,68 +259,6 @@ class MainActivity : AppCompatActivity() {
                 main_progressBar.visibility = View.GONE
                 Toast.makeText(this, "Connection error", Toast.LENGTH_SHORT).show()
             }
-    }
-
-    private fun loadKursus(){
-        main_progressBar.visibility = View.VISIBLE
-        randomAngka()
-        val kategori1 = kategori[angka1]
-        val kategori2 = kategori[angka2]
-        val db = FirebaseFirestore.getInstance()
-        db.collection("kursus")
-            .orderBy("dilihat", Query.Direction.DESCENDING)
-            .get()
-            .addOnSuccessListener { result ->
-                arrayList?.clear()
-                arrayList2?.clear()
-                arrayList3?.clear()
-                for (document in result) {
-                    arrayList?.add(DataKursus(document.getString("deskripsi")!!,
-                        document.getLong("dilihat")!!,
-                        document.getString("gambar")!!,
-                        document.getString("harga")!!,
-                        document.getString("kategori")!!,
-                        document.getString("nama")!!,
-                        document.getString("pembuat")!!,
-                        document.getLong("pengguna")!!,
-                        document.getString("rating")!!,
-                        document.getString("remaining")!!))
-                }
-
-                if(arrayList != null){
-                    for(i in 0 until arrayList!!.size){
-                        if(arrayList!![i].kategori == kategori1){
-                            arrayList2!!.add(arrayList!![i])
-                        }
-                        if(arrayList!![i].kategori == kategori2){
-                            arrayList3!!.add(arrayList!![i])
-                        }
-                    }
-
-                    main_progressBar.visibility = View.GONE
-                    val pagerAdapter = PagerAdapter(supportFragmentManager, arrayList!!, arrayList2!!, arrayList3!!,
-                        kategori1,
-                        kategori2
-                    )
-                    val pager = findViewById<View>(R.id.pager) as ViewPager
-                    pager.adapter = pagerAdapter
-                    tabLayout1.setupWithViewPager(pager)
-                }
-                else{
-                    loadKursus()
-                }
-            }
-            .addOnFailureListener { exception ->
-                Toast.makeText(this, "Koneksi error", Toast.LENGTH_SHORT).show()
-            }
-    }
-
-    fun randomAngka(){
-        angka1 = Random.nextInt(0,5)
-        angka2 = Random.nextInt(0,5)
-        if(angka1 == angka2){
-            randomAngka()
-        }
     }
 
     private fun loadStatusBayar(user: UserDetail){

@@ -19,8 +19,21 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
             android:background="@color/white"
-            app:layout_constraintBottom_toTopOf="@id/tv_detail_nama"
+            app:layout_constraintBottom_toTopOf="@id/video_view"
             app:layout_constraintTop_toTopOf="@+id/detail_cons" />
+        <com.google.android.exoplayer2.ui.PlayerView
+            android:id="@+id/video_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/iv_detail">
+            <ProgressBar
+                android:id="@+id/progressBar"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_gravity="center"
+                android:visibility="visible" />
+
+        </com.google.android.exoplayer2.ui.PlayerView>
 
         <TextView
             android:id="@+id/tv_detail_nama"
@@ -36,7 +49,7 @@
             android:textSize="16sp"
             app:layout_constraintBottom_toTopOf="@id/tv_detail_harga"
             app:layout_constraintLeft_toLeftOf="@id/detail_cons"
-            app:layout_constraintTop_toBottomOf="@id/iv_detail" />
+            app:layout_constraintTop_toBottomOf="@id/video_view" />
 
         <View
             android:id="@+id/v_detail_bg"

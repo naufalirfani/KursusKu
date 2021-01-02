@@ -44,7 +44,7 @@ class SignInActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedLi
 
     private lateinit var auth: FirebaseAuth
 
-    private  var email: String? = null
+    private var email: String? = null
     private var username: String = ""
     private lateinit var password: String
     private var dataAkun: UserAkun? = null
@@ -53,7 +53,8 @@ class SignInActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedLi
     private var arrayList = ArrayList<DataKursus>()
     private var arrayList2 = ArrayList<DataKursus>()
     private var arrayList3 = ArrayList<DataKursus>()
-    private val kategori = arrayOf("Desain", "Bisnis", "Finansial", "Kantor", "Pendidikan", "Pengembangan")
+    private val kategori =
+        arrayOf("Desain", "Bisnis", "Finansial", "Kantor", "Pendidikan", "Pengembangan")
     private var angka1: Int = 0
     private var angka2: Int = 0
     private var arrayUser: ArrayList<String> = arrayListOf()
@@ -72,13 +73,14 @@ class SignInActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedLi
         supportActionBar?.hide()
 
         iv_masuk_mata.setOnClickListener {
-            if (isShow){
-                et_masuk_password.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+            if (isShow) {
+                et_masuk_password.inputType =
+                    InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
                 iv_masuk_mata.background = getDrawable(R.drawable.matanutup)
                 isShow = false
-            }
-            else{
-                et_masuk_password.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+            } else {
+                et_masuk_password.inputType =
+                    InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
                 iv_masuk_mata.background = getDrawable(R.drawable.matabuka)
                 isShow = true
             }
@@ -94,7 +96,7 @@ class SignInActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedLi
             startActivity(intent)
         }
 
-        btn_masuk.setOnClickListener { masuk()}
+        btn_masuk.setOnClickListener { masuk() }
 
         et_masuk_password.setOnEditorActionListener(OnEditorActionListener { v, actionId, event ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
@@ -109,10 +111,11 @@ class SignInActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedLi
 
         //Then we need a GoogleSignInOptions object
         //And we need to build it as below
-        val gso: GoogleSignInOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken(getString(R.string.default_web_client_id))
-            .requestEmail()
-            .build()
+        val gso: GoogleSignInOptions =
+            GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build()
 
         //Then we will get the GoogleSignInClient object from GoogleSignIn class
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso)
@@ -165,7 +168,7 @@ class SignInActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedLi
         finish()
     }
 
-    private fun masuk(){
+    private fun masuk() {
         closeKeyBoard()
         auth = FirebaseAuth.getInstance()
         password = et_masuk_password.text.toString()
@@ -173,7 +176,7 @@ class SignInActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedLi
         loadKursus()
     }
 
-    private fun loadingShow(){
+    private fun loadingShow() {
         progressDialog = ProgressDialog(this)
         progressDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         progressDialog.isIndeterminate = true
@@ -190,84 +193,111 @@ class SignInActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedLi
         }
     }
 
-    private fun getEmail(array: ArrayList<DataKursus>, array2: ArrayList<DataKursus>, array3: ArrayList<DataKursus>, kat: String, kat2: String){
-        if(et_masuk_username.text.toString().contains("@")){
+    private fun getEmail(
+        array: ArrayList<DataKursus>,
+        array2: ArrayList<DataKursus>,
+        array3: ArrayList<DataKursus>,
+        kat: String,
+        kat2: String
+    ) {
+        if (et_masuk_username.text.toString().contains("@")) {
             email = et_masuk_username.text.toString()
             email?.let { it1 ->
-                auth.signInWithEmailAndPassword(it1, password).addOnCompleteListener(this, OnCompleteListener { task ->
-                    if(task.isSuccessful) {
-                        val username = et_masuk_username.text.toString()
-                        val intent = Intent(this, MainActivity::class.java)
-                        intent.putExtra("username",username)
-                        intent.putExtra("arrayList", array)
-                        intent.putExtra("arrayList2", array2)
-                        intent.putExtra("arrayList3", array3)
-                        intent.putExtra("kategori1", kat)
-                        intent.putExtra("kategori2", kat2)
-                        startActivity(intent)
-                        finish()
-                        progressDialog.dismiss()
-                    }else {
-                        progressDialog.dismiss()
-                        Toast.makeText(this, "Username $email tidak ditemukan atau password salah.", Toast.LENGTH_SHORT).show()
-                    }
-                })
+                auth.signInWithEmailAndPassword(it1, password)
+                    .addOnCompleteListener(this, OnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            val username = et_masuk_username.text.toString()
+                            val intent = Intent(this, MainActivity::class.java)
+                            intent.putExtra("username", username)
+                            intent.putExtra("arrayList", array)
+                            intent.putExtra("arrayList2", array2)
+                            intent.putExtra("arrayList3", array3)
+                            intent.putExtra("kategori1", kat)
+                            intent.putExtra("kategori2", kat2)
+                            startActivity(intent)
+                            finish()
+                            progressDialog.dismiss()
+                        } else {
+                            progressDialog.dismiss()
+                            Toast.makeText(
+                                this,
+                                "Username $email tidak ditemukan atau password salah.",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    })
             }
         }
-        if(!(et_masuk_username.text.toString().contains("@"))){
+        if (!(et_masuk_username.text.toString().contains("@"))) {
             username = et_masuk_username.text.toString()
             loadUser(username, array, array2, array3, kat, kat2)
         }
     }
 
-    private fun loadUser(username: String,
-                         array: ArrayList<DataKursus>,
-                         array2: ArrayList<DataKursus>,
-                         array3: ArrayList<DataKursus>,
-                         kat: String,
-                         kat2: String){
+    private fun loadUser(
+        username: String,
+        array: ArrayList<DataKursus>,
+        array2: ArrayList<DataKursus>,
+        array3: ArrayList<DataKursus>,
+        kat: String,
+        kat2: String
+    ) {
         val db = FirebaseFirestore.getInstance()
         db.collection("users").document(username)
             .get()
             .addOnSuccessListener { result ->
-                try{
-                    dataAkun =  UserAkun(result.getString("username")!!, result.getString("email")!!, result.getString("userId"))
-                }
-                catch (e: Exception){
-                    Toast.makeText(this, "Username $username tidak ditemukan atau password salah.", Toast.LENGTH_SHORT).show()
+                try {
+                    dataAkun = UserAkun(
+                        result.getString("username")!!,
+                        result.getString("email")!!,
+                        result.getString("userId")
+                    )
+                } catch (e: Exception) {
+                    Toast.makeText(
+                        this,
+                        "Username $username tidak ditemukan atau password salah.",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
 
-                try{
-                    if(dataAkun?.email?.isNotEmpty()!!){
+                try {
+                    if (dataAkun?.email?.isNotEmpty()!!) {
                         email = dataAkun?.email
                         email?.let { it1 ->
-                            auth.signInWithEmailAndPassword(it1, password).addOnCompleteListener(this, OnCompleteListener { task ->
-                                if(task.isSuccessful) {
-                                    progressDialog.dismiss()
-                                    val username2 = et_masuk_username.text.toString()
-                                    val intent = Intent(this, MainActivity::class.java)
-                                    intent.putExtra("username",username2)
-                                    intent.putExtra("arrayList", array)
-                                    intent.putExtra("arrayList2", array2)
-                                    intent.putExtra("arrayList3", array3)
-                                    intent.putExtra("kategori1", kat)
-                                    intent.putExtra("kategori2", kat2)
-                                    startActivity(intent)
-                                    finish()
-                                }else {
-                                    progressDialog.dismiss()
-                                    Toast.makeText(this, "Username $username tidak ditemukan atau password salah.", Toast.LENGTH_SHORT).show()
-                                }
-                            })
+                            auth.signInWithEmailAndPassword(it1, password)
+                                .addOnCompleteListener(this, OnCompleteListener { task ->
+                                    if (task.isSuccessful) {
+                                        progressDialog.dismiss()
+                                        val username2 = et_masuk_username.text.toString()
+                                        val intent = Intent(this, MainActivity::class.java)
+                                        intent.putExtra("username", username2)
+                                        intent.putExtra("arrayList", array)
+                                        intent.putExtra("arrayList2", array2)
+                                        intent.putExtra("arrayList3", array3)
+                                        intent.putExtra("kategori1", kat)
+                                        intent.putExtra("kategori2", kat2)
+                                        startActivity(intent)
+                                        finish()
+                                    } else {
+                                        progressDialog.dismiss()
+                                        Toast.makeText(
+                                            this,
+                                            "Username $username tidak ditemukan atau password salah.",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                    }
+                                })
                         }
-                    }
-                    else{
+                    } else {
                         loadUser(username, array, array2, array3, kat, kat2)
                     }
-                }
-                catch (e: java.lang.Exception){
+                } catch (e: java.lang.Exception) {
                     progressDialog.dismiss()
-                    Toast.makeText(this, "Username $username tidak ditemukan atau password salah.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        this,
+                        "Username $username tidak ditemukan atau password salah.",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
             .addOnFailureListener { exception ->
@@ -293,7 +323,7 @@ class SignInActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedLi
             }
     }
 
-    private fun loadKursus(){
+    private fun loadKursus() {
         randomAngka()
         val kategori1 = kategori[angka1]
         val kategori2 = kategori[angka2]
@@ -305,31 +335,35 @@ class SignInActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedLi
                 arrayList2.clear()
                 arrayList3.clear()
                 for (document in result) {
-                    arrayList.add(DataKursus(document.getString("deskripsi")!!,
-                        document.getLong("dilihat")!!,
-                        document.getString("gambar")!!,
-                        document.getString("harga")!!,
-                        document.getString("kategori")!!,
-                        document.getString("nama")!!,
-                        document.getString("pembuat")!!,
-                        document.getLong("pengguna")!!,
-                        document.getString("rating")!!,
-                        document.getString("remaining")!!))
+                    arrayList.add(
+                        DataKursus(
+                            document.getString("deskripsi")!!,
+                            document.getLong("dilihat")!!,
+                            document.getString("gambar")!!,
+                            document.getString("harga")!!,
+                            document.getString("kategori")!!,
+                            document.getString("nama")!!,
+                            document.getString("pembuat")!!,
+                            document.getLong("pengguna")!!,
+                            document.getString("rating")!!,
+                            document.getString("remaining")!!,
+                            document.getString("video")!!
+                        )
+                    )
                 }
 
-                if(arrayList.isNotEmpty()){
-                    for(i in 0 until arrayList.size){
-                        if(arrayList[i].kategori == kategori1){
+                if (arrayList.isNotEmpty()) {
+                    for (i in 0 until arrayList.size) {
+                        if (arrayList[i].kategori == kategori1) {
                             arrayList2.add(arrayList[i])
                         }
-                        if(arrayList[i].kategori == kategori2){
+                        if (arrayList[i].kategori == kategori2) {
                             arrayList3.add(arrayList[i])
                         }
                     }
 
                     getEmail(arrayList, arrayList2, arrayList3, kategori1, kategori2)
-                }
-                else{
+                } else {
                     loadKursus()
                 }
             }
@@ -338,7 +372,7 @@ class SignInActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedLi
             }
     }
 
-    private fun loadKursus2(){
+    private fun loadKursus2() {
         randomAngka()
         val kategori1 = kategori[angka1]
         val kategori2 = kategori[angka2]
@@ -350,31 +384,36 @@ class SignInActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedLi
                 arrayList2.clear()
                 arrayList3.clear()
                 for (document in result) {
-                    arrayList.add(DataKursus(document.getString("deskripsi")!!,
-                        document.getLong("dilihat")!!,
-                        document.getString("gambar")!!,
-                        document.getString("harga")!!,
-                        document.getString("kategori")!!,
-                        document.getString("nama")!!,
-                        document.getString("pembuat")!!,
-                        document.getLong("pengguna")!!,
-                        document.getString("rating")!!,
-                        document.getString("remaining")!!))
+                    arrayList.add(
+                        DataKursus(
+                            document.getString("deskripsi")!!,
+                            document.getLong("dilihat")!!,
+                            document.getString("gambar")!!,
+                            document.getString("harga")!!,
+                            document.getString("kategori")!!,
+                            document.getString("nama")!!,
+                            document.getString("pembuat")!!,
+                            document.getLong("pengguna")!!,
+                            document.getString("rating")!!,
+                            document.getString("remaining")!!,
+                            document.getString("video")!!
+                        )
+                    )
                 }
 
-                if(arrayList.isNotEmpty()){
-                    for(i in 0 until arrayList.size){
-                        if(arrayList[i].kategori == kategori1){
+                if (arrayList.isNotEmpty()) {
+                    for (i in 0 until arrayList.size) {
+                        if (arrayList[i].kategori == kategori1) {
                             arrayList2.add(arrayList[i])
                         }
-                        if(arrayList[i].kategori == kategori2){
+                        if (arrayList[i].kategori == kategori2) {
                             arrayList3.add(arrayList[i])
                         }
                     }
                     progressDialog.dismiss()
                     val username2 = et_masuk_username.text.toString()
                     val intent = Intent(this, MainActivity::class.java)
-                    intent.putExtra("username",username2)
+                    intent.putExtra("username", username2)
                     intent.putExtra("arrayList", arrayList)
                     intent.putExtra("arrayList2", arrayList2)
                     intent.putExtra("arrayList3", arrayList3)
@@ -382,8 +421,7 @@ class SignInActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedLi
                     intent.putExtra("kategori2", kategori2)
                     startActivity(intent)
                     finish()
-                }
-                else{
+                } else {
                     loadKursus2()
                 }
             }
@@ -392,10 +430,10 @@ class SignInActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedLi
             }
     }
 
-    fun randomAngka(){
-        angka1 = Random.nextInt(0,5)
-        angka2 = Random.nextInt(0,5)
-        if(angka1 == angka2){
+    fun randomAngka() {
+        angka1 = Random.nextInt(0, 5)
+        angka2 = Random.nextInt(0, 5)
+        if (angka1 == angka2) {
             randomAngka()
         }
     }
@@ -406,7 +444,7 @@ class SignInActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedLi
             val v: View = signInButton.getChildAt(i)
             if (v is TextView) {
                 v.text = buttonText
-                v.setPadding(48,0,0,0)
+                v.setPadding(48, 0, 0, 0)
                 return
             }
         }
@@ -431,8 +469,7 @@ class SignInActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedLi
             } catch (e: ApiException) {
                 Toast.makeText(this, "Error: $e", Toast.LENGTH_LONG).show()
             }
-        }
-        else{
+        } else {
             mCallbackManager!!.onActivityResult(requestCode, resultCode, data)
         }
     }
@@ -452,7 +489,11 @@ class SignInActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedLi
                     loadingShow()
                     checkUser(user)
                 } else {
-                    Toast.makeText(this@SignInActivity, "Email telah digunakan.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        this@SignInActivity,
+                        "Email telah digunakan.",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
     }
@@ -467,7 +508,7 @@ class SignInActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedLi
         startActivityForResult(signInIntent, RC_SIGN_IN)
     }
 
-    private fun checkUser(user: FirebaseUser?){
+    private fun checkUser(user: FirebaseUser?) {
         val db = FirebaseFirestore.getInstance()
         db.collection("users").document("daftarUser")
             .get()
@@ -476,21 +517,22 @@ class SignInActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedLi
                 arrayUser = result.get("listSearch") as ArrayList<String>
 
 
-                if(arrayUser.isNotEmpty()){
-                    if(arrayUser.contains(user?.email)){
+                if (arrayUser.isNotEmpty()) {
+                    if (arrayUser.contains(user?.email)) {
                         loadKursus2()
-                    }
-                    else{
-                        val userDetail = UserDetail(user?.displayName!!,
+                    } else {
+                        val userDetail = UserDetail(
+                            user?.displayName!!,
                             user.email!!,
                             user.photoUrl!!.toString(),
                             "0",
                             "kosong",
                             "0",
-                            "kosong")
+                            "kosong"
+                        )
                         db.collection("users2").document(user.uid).set(userDetail)
 
-                        val dataBayar = DataPesanan("kosong", 0,0,"kosong",0)
+                        val dataBayar = DataPesanan("kosong", 0, 0, "kosong", 0)
                         db.collection("statusBayar").document(user.uid).set(dataBayar)
 
                         val listSearch: ArrayList<String> = arrayListOf("kosong")
@@ -504,8 +546,7 @@ class SignInActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedLi
 
                         addUser(user.displayName!!, user.email!!, user.uid)
                     }
-                }
-                else{
+                } else {
                     checkUser(user)
                 }
             }
@@ -521,15 +562,16 @@ class SignInActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedLi
     private fun handleFacebookAccessToken(token: AccessToken) {
         val credential = FacebookAuthProvider.getCredential(token.token)
         mAuth?.signInWithCredential(credential)?.addOnCompleteListener(this) { task ->
-                if (task.isSuccessful) {
-                    val user: FirebaseUser? = mAuth!!.currentUser
-                    loadingShow()
-                    checkUser(user)
-                } else {
-                    disconnectFromFacebook()
-                    Toast.makeText(applicationContext, "Email telah digunakan.", Toast.LENGTH_SHORT).show()
-                }
+            if (task.isSuccessful) {
+                val user: FirebaseUser? = mAuth!!.currentUser
+                loadingShow()
+                checkUser(user)
+            } else {
+                disconnectFromFacebook()
+                Toast.makeText(applicationContext, "Email telah digunakan.", Toast.LENGTH_SHORT)
+                    .show()
             }
+        }
     }
 
     fun disconnectFromFacebook() {
@@ -544,7 +586,7 @@ class SignInActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedLi
             GraphRequest.Callback { LoginManager.getInstance().logOut() }).executeAsync()
     }
 
-    private fun addUser(name: String, email: String, userId: String){
+    private fun addUser(name: String, email: String, userId: String) {
         val username: String = name
         val db = FirebaseFirestore.getInstance()
         val user = UserAkun(name, email, userId)

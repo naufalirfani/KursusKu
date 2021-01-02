@@ -14,7 +14,8 @@ class ScreenActivity : AppCompatActivity() {
     private var arrayList = ArrayList<DataKursus>()
     private var arrayList2 = ArrayList<DataKursus>()
     private var arrayList3 = ArrayList<DataKursus>()
-    private val kategori = arrayOf("Desain", "Bisnis", "Finansial", "Kantor", "Pendidikan", "Pengembangan")
+    private val kategori =
+        arrayOf("Desain", "Bisnis", "Finansial", "Kantor", "Pendidikan", "Pengembangan")
     private var angka1: Int = 0
     private var angka2: Int = 0
 
@@ -30,7 +31,7 @@ class ScreenActivity : AppCompatActivity() {
         loadKursus()
     }
 
-    private fun loadKursus(){
+    private fun loadKursus() {
         randomAngka()
         val kategori1 = kategori[angka1]
         val kategori2 = kategori[angka2]
@@ -43,24 +44,29 @@ class ScreenActivity : AppCompatActivity() {
                 arrayList2.clear()
                 arrayList3.clear()
                 for (document in result) {
-                    arrayList.add(DataKursus(document.getString("deskripsi")!!,
-                        document.getLong("dilihat")!!,
-                        document.getString("gambar")!!,
-                        document.getString("harga")!!,
-                        document.getString("kategori")!!,
-                        document.getString("nama")!!,
-                        document.getString("pembuat")!!,
-                        document.getLong("pengguna")!!,
-                        document.getString("rating")!!,
-                        document.getString("remaining")!!))
+                    arrayList.add(
+                        DataKursus(
+                            document.getString("deskripsi")!!,
+                            document.getLong("dilihat")!!,
+                            document.getString("gambar")!!,
+                            document.getString("harga")!!,
+                            document.getString("kategori")!!,
+                            document.getString("nama")!!,
+                            document.getString("pembuat")!!,
+                            document.getLong("pengguna")!!,
+                            document.getString("rating")!!,
+                            document.getString("remaining")!!,
+                            document.getString("video")!!
+                        )
+                    )
                 }
 
-                if(arrayList.isNotEmpty()){
-                    for(i in 0 until arrayList.size){
-                        if(arrayList[i].kategori == kategori1){
+                if (arrayList.isNotEmpty()) {
+                    for (i in 0 until arrayList.size) {
+                        if (arrayList[i].kategori == kategori1) {
                             arrayList2.add(arrayList[i])
                         }
-                        if(arrayList[i].kategori == kategori2){
+                        if (arrayList[i].kategori == kategori2) {
                             arrayList3.add(arrayList[i])
                         }
                     }
@@ -73,8 +79,7 @@ class ScreenActivity : AppCompatActivity() {
                     intent.putExtra("kategori2", kategori2)
                     startActivity(intent)
                     finish()
-                }
-                else{
+                } else {
                     loadKursus()
                 }
             }
@@ -83,10 +88,10 @@ class ScreenActivity : AppCompatActivity() {
             }
     }
 
-    fun randomAngka(){
-        angka1 = Random.nextInt(0,5)
-        angka2 = Random.nextInt(0,5)
-        if(angka1 == angka2){
+    fun randomAngka() {
+        angka1 = Random.nextInt(0, 5)
+        angka2 = Random.nextInt(0, 5)
+        if (angka1 == angka2) {
             randomAngka()
         }
     }

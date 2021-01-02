@@ -27,7 +27,7 @@ import kotlin.random.Random
 
 
 @Suppress("DEPRECATION")
-class AkunActivity : AppCompatActivity(){
+class AkunActivity : AppCompatActivity() {
 
     private lateinit var userDetail: UserDetail
     private lateinit var auth: FirebaseAuth
@@ -38,7 +38,8 @@ class AkunActivity : AppCompatActivity(){
     private var arrayList = ArrayList<DataKursus>()
     private var arrayList2 = ArrayList<DataKursus>()
     private var arrayList3 = ArrayList<DataKursus>()
-    private val kategori = arrayOf("Desain", "Bisnis", "Finansial", "Kantor", "Pendidikan", "Pengembangan")
+    private val kategori =
+        arrayOf("Desain", "Bisnis", "Finansial", "Kantor", "Pendidikan", "Pengembangan")
     private var angka1: Int = 0
     private var angka2: Int = 0
     private lateinit var dbReference2: DatabaseReference
@@ -75,12 +76,16 @@ class AkunActivity : AppCompatActivity(){
             builder.setCancelable(true)
             builder.setMessage("Apakah Anda ingin keluar?")
 
-            builder.setPositiveButton("Ya"
+            builder.setPositiveButton(
+                "Ya"
             ) { dialog, which -> // Do nothing but close the dialog
                 akun_progressbar_utama.visibility = View.VISIBLE
                 FirebaseAuth.getInstance().signOut()
 
-                try{ disconnectFromFacebook() }catch (e: Exception){ }
+                try {
+                    disconnectFromFacebook()
+                } catch (e: Exception) {
+                }
                 val handler = Handler()
                 handler.postDelayed({
                     onBackPressed()
@@ -89,7 +94,8 @@ class AkunActivity : AppCompatActivity(){
                 dialog.dismiss()
             }
 
-            builder.setNegativeButton("Tidak"
+            builder.setNegativeButton(
+                "Tidak"
             ) { dialog, which -> // Do nothing
                 dialog.dismiss()
             }
@@ -139,51 +145,51 @@ class AkunActivity : AppCompatActivity(){
             GraphRequest.Callback { LoginManager.getInstance().logOut() }).executeAsync()
     }
 
-    private fun loadUser(){
-        if(userDetail.gambar != "kosong"){
+    private fun loadUser() {
+        if (userDetail.gambar != "kosong") {
             Glide.with(applicationContext)
                 .load(userDetail.gambar)
                 .apply(
                     RequestOptions().fitCenter().format(DecodeFormat.PREFER_ARGB_8888).override(
-                        Target.SIZE_ORIGINAL))
+                        Target.SIZE_ORIGINAL
+                    )
+                )
                 .into(iv_akun_foto)
-        }
-        else{
+        } else {
             Glide.with(applicationContext)
                 .load(resources.getDrawable(R.drawable.akun))
                 .apply(
                     RequestOptions().fitCenter().format(DecodeFormat.PREFER_ARGB_8888).override(
-                        Target.SIZE_ORIGINAL))
+                        Target.SIZE_ORIGINAL
+                    )
+                )
                 .into(iv_akun_foto)
         }
         tv_akun_username.text = userDetail.username
         tv_akun_email.text = userDetail.email
-        if(userDetail.saldo.length in 4..6){
+        if (userDetail.saldo.length in 4..6) {
             var x = userDetail.saldo
-            x = x.substring(0, x.length-3) + "." + x.substring(x.length -3, x.length)
+            x = x.substring(0, x.length - 3) + "." + x.substring(x.length - 3, x.length)
             val textHarga = "Rp $x"
             tv_akun_saldo.text = textHarga
-        }
-        else if(userDetail.saldo.length in 7..9){
+        } else if (userDetail.saldo.length in 7..9) {
             var x = userDetail.saldo
-            x = x.substring(0, x.length-3) + "." + x.substring(x.length -3, x.length)
-            x = x.substring(0, x.length-7) + "." + x.substring(x.length -7, x.length)
+            x = x.substring(0, x.length - 3) + "." + x.substring(x.length - 3, x.length)
+            x = x.substring(0, x.length - 7) + "." + x.substring(x.length - 7, x.length)
             val textHarga = "Rp $x"
             tv_akun_saldo.text = textHarga
-        }
-        else
-            if(userDetail.saldo.length in 10..12){
+        } else
+            if (userDetail.saldo.length in 10..12) {
                 var x = userDetail.saldo
-                x = x.substring(0, x.length-3) + "." + x.substring(x.length -3, x.length)
-                x = x.substring(0, x.length-7) + "." + x.substring(x.length -7, x.length)
-                x = x.substring(0, x.length-11) + "." + x.substring(x.length -11, x.length)
+                x = x.substring(0, x.length - 3) + "." + x.substring(x.length - 3, x.length)
+                x = x.substring(0, x.length - 7) + "." + x.substring(x.length - 7, x.length)
+                x = x.substring(0, x.length - 11) + "." + x.substring(x.length - 11, x.length)
                 val textHarga = "Rp $x"
                 tv_akun_saldo.text = textHarga
+            } else {
+                val saldo = "Rp ${userDetail.saldo}"
+                tv_akun_saldo.text = saldo
             }
-        else{
-            val saldo = "Rp ${userDetail.saldo}"
-            tv_akun_saldo.text = saldo
-        }
     }
 
     private fun loadUser2() {
@@ -191,15 +197,17 @@ class AkunActivity : AppCompatActivity(){
         db.collection("users2").document(userId)
             .get()
             .addOnSuccessListener { result ->
-                userDetail = UserDetail(result.getString("username").toString(),
+                userDetail = UserDetail(
+                    result.getString("username").toString(),
                     result.getString("email").toString(),
                     result.getString("gambar").toString(),
                     result.getString("saldo").toString(),
                     result.getString("isiKeranjang").toString(),
                     result.getString("jumlahKeranjang").toString(),
-                    result.getString("wa").toString())
+                    result.getString("wa").toString()
+                )
 
-                if(userDetail.isiKeranjang.isNotEmpty()){
+                if (userDetail.isiKeranjang.isNotEmpty()) {
                     btn_akun_setting.setOnClickListener {
                         val intent = Intent(this, SettingActivity::class.java)
                         intent.putExtra("userDetail", userDetail)
@@ -219,8 +227,7 @@ class AkunActivity : AppCompatActivity(){
                     loadPesanan(userDetail, userId)
 
                     loadUser()
-                }
-                else{
+                } else {
                     loadUser2()
                 }
             }
@@ -229,18 +236,20 @@ class AkunActivity : AppCompatActivity(){
             }
     }
 
-    private fun loadPesanan(user: UserDetail, id: String){
+    private fun loadPesanan(user: UserDetail, id: String) {
         val db = FirebaseFirestore.getInstance()
         db.collection("statusBayar").document(userId)
             .get()
             .addOnSuccessListener { result ->
-                dataPesanan = DataPesanan(result.getString("caraBayar"),
+                dataPesanan = DataPesanan(
+                    result.getString("caraBayar"),
                     result.getLong("durasi"),
                     result.getLong("jumlah"),
                     result.getString("status"),
-                    result.getLong("waktu"))
+                    result.getLong("waktu")
+                )
 
-                if(dataPesanan != null){
+                if (dataPesanan != null) {
                     akun_progressbar.visibility = View.GONE
                     when (dataPesanan?.status) {
                         "batal" -> {
@@ -276,8 +285,7 @@ class AkunActivity : AppCompatActivity(){
                             }
                         }
                     }
-                }
-                else{
+                } else {
                     loadPesanan(user, id)
                 }
             }
@@ -286,7 +294,7 @@ class AkunActivity : AppCompatActivity(){
             }
     }
 
-    private fun loadKursus(){
+    private fun loadKursus() {
         randomAngka()
         val kategori1 = kategori[angka1]
         val kategori2 = kategori[angka2]
@@ -299,24 +307,29 @@ class AkunActivity : AppCompatActivity(){
                 arrayList2.clear()
                 arrayList3.clear()
                 for (document in result) {
-                    arrayList.add(DataKursus(document.getString("deskripsi")!!,
-                        document.getLong("dilihat")!!,
-                        document.getString("gambar")!!,
-                        document.getString("harga")!!,
-                        document.getString("kategori")!!,
-                        document.getString("nama")!!,
-                        document.getString("pembuat")!!,
-                        document.getLong("pengguna")!!,
-                        document.getString("rating")!!,
-                        document.getString("remaining")!!))
+                    arrayList.add(
+                        DataKursus(
+                            document.getString("deskripsi")!!,
+                            document.getLong("dilihat")!!,
+                            document.getString("gambar")!!,
+                            document.getString("harga")!!,
+                            document.getString("kategori")!!,
+                            document.getString("nama")!!,
+                            document.getString("pembuat")!!,
+                            document.getLong("pengguna")!!,
+                            document.getString("rating")!!,
+                            document.getString("remaining")!!,
+                            document.getString("video")!!
+                        )
+                    )
                 }
 
-                if(arrayList.isNotEmpty()){
-                    for(i in 0 until arrayList.size){
-                        if(arrayList[i].kategori == kategori1){
+                if (arrayList.isNotEmpty()) {
+                    for (i in 0 until arrayList.size) {
+                        if (arrayList[i].kategori == kategori1) {
                             arrayList2.add(arrayList[i])
                         }
-                        if(arrayList[i].kategori == kategori2){
+                        if (arrayList[i].kategori == kategori2) {
                             arrayList3.add(arrayList[i])
                         }
                     }
@@ -329,8 +342,7 @@ class AkunActivity : AppCompatActivity(){
                     intent.putExtra("kategori2", kategori2)
                     startActivity(intent)
                     finish()
-                }
-                else{
+                } else {
                     loadKursus()
                 }
             }
@@ -339,24 +351,23 @@ class AkunActivity : AppCompatActivity(){
             }
     }
 
-    fun randomAngka(){
-        angka1 = Random.nextInt(0,5)
-        angka2 = Random.nextInt(0,5)
-        if(angka1 == angka2){
+    fun randomAngka() {
+        angka1 = Random.nextInt(0, 5)
+        angka2 = Random.nextInt(0, 5)
+        if (angka1 == angka2) {
             randomAngka()
         }
     }
 
-    private fun jumlahKeranjang(){
+    private fun jumlahKeranjang() {
         val postListener = object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 var jumlah: Long = 0
-                for(data in dataSnapshot.children){
+                for (data in dataSnapshot.children) {
                     val hasil = data.getValue(DataKeranjang::class.java)
-                    if(hasil == null){
+                    if (hasil == null) {
                         tv_akun_jumlahkeranjang.visibility = View.GONE
-                    }
-                    else{
+                    } else {
                         tv_akun_jumlahkeranjang.visibility = View.VISIBLE
                         jumlah += hasil.jumlah!!
                     }

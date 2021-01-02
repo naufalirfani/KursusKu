@@ -23,7 +23,7 @@ class KeranjangActivity : AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth
     private var arrayList = ArrayList<DataKursus>()
-    private  var namaKursus: ArrayList<DataKeranjang> = arrayListOf()
+    private var namaKursus: ArrayList<DataKeranjang> = arrayListOf()
     private var widthfix: Int = 0
     private var berasalDari: String? = null
     private var kursusDibeli: String? = null
@@ -41,14 +41,14 @@ class KeranjangActivity : AppCompatActivity() {
         Glide.with(this).load(R.drawable.bouncy_balls).into(keranjang_progressbar)
 
         berasalDari = intent.getStringExtra("berasalDari")
-        if (berasalDari == "DetailActivity"){
-            kursusDibeli =intent.getStringExtra("kursusDibeli")
+        if (berasalDari == "DetailActivity") {
+            kursusDibeli = intent.getStringExtra("kursusDibeli")
         }
         val displayMetrics = DisplayMetrics()
         windowManager.defaultDisplay.getMetrics(displayMetrics)
         val dpheight = displayMetrics.heightPixels
         val dpwidth = displayMetrics.widthPixels
-        widthfix = dpwidth/3
+        widthfix = dpwidth / 3
 
         auth = FirebaseAuth.getInstance()
         val user = auth.currentUser
@@ -58,8 +58,7 @@ class KeranjangActivity : AppCompatActivity() {
             loadKeranjang()
             loadUser()
             keranjang_progressbar.visibility = View.VISIBLE
-        }
-        else{
+        } else {
             val intent = Intent(this@KeranjangActivity, SignInActivity::class.java)
             startActivity(intent)
             finish()
@@ -77,7 +76,8 @@ class KeranjangActivity : AppCompatActivity() {
         tv_keranjang_kosong.visibility = View.GONE
         tv_keranjang_kosong2.visibility = View.GONE
 
-        adapter = RVAKeranjangList(this,
+        adapter = RVAKeranjangList(
+            this,
             widthfix,
             userId,
             tv_keranjang_totalharga,
@@ -86,7 +86,8 @@ class KeranjangActivity : AppCompatActivity() {
             tv_keranjang_kosong,
             tv_keranjang_kosong2,
             btn_keranajng_bayar,
-            keranjang_progressbar)
+            keranjang_progressbar
+        )
         adapter.notifyDataSetChanged()
         rv_keranjang.setHasFixedSize(true)
         rv_keranjang.layoutManager = LinearLayoutManager(this)
@@ -99,17 +100,16 @@ class KeranjangActivity : AppCompatActivity() {
         finish()
     }
 
-    private fun loadKeranjang(){
+    private fun loadKeranjang() {
         val postListener = object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 namaKursus.clear()
                 arrayList.clear()
-                for( data in dataSnapshot.children){
+                for (data in dataSnapshot.children) {
                     val hasil = data.getValue(DataKeranjang::class.java)
-                    if(hasil != null){
+                    if (hasil != null) {
                         namaKursus.add(hasil)
-                    }
-                    else{
+                    } else {
                         keranjang_progressbar.visibility = View.GONE
                         keranjang_cons_utama.setBackgroundColor(resources.getColor((R.color.white)))
                         iv_keranjang_kosong.visibility = View.VISIBLE
@@ -117,7 +117,7 @@ class KeranjangActivity : AppCompatActivity() {
                         tv_keranjang_kosong2.visibility = View.VISIBLE
                     }
                 }
-                if(namaKursus.isEmpty()){
+                if (namaKursus.isEmpty()) {
                     keranjang_progressbar.visibility = View.GONE
                     keranjang_cons_utama.setBackgroundColor(resources.getColor((R.color.white)))
                     iv_keranjang_kosong.visibility = View.VISIBLE
@@ -153,30 +153,35 @@ class KeranjangActivity : AppCompatActivity() {
         dbReference.addValueEventListener(postListener)
     }
 
-    private fun loadKursus(nama: ArrayList<DataKeranjang>){
+    private fun loadKursus(nama: ArrayList<DataKeranjang>) {
         val db = FirebaseFirestore.getInstance()
         db.collection("kursus")
             .get()
             .addOnSuccessListener { result ->
                 arrayList.clear()
                 for (document in result) {
-                    for(i in 0 until nama.size){
-                        if(document.getString("nama") == nama[i].namaKursus){
-                            arrayList.add(DataKursus(document.getString("deskripsi")!!,
-                                document.getLong("dilihat")!!,
-                                document.getString("gambar")!!,
-                                document.getString("harga")!!,
-                                document.getString("kategori")!!,
-                                document.getString("nama")!!,
-                                document.getString("pembuat")!!,
-                                document.getLong("pengguna")!!,
-                                document.getString("rating")!!,
-                                document.getString("remaining")!!))
+                    for (i in 0 until nama.size) {
+                        if (document.getString("nama") == nama[i].namaKursus) {
+                            arrayList.add(
+                                DataKursus(
+                                    document.getString("deskripsi")!!,
+                                    document.getLong("dilihat")!!,
+                                    document.getString("gambar")!!,
+                                    document.getString("harga")!!,
+                                    document.getString("kategori")!!,
+                                    document.getString("nama")!!,
+                                    document.getString("pembuat")!!,
+                                    document.getLong("pengguna")!!,
+                                    document.getString("rating")!!,
+                                    document.getString("remaining")!!,
+                                    document.getString("video")!!
+                                )
+                            )
                         }
                     }
                 }
 
-                if(arrayList.isNotEmpty()){
+                if (arrayList.isNotEmpty()) {
                     iv_keranjang_kosong.visibility = View.GONE
                     tv_keranjang_kosong.visibility = View.GONE
                     tv_keranjang_kosong2.visibility = View.GONE
@@ -184,8 +189,7 @@ class KeranjangActivity : AppCompatActivity() {
                     adapter.setData(arrayList, namaKursus)
 
                     keranjang_progressbar.visibility = View.GONE
-                }
-                else{
+                } else {
                     loadKursus(namaKursus)
                 }
             }
@@ -200,18 +204,19 @@ class KeranjangActivity : AppCompatActivity() {
         db.collection("users2").document(userId)
             .get()
             .addOnSuccessListener { result ->
-                userDetail = UserDetail(result.getString("username").toString(),
+                userDetail = UserDetail(
+                    result.getString("username").toString(),
                     result.getString("email").toString(),
                     result.getString("gambar").toString(),
                     result.getString("saldo").toString(),
                     result.getString("isiKeranjang").toString(),
                     result.getString("jumlahKeranjang").toString(),
-                    result.getString("wa").toString())
+                    result.getString("wa").toString()
+                )
 
-                if(userDetail.isiKeranjang.isNotEmpty()){
+                if (userDetail.isiKeranjang.isNotEmpty()) {
                     adapter.setDataSaldo(userDetail.saldo, userDetail)
-                }
-                else{
+                } else {
                     loadUser()
                 }
             }

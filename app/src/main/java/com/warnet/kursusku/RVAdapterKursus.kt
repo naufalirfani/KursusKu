@@ -58,7 +58,8 @@ class RVAdapterKursus(private val context: Context?, private val listKursus: Arr
             kursus.pembuat,
             kursus.pengguna,
             kursus.rating,
-            kursus.remaining
+            kursus.remaining,
+            kursus.video
         )
 
         holder.view.cvList.setOnClickListener{

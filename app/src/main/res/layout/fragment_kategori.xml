@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="#F2F2F2"
+    android:scrollbars="none"
     tools:context=".KategoriFragment">
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/kategori_cons"

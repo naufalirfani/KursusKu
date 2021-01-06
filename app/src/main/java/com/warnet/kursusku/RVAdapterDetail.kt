@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.android.exoplayer2.*
 import com.google.android.exoplayer2.source.ExtractorMediaSource
+import com.google.android.exoplayer2.ui.AspectRatioFrameLayout
 import com.google.android.exoplayer2.ui.PlayerView
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.util.Util
@@ -23,8 +24,8 @@ class RVAdapterDetail(private val context: Context?,
                       private val arrayDipelajari: ArrayList<String>,
                       private val arraySyarat: ArrayList<String>) : RecyclerView.Adapter<RVAdapterDetail.Holder>() {
 
-    private lateinit var playerView: PlayerView
-    private lateinit var simpleExoPlayer: SimpleExoPlayer
+    lateinit var playerView: PlayerView
+    lateinit var simpleExoPlayer: SimpleExoPlayer
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, i: Int): Holder {
         val view: View = LayoutInflater.from(viewGroup.context).inflate(R.layout.rv_detail, viewGroup, false)
@@ -71,6 +72,7 @@ class RVAdapterDetail(private val context: Context?,
         }
         else{
             holder.view.iv_detail.visibility = View.VISIBLE
+            holder.view.video_view.visibility = View.GONE
         }
     }
 
@@ -87,7 +89,10 @@ class RVAdapterDetail(private val context: Context?,
         val videoSource = ExtractorMediaSource.Factory(dataSourceFactory)
             .createMediaSource(Uri.parse(url))
         simpleExoPlayer.prepare(videoSource)
-        simpleExoPlayer.playWhenReady = true
+        simpleExoPlayer.playWhenReady = false
+        simpleExoPlayer.playbackState
+
+        playerView.resizeMode = AspectRatioFrameLayout.RESIZE_MODE_FILL
 
         simpleExoPlayer.addListener(object : ExoPlayer.EventListener {
             override fun onPlayerStateChanged(

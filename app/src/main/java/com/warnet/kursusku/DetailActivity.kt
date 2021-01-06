@@ -35,6 +35,7 @@ class DetailActivity : AppCompatActivity() {
     private lateinit var dbReference: DatabaseReference
     private lateinit var dbReference2: DatabaseReference
     private var user: FirebaseUser? = null
+    private lateinit var adapter: RVAdapterDetail
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -100,6 +101,22 @@ class DetailActivity : AppCompatActivity() {
         }
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        if(kursus.video != "kosong"){
+            adapter.simpleExoPlayer.release()
+        }
+
+    }
+
+    override fun onPause() {
+        super.onPause()
+        if(kursus.video != "kosong"){
+            adapter.simpleExoPlayer.playWhenReady = false
+            adapter.simpleExoPlayer.playbackState
+        }
+    }
+
     override fun onBackPressed() {
         super.onBackPressed()
         finish()
@@ -117,7 +134,7 @@ class DetailActivity : AppCompatActivity() {
                 if(arraySyarat.isNotEmpty() && arrayDipelajari.isNotEmpty()){
                     rv_detail.setHasFixedSize(true)
                     rv_detail.layoutManager = LinearLayoutManager(this)
-                    val adapter = RVAdapterDetail(applicationContext, kursus, arrayDipelajari, arraySyarat)
+                    adapter = RVAdapterDetail(applicationContext, kursus, arrayDipelajari, arraySyarat)
                     adapter.notifyDataSetChanged()
                     rv_detail.adapter = adapter
                     rv_detail.scrollToPosition(0)

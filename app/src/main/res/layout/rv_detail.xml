@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -7,20 +8,36 @@
     android:orientation="vertical">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/detail_cons"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#F2F2F2">
-
-        <ImageView
-            android:id="@+id/iv_detail"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/relative_iv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:background="@color/white"
+            android:gravity="center"
             app:layout_constraintBottom_toTopOf="@id/video_view"
-            app:layout_constraintTop_toTopOf="@+id/detail_cons" />
+            app:layout_constraintTop_toTopOf="@+id/detail_cons">
+            <ImageView
+                android:id="@+id/iv_detail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:background="@color/white"
+                app:layout_constraintTop_toTopOf="@+id/relative_iv"/>
+            <Button
+                android:id="@+id/btn_detail_play"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_gravity="center"
+                android:background="@drawable/ic_play_circle_filled_white"
+                app:layout_constraintTop_toTopOf="@+id/iv_detail"
+                app:layout_constraintLeft_toLeftOf="@+id/iv_detail"
+                app:layout_constraintRight_toRightOf="@id/iv_detail"
+                app:layout_constraintBottom_toBottomOf="@id/iv_detail"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
         <com.google.android.exoplayer2.ui.PlayerView
             android:id="@+id/video_view"
             android:layout_width="match_parent"
@@ -29,7 +46,7 @@
             app:show_timeout="2000"
             app:resize_mode="fill"
             app:controller_layout_id="@layout/player_controller"
-            app:layout_constraintTop_toBottomOf="@id/iv_detail"
+            app:layout_constraintTop_toBottomOf="@id/relative_iv"
             app:layout_constraintBottom_toTopOf="@id/tv_detail_nama">
             <ProgressBar
                 android:id="@+id/progressBar"

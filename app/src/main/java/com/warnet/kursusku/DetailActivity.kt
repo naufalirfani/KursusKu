@@ -133,11 +133,11 @@ class DetailActivity : AppCompatActivity() {
                 arrayDipelajari = result.get("dipelajari") as ArrayList<String>
                 if(arraySyarat.isNotEmpty() && arrayDipelajari.isNotEmpty()){
                     rv_detail.setHasFixedSize(true)
-                    rv_detail.layoutManager = LinearLayoutManager(this)
+                    val layoutManager = LinearLayoutManager(this)
+                    rv_detail.layoutManager = layoutManager
                     adapter = RVAdapterDetail(applicationContext, kursus, arrayDipelajari, arraySyarat)
                     adapter.notifyDataSetChanged()
                     rv_detail.adapter = adapter
-                    rv_detail.scrollToPosition(0)
 
                     datail_progressBar.visibility = View.INVISIBLE
                 }

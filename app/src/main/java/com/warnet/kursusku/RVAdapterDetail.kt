@@ -4,10 +4,13 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Paint
 import android.net.Uri
+import android.text.Layout
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.ProgressBar
+import android.widget.RelativeLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -66,13 +69,24 @@ class RVAdapterDetail(private val context: Context?,
         holder.view.rv_syarat.isNestedScrollingEnabled = false
         holder.view.rv_syarat.adapter = adapter2
 
+
         if(kursus.video != "kosong"){
-            holder.view.iv_detail.visibility = View.GONE
+            holder.view.video_view.visibility = View.GONE
+
             initExoPlayer(holder.view.video_view, holder.view.progressBar, kursus.video)
+
+            holder.view.btn_detail_play.setOnClickListener {
+                holder.view.video_view.visibility = View.VISIBLE
+                holder.view.iv_detail.visibility = View.GONE
+                holder.view.btn_detail_play.visibility = View.GONE
+
+                simpleExoPlayer.playWhenReady = true
+                simpleExoPlayer.playbackState
+            }
         }
         else{
-            holder.view.iv_detail.visibility = View.VISIBLE
             holder.view.video_view.visibility = View.GONE
+            holder.view.btn_detail_play.visibility = View.GONE
         }
     }
 
